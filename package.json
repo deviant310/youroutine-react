@@ -1,0 +1,40 @@
+{
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tanstack/query-core": "^5.51.21",
+    "@tanstack/react-query": "^5.51.23",
+    "color": "^4.2.3",
+    "eslint-plugin-react-hooks": "^5.1.0-beta-26f2496093-20240514",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-inputs": "file:libs/react-inputs-1.0.0.tgz",
+    "styled-components": "^6.1.12",
+    "use-query-action": "file:libs/use-query-action-1.0.0.tgz"
+  },
+  "devDependencies": {
+    "@eslint/compat": "^1.1.1",
+    "@eslint/js": "^9.9.0",
+    "@tanstack/react-query-devtools": "^5.51.23",
+    "@types/color": "^3.0.6",
+    "@types/node": "^22.5.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react-swc": "^3.7.0",
+    "eslint": "^9.9.0",
+    "eslint-plugin-perfectionist": "^3.1.3",
+    "eslint-plugin-prettier": "^5.2.1",
+    "globals": "^15.9.0",
+    "prettier": "^3.3.3",
+    "ts-allow-imports-plugin": "file:./libs/ts-allow-imports-plugin-0.0.1.tgz",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.1.0",
+    "vite": "^5.4.0",
+    "vite-plugin-checker": "^0.7.2",
+    "vite-tsconfig-paths": "^5.0.1"
+  },
+  "packageManager": "yarn@4.4.0"
+}

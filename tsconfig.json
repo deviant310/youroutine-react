@@ -1,0 +1,128 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": false,
+    "skipLibCheck": false,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "sourceMap": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "baseUrl": "./src",
+    "plugins": [
+      {
+        "name": "ts-allow-imports-plugin",
+        "imports": {
+          "**/*": [
+            "react",
+            "./**"
+          ],
+          "**/app/**": [
+            "~/concern/*",
+            "~/concern/*/*",
+            "~/infrastructure/*",
+            "~/utils/*"
+          ],
+          "**/app/boot/**": [
+            "react-dom/*",
+            "~/pages"
+          ],
+          "**/app/pages/auth-page/forms/**": [
+            "~/auth-page/general/*"
+          ],
+          "**/app/pages/auth-page/forms/*/fields/*": [
+            "../send-form"
+          ],
+          "**/concern/**": [
+            "~/infrastructure/*",
+            "~/utils/*"
+          ],
+          "**/concern/common/**": [
+            "~/concern/entities"
+          ],
+          "**/concern/common/chunks/**": [
+            "styled-components"
+          ],
+          "**/concern/common/providers/http-provider*": [
+            "@tanstack/react-query",
+            "@tanstack/react-query-devtools"
+          ],
+          "**/concern/common/third-party/use/**": [
+            "../actions",
+            "../requests",
+            "../base-url",
+            "use-query-action",
+            "@tanstack/react-query"
+          ],
+          "**/concern/common/third-party/actions/**": [
+            "../requests",
+            "../base-url"
+          ],
+          "**/concern/common/third-party/requests/**": [
+            "../base-url"
+          ],
+          "**/concern/common/themes/**": [
+            "color",
+            "styled-components"
+          ],
+          "**/infrastructure/**": [
+            "~/utils/*"
+          ],
+          "**/infrastructure/http/**": [
+            "@tanstack/react-query",
+            "@tanstack/react-query-devtools"
+          ],
+          "**/infrastructure/http/assets/**": [
+            "../helpers"
+          ],
+          "**/infrastructure/ui/**": [
+            "color",
+            "styled-components",
+            "styled-normalize"
+          ],
+          "**/infrastructure/ui/components/**": [
+            "react-inputs/*",
+            "../../helpers",
+            "../../../helpers",
+            "../../hooks"
+          ],
+          "**/infrastructure/ui/theme/theme-provider/**": [
+            "../theme"
+          ]
+        }
+      }
+    ],
+    "paths": {
+      "~/pages": [
+        "./app/pages"
+      ],
+      "~/auth-page/general/*": [
+        "./app/pages/auth-page/general/*"
+      ],
+      "~/concern/*": [
+        "./concern/*"
+      ],
+      "~/infrastructure/*": [
+        "./infrastructure/*"
+      ],
+      "~/utils/*": [
+        "./utils/*"
+      ]
+    }
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}
