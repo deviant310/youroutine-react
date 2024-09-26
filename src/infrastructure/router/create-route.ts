@@ -1,4 +1,6 @@
-import { split } from "~/utils/string";
+import { split } from "../../underlying/string";
+
+import { RouteParsedPart } from "./route";
 
 export function createRoute<RouteTemplate extends string>(
   routeTemplate: RouteTemplate,
@@ -22,8 +24,14 @@ export function createRoute<RouteTemplate extends string>(
     const path = routeParsed
       .filter(({ value }) => value)
       .map(({ type, value }) => {
-        if (type === "param" && routeParams)
+        if (type === "param") {
+          if (!routeParams)
+            throw new Error(
+              `Missing param "${value}" for route "${routeTemplate}"`,
+            );
+
           return routeParams[value as keyof RouteParams];
+        }
 
         return value;
       })
@@ -42,21 +50,29 @@ function parseRouteTemplate<RouteTemplate extends string>(
 ) {
   const templateParts = split(routeTemplate, "/");
 
-  return templateParts.map(part =>
-    part.startsWith(":")
-      ? { type: "param", value: part.slice(part.lastIndexOf(":") + 1) }
-      : { type: "path", value: part },
-  ) as RouteParsed<typeof templateParts>;
+  return templateParts.map(part => {
+    const routeParamParsedPart: RouteParsedPart = {
+      type: "param",
+      value: part.slice(part.lastIndexOf(":") + 1),
+    };
+
+    const routePathParsedPart: RouteParsedPart = {
+      type: "path",
+      value: part,
+    };
+
+    return part.startsWith(":") ? routeParamParsedPart : routePathParsedPart;
+  }) as RouteParsed<typeof templateParts>;
 }
 
 type RouteParsed<A extends string[]> = {
   [K in keyof A]: A[K] extends `:${infer P}`
-    ? { type: "param"; value: P }
-    : { type: "path"; value: A[K] };
+    ? RouteParsedPart<"param", P>
+    : RouteParsedPart<"path", A[K]>;
 };
 
 type RouteParsedParams<T> = {
-  [K in keyof T]: T[K] extends { type: "path" | "param"; value: string }
+  [K in keyof T]: T[K] extends RouteParsedPart
     ? T[K]["type"] extends "param"
       ? T[K]["value"]
       : never

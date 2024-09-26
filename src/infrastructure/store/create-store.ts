@@ -2,13 +2,11 @@ import { Store } from "./store";
 import { StoreController } from "./store-controller";
 import { useStoreInstance } from "./use-store-instance";
 
-export const createStore = <Value>() => {
-  const storeController = new StoreController<Value>();
+export const createStore = <Value>(initialValue: Value) => {
+  const storeController = new StoreController(initialValue);
 
-  const useStore = <InitialValue extends Value | undefined>(
-    initialValue?: InitialValue,
-  ) => {
-    const store = new Store(storeController, initialValue);
+  const useStore = () => {
+    const store = new Store(storeController);
 
     return useStoreInstance(store);
   };

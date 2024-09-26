@@ -3,28 +3,22 @@ import {
   PropsWithChildren,
   createElement,
   memo,
-  FC,
-  ReactNode,
-  ComponentProps,
+  NamedExoticComponent,
 } from "react";
 
+import { PropsWithRequiredChildren } from "~/rack/react";
+
 export function registerProviders<
-  Providers extends WithRequiredChildrenProps<Providers>,
+  Providers extends {
+    [K in keyof Providers]: NamedExoticComponent<PropsWithRequiredChildren> extends Providers[K]
+      ? Providers[K]
+      : never;
+  },
 >(...providers: Providers extends Array<any> ? Providers : never) {
-  return memo<PropsWithChildren>(({ children }) =>
+  return memo<Required<PropsWithChildren>>(({ children }) =>
     providers.reduce(
       (children, provider) => createElement(provider, { children }),
       children,
     ),
   );
 }
-
-type ContextProviderProps = { children: ReactNode };
-
-type WithRequiredChildrenProps<T> = {
-  [K in keyof T]: T[K] extends FC<any>
-    ? ComponentProps<T[K]> extends ContextProviderProps
-      ? T[K]
-      : { children: ReactNode }
-    : never;
-};

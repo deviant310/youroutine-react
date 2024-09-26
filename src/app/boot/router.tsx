@@ -1,7 +1,7 @@
 import { memo } from "react";
 
 import { RequestUnauthorizedError } from "~/infrastructure/http";
-import { RouterProvider } from "~/infrastructure/router";
+import { initHomeRoute, RouterProvider } from "~/infrastructure/router";
 
 import { taskRoute, tasksRoute } from "~/concern/common/routes";
 import { useCurrentUser } from "~/concern/common/third-party";
@@ -18,6 +18,8 @@ export const Router = memo(() => {
 
   if (loadingCurrentUserError instanceof Error)
     return loadingCurrentUserError.message;
+
+  initHomeRoute(tasksRoute);
 
   return <RouterProvider routesEntries={routesEntries} />;
 });

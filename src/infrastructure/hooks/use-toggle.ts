@@ -1,11 +1,15 @@
 import { useCallback, useMemo, useState } from "react";
 
 export function useToggle<
-  Value extends True | False,
-  True = true,
-  False = false,
->(initialValue: Value, positive = true as True, negative = false as False) {
-  const [value, setValue] = useState<True | False>(initialValue);
+  Value extends Positive | Negative,
+  Positive extends string | number | boolean = true,
+  Negative extends string | number | boolean = false,
+>(
+  initialValue = false as Value,
+  positive = true as Positive,
+  negative = false as Negative,
+) {
+  const [value, setValue] = useState<Positive | Negative>(initialValue);
   const on = useCallback(() => setValue(positive as Value), [positive]);
   const off = useCallback(() => setValue(negative as Value), [negative]);
 

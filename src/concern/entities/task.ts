@@ -1,6 +1,9 @@
-import { Entity } from "infrastructure/entity";
+export class Task {
+  id: number;
+  title: string;
+  description: string;
+  approved: boolean;
 
-export class Task extends Entity<TaskAttributes> {
   static getInstanceId(task: Task) {
     return task.id;
   }
@@ -9,26 +12,10 @@ export class Task extends Entity<TaskAttributes> {
     return task.title;
   }
 
-  get id() {
-    return this.attributes.id;
-  }
-
-  get title() {
-    return this.attributes.title;
-  }
-
-  get description() {
-    return this.attributes.description;
-  }
-
-  get approved() {
-    return this.attributes.approved;
+  constructor(attributes: { [K in keyof Task]: Task[K] }) {
+    this.id = attributes.id;
+    this.title = attributes.title;
+    this.description = attributes.description;
+    this.approved = attributes.approved;
   }
 }
-
-export type TaskAttributes = {
-  id: number;
-  title: string;
-  description: string;
-  approved: boolean;
-};

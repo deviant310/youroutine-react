@@ -1,5 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 
+import { getUnitWithMeasure } from "~/infrastructure/ui";
+
 import * as Fonts from "./fonts";
 
 export const Canvas = createGlobalStyle`
@@ -54,7 +56,8 @@ export const Canvas = createGlobalStyle`
 
   body {
     font-family: Euclid Circular B, system-ui, sans-serif;
-    font-size: 16px;
+    font-size: ${getUnitWithMeasure(4)};
+    line-height: ${getUnitWithMeasure(4)};
     color: ${({ theme }) => theme.colors.default[1].filled()};
     background-color: ${({ theme }) => theme.colors.default[8].filled()};
   }

@@ -1,3 +1,3 @@
 export type TransientProps<P> = {
-  [K in string & keyof P as `$${K}`]: P[K];
+  [K in keyof P as K extends string ? `$${K}` : K]: P[K];
 };

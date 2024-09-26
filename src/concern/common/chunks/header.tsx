@@ -17,11 +17,11 @@ import {
   Text,
 } from "~/infrastructure/ui";
 
-const AnimatedArea = animated(Area);
+const AnimatedArea = animated(Area, "slide");
 
 export const Header = memo(() => {
-  const [dropdownIsVisible, { toggle: toggleDropdown, off: hideDropdown }] =
-    useToggle(false);
+  const [dropdownIsVisible, { off: hideDropdown, toggle: toggleDropdown }] =
+    useToggle();
 
   return (
     <HeaderContainerStyled>
@@ -41,11 +41,20 @@ export const Header = memo(() => {
                 width="300px"
                 top="100%"
                 right={0}
+                marginTop="-5px"
               >
                 {dropdownIsVisible && (
-                  <Paper elevation={1} backdrop>
+                  <Paper elevation={1}>
                     <Area paddingVertical={2}>
-                      <Clickable>
+                      <Clickable onClick={hideDropdown}>
+                        <Area paddingHorizontal={4}>
+                          <Flex alignItems="center" gap={2}>
+                            <Text>Settings</Text>
+                          </Flex>
+                        </Area>
+                      </Clickable>
+
+                      <Clickable onClick={hideDropdown}>
                         <Area paddingHorizontal={4}>
                           <Flex alignItems="center" gap={2}>
                             <SignOutIcon />
@@ -67,7 +76,10 @@ export const Header = memo(() => {
 
 const HeaderContainerStyled = styled.div`
   display: inline-block;
+  position: relative;
+  z-index: 1;
   line-height: ${getUnitWithMeasure(10)};
+  margin-bottom: ${getUnitWithMeasure(3)};
   &:after {
     content: "\u200b";
   }

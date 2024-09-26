@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   createContext,
   createElement,
@@ -11,10 +10,14 @@ import {
   useEffect,
 } from "react";
 
-const context = createContext<ContextValue>({} as ContextValue);
+import { RouteAbstract } from "./route";
+
+const context = createContext<Router>({} as Router);
 const { Provider } = context;
 
-export const RouterProvider = memo<RouterProviderProps>(({ routesEntries }) => {
+export const RouterProvider = memo<RouterProviderProps>(props => {
+  const { routesEntries } = props;
+
   const [locationPathname, setLocationPathname] = useState(
     window.location.pathname,
   );
@@ -41,18 +44,22 @@ export const RouterProvider = memo<RouterProviderProps>(({ routesEntries }) => {
     return map;
   }, [routesEntries]);
 
-  const component = useMemo(() => {
+  const { component, routeParams } = useMemo(() => {
     for (const [
       componentPattern,
       component,
     ] of componentPatternToComponentMap) {
-      if (componentPattern.test(locationPathname)) return component;
+      if (componentPattern.test(locationPathname)) {
+        const routeParams = locationPathname.match(componentPattern)?.groups;
+
+        return { component, routeParams };
+      }
     }
 
-    return NotFound;
+    return { component: NotFound };
   }, [componentPatternToComponentMap, locationPathname]);
 
-  const navigate = useCallback<ContextValue["navigate"]>((route, ...params) => {
+  const navigate = useCallback<Router["navigate"]>((route, ...params) => {
     const [routeParams] = params;
     const pathname = route(routeParams);
 
@@ -61,24 +68,9 @@ export const RouterProvider = memo<RouterProviderProps>(({ routesEntries }) => {
     setLocationPathname(pathname);
   }, []);
 
-  const getRouteParams = useCallback<ContextValue["getRouteParams"]>(
-    route => {
-      const pathname = route(history.state);
-
-      if (locationPathname !== pathname) {
-        throw new Error(
-          `Cannot use params of route "${pathname}" in current location`,
-        );
-      }
-
-      return history.state;
-    },
-    [locationPathname],
-  );
-
   const value = useMemo(
-    () => ({ navigate, getRouteParams }),
-    [getRouteParams, navigate],
+    () => ({ navigate, routeParams }),
+    [navigate, routeParams],
   );
 
   const onPopState = useCallback(() => {
@@ -94,26 +86,27 @@ export const RouterProvider = memo<RouterProviderProps>(({ routesEntries }) => {
   return createElement(Provider, { value }, createElement(component));
 });
 
-export const useRouter = () => useContext(context);
+export const useNavigator = () => useContext(context).navigate;
+
+export const useParams = <Route extends RouteAbstract = never>() => {
+  type RouteParams = Parameters<Route>[0];
+  type RouteStringParams = { [K in keyof RouteParams]?: string };
+
+  const { routeParams } = useContext(context);
+
+  return (routeParams ?? {}) satisfies RouteStringParams as RouteStringParams;
+};
 
 const NotFound: FC = () => {
   return "Not found";
 };
 
-interface ContextValue {
+interface Router {
+  routeParams?: Record<string, string>;
   navigate<Route extends RouteAbstract>(
     route: Route,
     ...params: Parameters<Route>
   ): void;
-
-  getRouteParams<Route extends RouteAbstract>(
-    route: Route,
-  ): Parameters<Route>[0];
-}
-
-interface RouteAbstract {
-  (...params: Array<any>): string;
-  parsed: Array<{ type: "param" | "path"; value: string }>;
 }
 
 interface RouterProviderProps {

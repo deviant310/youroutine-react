@@ -1,26 +1,19 @@
 export class StoreController<Value> {
-  private initialValue?: Value;
-  private value?: Value;
+  private value: Value;
+
+  constructor(private initialValue: Value) {
+    this.value = initialValue;
+  }
 
   getValue() {
     return this.value;
   }
 
   setValue(value: Value) {
-    if (typeof this.initialValue === "undefined") return;
-
-    this.value = value;
-  }
-
-  setInitialValue(value: Value) {
-    if (typeof this.initialValue !== "undefined") return;
-
-    this.initialValue = value;
     this.value = value;
   }
 
   reset() {
-    if (typeof this.initialValue !== "undefined")
-      this.value = this.initialValue;
+    this.value = this.initialValue;
   }
 }

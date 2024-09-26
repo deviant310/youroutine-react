@@ -1,18 +1,12 @@
 import { ChangeEvent, ChangeEventListener } from "./change-event";
 import { StoreController } from "./store-controller";
 
-export class Store<Value, InitialValue extends Value | undefined> {
+export class Store<Value> {
   private changeEvent = new ChangeEvent();
 
-  constructor(
-    private controller: StoreController<Value>,
-    initialValue?: InitialValue,
-  ) {
+  constructor(private controller: StoreController<Value>) {
     this.onChange = this.onChange.bind(this);
     this.getValue = this.getValue.bind(this);
-
-    if (typeof initialValue !== "undefined")
-      this.controller.setInitialValue(initialValue);
   }
 
   onChange(listener: ChangeEventListener) {

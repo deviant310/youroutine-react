@@ -15,8 +15,8 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   h1 {
-    font-size: 2em;
-    margin: 0.67em 0;
+    font-size: 2rem;
+    margin: 0.5rem 0;
   }
 
   hr {
@@ -27,7 +27,7 @@ export const GlobalStyle = createGlobalStyle`
 
   pre {
     font-family: monospace, monospace;
-    font-size: 1em;
+    font-size: 1rem;
   }
 
   a {
@@ -180,5 +180,10 @@ export const GlobalStyle = createGlobalStyle`
     border-width: 0;
     padding: 0;
     margin: 0;
+  }
+
+  svg {
+    display: flex;
+    fill: inherit;
   }
 `;

@@ -13,8 +13,8 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "sourceMap": true,
@@ -27,16 +27,18 @@
         "imports": {
           "**/*": [
             "react",
+            "react-dom",
+            "react-dom/*",
             "./**"
           ],
           "**/app/**": [
             "~/concern/*",
             "~/concern/*/*",
             "~/infrastructure/*",
-            "~/utils/*"
+            "~/rack/*",
+            "~/underlying/*"
           ],
           "**/app/boot/**": [
-            "react-dom/*",
             "~/pages"
           ],
           "**/app/pages/auth-page/forms/**": [
@@ -47,7 +49,8 @@
           ],
           "**/concern/**": [
             "~/infrastructure/*",
-            "~/utils/*"
+            "~/rack/*",
+            "~/underlying/*"
           ],
           "**/concern/common/**": [
             "~/concern/entities"
@@ -78,7 +81,8 @@
             "styled-components"
           ],
           "**/infrastructure/**": [
-            "~/utils/*"
+            "~/rack/*",
+            "~/underlying/*"
           ],
           "**/infrastructure/http/**": [
             "@tanstack/react-query",
@@ -94,9 +98,18 @@
           ],
           "**/infrastructure/ui/components/**": [
             "react-inputs/*",
+            "../core",
+            "../hooks",
+            "../helpers"
+          ],
+          "**/infrastructure/ui/core/**": [
             "../../helpers",
             "../../../helpers",
+            "../../../../helpers",
             "../../hooks"
+          ],
+          "**/infrastructure/ui/hooks/**": [
+            "../helpers"
           ],
           "**/infrastructure/ui/theme/theme-provider/**": [
             "../theme"
@@ -117,8 +130,11 @@
       "~/infrastructure/*": [
         "./infrastructure/*"
       ],
-      "~/utils/*": [
-        "./utils/*"
+      "~/rack/*": [
+        "./rack/*"
+      ],
+      "~/underlying/*": [
+        "./underlying/*"
       ]
     }
   },
