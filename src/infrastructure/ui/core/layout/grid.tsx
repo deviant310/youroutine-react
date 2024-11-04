@@ -1,18 +1,14 @@
-import { HTMLAttributes, memo } from "react";
+import { ElementRef, HTMLAttributes, memo } from "react";
 
-import { styled } from "styled-components";
+import { css, styled } from "styled-components";
 
-import {
-  UnitMultiplier,
-  getUnitWithMeasure,
-  TransientProps,
-} from "../../helpers";
+import { UnitIndex, getUnitWithMeasure, TransientProps } from "../../helpers";
 
 export const Grid = memo<GridProps>(props => {
   const { alignItems, autoFlow, gap, justifyContent, ...restProps } = props;
 
   return (
-    <StyledGrid
+    <GridStyled
       $alignItems={alignItems}
       $autoFlow={autoFlow}
       $gap={gap}
@@ -24,7 +20,7 @@ export const Grid = memo<GridProps>(props => {
 
 Grid.displayName = "Grid";
 
-const StyledGrid = styled.div<TransientProps<StyledGridProps>>`
+export const GridCSS = css<TransientProps<GridStyledProps>>`
   display: grid;
   grid-auto-flow: ${({ $autoFlow }) => $autoFlow};
   align-items: ${({ $alignItems }) => $alignItems};
@@ -32,21 +28,29 @@ const StyledGrid = styled.div<TransientProps<StyledGridProps>>`
   justify-content: ${({ $justifyContent }) =>
     $justifyContent &&
     {
+      center: "center",
       around: "space-around",
       between: "space-between",
       start: "start",
+      end: "end",
     }[$justifyContent]};
 
   gap: ${({ $gap }) => getUnitWithMeasure($gap)};
 `;
 
-export type GridElementProps = HTMLAttributes<HTMLDivElement>;
+const GridStyled = styled.div<TransientProps<GridStyledProps>>`
+  ${GridCSS}
+`;
 
-export type StyledGridProps = {
+export type GridStyledProps = {
+  justifyContent?: "center" | "start" | "end" | "around" | "between";
   alignItems?: "center" | "top" | "bottom" | "baseline";
   autoFlow?: "row" | "column";
-  gap?: UnitMultiplier;
-  justifyContent?: "start" | "around" | "between";
+  gap?: UnitIndex;
 };
 
-export type GridProps = GridElementProps & StyledGridProps;
+export interface GridProps
+  extends HTMLAttributes<GridElement>,
+    GridStyledProps {}
+
+export type GridElement = ElementRef<typeof GridStyled>;

@@ -1,6 +1,6 @@
 import { createElement, memo } from "react";
 
-import { PropsWithRequiredChildren } from "~/rack/react";
+import { PropsWithRequiredChildren } from "~/react";
 
 import { ThemeProvider } from "~/infrastructure/ui";
 

@@ -1,4 +1,4 @@
-import {
+/*import {
   FunctionComponent,
   ReactElement,
   memo,
@@ -11,7 +11,7 @@ import {
   MaskedInputProps,
   MaskedInputValue,
   useMaskedInput,
-} from "react-inputs/masked-input";
+} from "use-react-input/masked-input";
 
 import { Error, Fieldset, Textbox } from "../core";
 import { animated } from "../helpers";
@@ -80,4 +80,4 @@ export interface MaskedFieldProps<Name extends string>
 
 export type MaskedFieldTextboxComponent = MaskedInputTextboxComponent;
 
-export type MaskedFieldValue = MaskedInputValue;
+export type MaskedFieldValue = MaskedInputValue;*/

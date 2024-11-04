@@ -20,7 +20,6 @@
     "sourceMap": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "./src",
     "plugins": [
       {
         "name": "ts-allow-imports-plugin",
@@ -35,32 +34,36 @@
             "~/concern/*",
             "~/concern/*/*",
             "~/infrastructure/*",
-            "~/rack/*",
-            "~/underlying/*"
+            "~/react",
+            "~/typescript"
           ],
           "**/app/boot/**": [
             "~/pages"
           ],
-          "**/app/pages/auth-page/forms/**": [
-            "~/auth-page/general/*"
+          "**/app/pages/*/popups/components/**": [
+            "../stores",
+            "../../forms",
           ],
-          "**/app/pages/auth-page/forms/*/fields/*": [
-            "../send-form"
+          "**/app/pages/*/forms/components/**": [
+            "../stores",
+            "../../stores",
+            "../../../stores",
           ],
           "**/concern/**": [
             "~/infrastructure/*",
-            "~/rack/*",
-            "~/underlying/*"
+            "~/react",
+            "~/typescript"
           ],
-          "**/concern/common/**": [
-            "~/concern/entities"
-          ],
-          "**/concern/common/chunks/**": [
+          "**/concern/chunks/**": [
+            "~/concern/common/*",
+            "~/concern/general/*",
             "styled-components"
           ],
-          "**/concern/common/providers/http-provider*": [
-            "@tanstack/react-query",
-            "@tanstack/react-query-devtools"
+          "**/concern/common/**": [
+            "~/concern/general/*"
+          ],
+          "**/concern/common/ui/**": [
+            "styled-components"
           ],
           "**/concern/common/third-party/use/**": [
             "../actions",
@@ -74,15 +77,16 @@
             "../base-url"
           ],
           "**/concern/common/third-party/requests/**": [
-            "../base-url"
+            "../base-url",
+            "../../base-url"
           ],
           "**/concern/common/themes/**": [
             "color",
             "styled-components"
           ],
           "**/infrastructure/**": [
-            "~/rack/*",
-            "~/underlying/*"
+            "~/react",
+            "~/typescript"
           ],
           "**/infrastructure/http/**": [
             "@tanstack/react-query",
@@ -91,13 +95,16 @@
           "**/infrastructure/http/assets/**": [
             "../helpers"
           ],
+          "**/infrastructure/stores/form-store/**": [
+            "../form-store"
+          ],
           "**/infrastructure/ui/**": [
             "color",
             "styled-components",
-            "styled-normalize"
+            "styled-normalize",
+            "use-react-input/*"
           ],
           "**/infrastructure/ui/components/**": [
-            "react-inputs/*",
             "../core",
             "../hooks",
             "../helpers"
@@ -119,22 +126,19 @@
     ],
     "paths": {
       "~/pages": [
-        "./app/pages"
-      ],
-      "~/auth-page/general/*": [
-        "./app/pages/auth-page/general/*"
+        "./src/app/pages"
       ],
       "~/concern/*": [
-        "./concern/*"
+        "./src/concern/*"
       ],
       "~/infrastructure/*": [
-        "./infrastructure/*"
+        "./src/infrastructure/*"
       ],
-      "~/rack/*": [
-        "./rack/*"
+      "~/react": [
+        "./src/react"
       ],
-      "~/underlying/*": [
-        "./underlying/*"
+      "~/typescript": [
+        "./src/typescript"
       ]
     }
   },

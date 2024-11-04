@@ -3,21 +3,20 @@ import { memo } from "react";
 import { RequestUnauthorizedError } from "~/infrastructure/http";
 import { initHomeRoute, RouterProvider } from "~/infrastructure/router";
 
-import { taskRoute, tasksRoute } from "~/concern/common/routes";
-import { useCurrentUser } from "~/concern/common/third-party";
+import { useUserRetrieving } from "~/concern/common/third-party";
+import { projectsRoute, taskRoute, tasksRoute } from "~/concern/general/routes";
 
-import { AuthPage, TaskPage, TasksPage } from "~/pages";
+import { AuthPage, ProjectsPage, TaskPage, TasksPage } from "~/pages";
 
 export const Router = memo(() => {
-  const { loadingCurrentUser, loadingCurrentUserError } = useCurrentUser();
+  const { retrievingUser, retrievingUserError } = useUserRetrieving();
 
-  if (loadingCurrentUser) return "loading...";
+  if (retrievingUser) return "loading...";
 
-  if (loadingCurrentUserError instanceof RequestUnauthorizedError)
+  if (retrievingUserError instanceof RequestUnauthorizedError)
     return <AuthPage />;
 
-  if (loadingCurrentUserError instanceof Error)
-    return loadingCurrentUserError.message;
+  if (retrievingUserError instanceof Error) return retrievingUserError.message;
 
   initHomeRoute(tasksRoute);
 
@@ -27,4 +26,5 @@ export const Router = memo(() => {
 const routesEntries = [
   [tasksRoute, TasksPage] as const,
   [taskRoute, TaskPage] as const,
+  [projectsRoute, ProjectsPage] as const,
 ];

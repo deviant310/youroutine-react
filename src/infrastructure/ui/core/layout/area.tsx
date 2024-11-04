@@ -1,25 +1,22 @@
 import {
-  FocusEvent,
+  ElementRef,
   forwardRef,
   ForwardRefExoticComponent,
   HTMLAttributes,
   memo,
-  ReactNode,
   RefAttributes,
-  useCallback,
 } from "react";
 
-import { styled } from "styled-components";
+import { css, styled } from "styled-components";
 
-import {
-  UnitMultiplier,
-  getUnitWithMeasure,
-  TransientProps,
-} from "../../helpers";
+import { UnitIndex, getUnitWithMeasure, TransientProps } from "../../helpers";
 
 export const Area: AreaComponent = memo(
   forwardRef((props, ref) => {
     const {
+      overflow,
+      disabled,
+      inline,
       position,
       top,
       bottom,
@@ -43,24 +40,14 @@ export const Area: AreaComponent = memo(
       height,
       maxWidth,
       maxHeight,
-      fillAvailableWidth,
-      fillAvailableHeight,
-      onBlur,
       ...restProps
-    }: AreaCustomProps & AreaElementProps = props;
-
-    const onAreaBlur = useCallback(
-      (event: FocusEvent<HTMLDivElement>) => {
-        if (event.currentTarget.contains(event.relatedTarget)) return;
-
-        onBlur?.(event);
-      },
-      [onBlur],
-    );
+    } = props;
 
     return (
       <AreaStyled
-        ref={ref}
+        $overflow={overflow}
+        $disabled={disabled}
+        $inline={inline}
         $position={position}
         $top={top}
         $bottom={bottom}
@@ -84,10 +71,8 @@ export const Area: AreaComponent = memo(
         $height={height}
         $maxWidth={maxWidth}
         $maxHeight={maxHeight}
-        $fillAvailableWidth={fillAvailableWidth}
-        $fillAvailableHeight={fillAvailableHeight}
-        onBlur={onAreaBlur}
         {...restProps}
+        ref={ref}
       />
     );
   }),
@@ -95,27 +80,18 @@ export const Area: AreaComponent = memo(
 
 Area.displayName = "Area";
 
-const AreaStyled = styled.div.attrs<AreaStyledProps>(({ $position }) => ({
-  ...($position === "relative" && { tabIndex: -1 }),
-}))`
+export const AreaCSS = css<TransientProps<AreaStyledProps>>`
+  display: ${({ $inline }) => $inline && "inline-block"};
+  overflow: ${({ $overflow }) => $overflow};
+  pointer-events: ${({ $disabled }) => $disabled && "none"};
   position: ${({ $position }) => $position};
   top: ${({ $top }) => getUnitWithMeasure($top)};
   bottom: ${({ $bottom }) => getUnitWithMeasure($bottom)};
   right: ${({ $right }) => getUnitWithMeasure($right)};
   left: ${({ $left }) => getUnitWithMeasure($left)};
-
-  width: ${({ $fillAvailableWidth, $width }) =>
-    $fillAvailableWidth
-      ? "-webkit-fill-available"
-      : getUnitWithMeasure($width)};
-
-  height: ${({ $fillAvailableHeight, $height }) =>
-    $fillAvailableHeight
-      ? "-webkit-fill-available"
-      : getUnitWithMeasure($height)};
-
+  width: ${({ $width }) => getUnitWithMeasure($width)};
+  height: ${({ $height }) => getUnitWithMeasure($height)};
   max-width: ${({ $maxWidth }) => getUnitWithMeasure($maxWidth)};
-
   max-height: ${({ $maxHeight }) => getUnitWithMeasure($maxHeight)};
 
   padding-top: ${({ $paddingTop, $paddingVertical, $padding }) =>
@@ -145,99 +121,45 @@ const AreaStyled = styled.div.attrs<AreaStyledProps>(({ $position }) => ({
     getUnitWithMeasure($marginRight ?? $marginHorizontal ?? $margin)};
 `;
 
-export interface AreaComponent
-  extends Omit<
-    ForwardRefExoticComponent<AreaCustomProps & RefAttributes<HTMLDivElement>>,
-    number
-  > {
-  (props: AreaConcreteSizesProps & AreaElementProps): ReactNode;
-  (props: AreaMaxSizesProps & AreaElementProps): ReactNode;
-  (props: AreaAutoSizesProps & AreaElementProps): ReactNode;
-  (props: AreaMaxWidthAndConcreteHeightProps & AreaElementProps): ReactNode;
-  (props: AreaMaxHeightAndConcreteWidthProps & AreaElementProps): ReactNode;
-  (props: AreaConcreteWidthAndAutoHeightProps & AreaElementProps): ReactNode;
-  (props: AreaMaxWidthAndAutoHeightProps & AreaElementProps): ReactNode;
-  (props: AreaConcreteHeightAndAutoWidthProps & AreaElementProps): ReactNode;
-  (props: AreaMaxHeightAndAutoWidthProps & AreaElementProps): ReactNode;
-}
+const AreaStyled = styled.div<TransientProps<AreaStyledProps>>`
+  ${AreaCSS};
+`;
 
-interface AreaBaseProps {
+interface AreaStyledProps {
+  inline?: boolean;
   position?: "absolute" | "relative" | "fixed" | "sticky";
-  top?: string | UnitMultiplier;
-  bottom?: string | UnitMultiplier;
-  right?: string | UnitMultiplier;
-  left?: string | UnitMultiplier;
-  margin?: string | UnitMultiplier;
-  marginBottom?: string | UnitMultiplier;
-  marginLeft?: string | UnitMultiplier;
-  marginRight?: string | UnitMultiplier;
-  marginTop?: string | UnitMultiplier;
-  marginHorizontal?: string | UnitMultiplier;
-  marginVertical?: string | UnitMultiplier;
-  padding?: string | UnitMultiplier;
-  paddingBottom?: string | UnitMultiplier;
-  paddingLeft?: string | UnitMultiplier;
-  paddingRight?: string | UnitMultiplier;
-  paddingTop?: string | UnitMultiplier;
-  paddingHorizontal?: string | UnitMultiplier;
-  paddingVertical?: string | UnitMultiplier;
+  top?: string | UnitIndex;
+  bottom?: string | UnitIndex;
+  right?: string | UnitIndex;
+  left?: string | UnitIndex;
+  overflow?: "hidden" | "auto";
+  disabled?: boolean;
+  width?: string | UnitIndex;
+  height?: string | UnitIndex;
+  maxWidth?: string | UnitIndex;
+  maxHeight?: string | UnitIndex;
+  margin?: string | UnitIndex;
+  marginBottom?: string | UnitIndex;
+  marginLeft?: string | UnitIndex;
+  marginRight?: string | UnitIndex;
+  marginTop?: string | UnitIndex;
+  marginHorizontal?: string | UnitIndex;
+  marginVertical?: string | UnitIndex;
+  padding?: string | UnitIndex;
+  paddingBottom?: string | UnitIndex;
+  paddingLeft?: string | UnitIndex;
+  paddingRight?: string | UnitIndex;
+  paddingTop?: string | UnitIndex;
+  paddingHorizontal?: string | UnitIndex;
+  paddingVertical?: string | UnitIndex;
 }
 
-export type AreaElementProps = HTMLAttributes<HTMLDivElement>;
+export type AreaComponent = ForwardRefExoticComponent<
+  AreaProps & RefAttributes<AreaElement>
+>;
 
-export interface AreaConcreteSizesProps extends AreaBaseProps {
-  width?: string | UnitMultiplier;
-  height?: string | UnitMultiplier;
-}
+export interface AreaProps
+  extends HTMLAttributes<AreaElement>,
+    AreaStyledProps {}
 
-export interface AreaMaxSizesProps extends AreaBaseProps {
-  maxWidth?: string | UnitMultiplier;
-  maxHeight?: string | UnitMultiplier;
-}
-
-export interface AreaAutoSizesProps extends AreaBaseProps {
-  fillAvailableWidth?: boolean;
-  fillAvailableHeight?: boolean;
-}
-
-export interface AreaMaxWidthAndConcreteHeightProps extends AreaBaseProps {
-  maxWidth?: string | UnitMultiplier;
-  height?: string | UnitMultiplier;
-}
-
-export interface AreaMaxHeightAndConcreteWidthProps extends AreaBaseProps {
-  maxHeight?: string | UnitMultiplier;
-  width?: string | UnitMultiplier;
-}
-
-export interface AreaConcreteWidthAndAutoHeightProps extends AreaBaseProps {
-  width?: string | UnitMultiplier;
-  fillAvailableHeight?: boolean;
-}
-
-export interface AreaMaxWidthAndAutoHeightProps extends AreaBaseProps {
-  maxWidth?: string | UnitMultiplier;
-  fillAvailableHeight?: boolean;
-}
-
-export interface AreaConcreteHeightAndAutoWidthProps extends AreaBaseProps {
-  height?: string | UnitMultiplier;
-  fillAvailableWidth?: boolean;
-}
-
-export interface AreaMaxHeightAndAutoWidthProps extends AreaBaseProps {
-  maxHeight?: string | UnitMultiplier;
-  fillAvailableWidth?: boolean;
-}
-
-export type AreaCustomProps = AreaConcreteSizesProps &
-  AreaMaxSizesProps &
-  AreaAutoSizesProps &
-  AreaMaxWidthAndConcreteHeightProps &
-  AreaMaxHeightAndConcreteWidthProps &
-  AreaConcreteWidthAndAutoHeightProps &
-  AreaMaxWidthAndAutoHeightProps &
-  AreaConcreteHeightAndAutoWidthProps &
-  AreaMaxHeightAndAutoWidthProps;
-
-export type AreaStyledProps = TransientProps<AreaCustomProps>;
+export type AreaElement = ElementRef<typeof AreaStyled>;

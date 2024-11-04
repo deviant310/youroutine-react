@@ -6,7 +6,7 @@ import {
   NamedExoticComponent,
 } from "react";
 
-import { PropsWithRequiredChildren } from "~/rack/react";
+import { PropsWithRequiredChildren } from "~/react";
 
 export function registerProviders<
   Providers extends {

@@ -1,3 +1,3 @@
-export type TransientProps<P> = {
-  [K in keyof P as K extends string ? `$${K}` : K]: P[K];
-};
+import { KeyPrefix } from "~/typescript";
+
+export type TransientProps<T> = KeyPrefix<T, "$">;

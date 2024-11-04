@@ -16,7 +16,7 @@ import { styled } from "styled-components";
 import { TransientProps } from "../../../helpers";
 
 import { useRipple } from "./use-ripple";
-
+// TODO type=primary|secondary...
 export const Clickable: ClickableComponent = memo(
   forwardRef((props, forwardedRef) => {
     const { children, disabled, ...restProps } = props;
@@ -47,9 +47,11 @@ const ClickableStyled = styled.div<TransientProps<ClickableStyledProps>>`
   overflow: hidden;
   cursor: pointer;
   opacity: ${({ $disabled }) => $disabled && "50%"};
+  transition-duration: 150ms;
+  transition-property: background-color;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.tension[7].transparent()};
+    background-color: ${({ theme }) => theme.colors.tension[8].transparent()};
   }
 
   --ripple-background-color: ${({ theme }) =>

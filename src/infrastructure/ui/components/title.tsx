@@ -6,13 +6,10 @@ import { TextAlign } from "../core";
 import { getUnitWithMeasure, TransientProps } from "../helpers";
 
 export const Title = memo<TitleProps>(props => {
-  const { size = 0, textAlign, ...restProps } = props;
+  const { size = 1, textAlign, ...restProps } = props;
 
   switch (size) {
     default:
-    case 0:
-      return <H0 $textAlign={textAlign} {...restProps} />;
-
     case 1:
       return <H1 $textAlign={textAlign} {...restProps} />;
 
@@ -33,13 +30,16 @@ export const Title = memo<TitleProps>(props => {
 
     case 7:
       return <H7 $textAlign={textAlign} {...restProps} />;
+
+    case 8:
+      return <H8 $textAlign={textAlign} {...restProps} />;
   }
 });
 
 Title.displayName = "Title";
 
 const TitleStyled = styled.div<TransientProps<TitleStyledProps>>`
-  margin: ${getUnitWithMeasure(4)} 0;
+  margin: ${getUnitWithMeasure(1.6)} 0;
   font-weight: 600;
   text-align: ${({ $textAlign }) =>
     $textAlign &&
@@ -50,40 +50,41 @@ const TitleStyled = styled.div<TransientProps<TitleStyledProps>>`
     }[$textAlign]};
 `;
 
-const H0 = styled(TitleStyled)`
-  font-size: ${getUnitWithMeasure(11)};
+const H1 = styled(TitleStyled).attrs({ role: "heading", "aria-level": 1 })`
+  font-size: ${getUnitWithMeasure(4.4)};
 `;
 
-const H1 = styled(TitleStyled)`
-  font-size: ${getUnitWithMeasure(9)};
+const H2 = styled(TitleStyled).attrs({ role: "heading", "aria-level": 2 })`
+  font-size: ${getUnitWithMeasure(3.6)};
 `;
 
-const H2 = styled(TitleStyled)`
-  font-size: ${getUnitWithMeasure(7)};
-  line-height: ${getUnitWithMeasure(9)};
+const H3 = styled(TitleStyled).attrs({ role: "heading", "aria-level": 3 })`
+  font-size: ${getUnitWithMeasure(2.8)};
+  line-height: ${getUnitWithMeasure(3.6)};
 `;
 
-const H3 = styled(TitleStyled)`
-  font-size: ${getUnitWithMeasure(6)};
+const H4 = styled(TitleStyled).attrs({ role: "heading", "aria-level": 4 })`
+  font-size: ${getUnitWithMeasure(2.4)};
+  line-height: ${getUnitWithMeasure(3.6)};
 `;
 
-const H4 = styled(TitleStyled)`
-  font-size: ${getUnitWithMeasure(5)};
+const H5 = styled(TitleStyled).attrs({ role: "heading", "aria-level": 5 })`
+  font-size: ${getUnitWithMeasure(2)};
 `;
 
-const H5 = styled(TitleStyled)`
-  font-size: ${getUnitWithMeasure(4)};
+const H6 = styled(TitleStyled).attrs({ role: "heading", "aria-level": 6 })`
+  font-size: ${getUnitWithMeasure(1.6)};
 `;
 
-const H6 = styled(TitleStyled)`
-  font-size: ${getUnitWithMeasure(3)};
+const H7 = styled(TitleStyled).attrs({ role: "heading", "aria-level": 7 })`
+  font-size: ${getUnitWithMeasure(1.2)};
 `;
 
-const H7 = styled(TitleStyled)`
-  font-size: 0.625rem;
+const H8 = styled(TitleStyled).attrs({ role: "heading", "aria-level": 8 })`
+  font-size: ${getUnitWithMeasure(1)};
 `;
 
-export type TitleSize = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+export type TitleSize = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
 export interface TitleStyledProps {
   textAlign?: TextAlign;

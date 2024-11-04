@@ -1,17 +1,16 @@
-import { HTMLAttributes, memo } from "react";
+import { ElementRef, HTMLAttributes, memo } from "react";
 
-import { styled } from "styled-components";
+import { css, styled } from "styled-components";
 
-import {
-  UnitMultiplier,
-  measure,
-  getUnit,
-  getUnitWithMeasure,
-  TransientProps,
-} from "../../helpers";
+import { getUnitWithMeasure, TransientProps, UnitIndex } from "../../helpers";
 
 export const Paper = memo<PaperProps>(props => {
-  const { elevation = 1, backdrop = true, radius = 3, ...restProps } = props;
+  const {
+    elevation = 1.6,
+    backdrop = true,
+    radius = 0.8,
+    ...restProps
+  } = props;
 
   return (
     <PaperStyled
@@ -23,29 +22,32 @@ export const Paper = memo<PaperProps>(props => {
   );
 });
 
-const PaperStyled = styled.div<TransientProps<PaperStyledProps>>`
+export const PaperCSS = css<TransientProps<PaperStyledProps>>`
   overflow: hidden;
   background-color: ${({ theme, $backdrop }) =>
     $backdrop && theme.colors.default[9].filled()};
+
   box-shadow: ${({ $elevation, theme }) => {
     if (!$elevation) return;
 
-    const measureValue = getUnit($elevation);
-
-    return [
-      `0 ${measureValue * 4}${measure} ${measureValue * 6}${measure} 0 ${theme.colors.default[7].transparent()}`,
-      `0 ${measureValue}${measure} ${measureValue * 2}${measure} 0 ${theme.colors.default[8].transparent()}`,
-    ].join(",");
+    return `0 ${$elevation}rem ${$elevation * 1.5}rem 0 ${theme.colors.default[6].transparent()}`;
   }};
+
   border-radius: ${({ $radius }) => getUnitWithMeasure($radius)};
 `;
 
+const PaperStyled = styled.div<TransientProps<PaperStyledProps>>`
+  ${PaperCSS}
+`;
+
 export interface PaperStyledProps {
-  elevation?: UnitMultiplier;
+  elevation?: UnitIndex;
   backdrop?: boolean;
-  radius?: UnitMultiplier;
+  radius?: UnitIndex;
 }
 
 export interface PaperProps
   extends HTMLAttributes<HTMLDivElement>,
     PaperStyledProps {}
+
+export type PaperElement = ElementRef<typeof PaperStyled>;

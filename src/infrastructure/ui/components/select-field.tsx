@@ -1,137 +1,248 @@
-import { FunctionComponent, memo, useCallback, useState } from "react";
+import {
+  ElementRef,
+  FC,
+  FieldsetHTMLAttributes,
+  FocusEvent,
+  memo,
+  ReactNode,
+  useCallback,
+  useState,
+} from "react";
+
+import { styled } from "styled-components";
+import {
+  SelectInputOptionProps,
+  VirtualList,
+  VirtualListItemRenderer,
+  useSelectInput,
+} from "use-react-input/select-input";
 
 import {
-  SelectInputContainerProps,
-  SelectInputDropdownProps,
-  SelectInputOptionItem,
-  SelectInputProps,
-  SelectInputValue,
-  SelectInputVirtualList,
-  SelectInputVirtualListItemRenderer,
-  useSelectInput,
-} from "react-inputs/select-input";
-import { styled } from "styled-components";
+  animated,
+  Area,
+  CircleCSS,
+  CircleStyledProps,
+  Clickable,
+  CloseIcon,
+  Column,
+  ColumnElement,
+  FieldError,
+  FieldLabel,
+  FieldProps,
+  Fieldset,
+  FlexCSS,
+  FlexStyledProps,
+  Grid,
+  Paper,
+  Textbox,
+  ClickableProps,
+  TextboxSize,
+  FieldTextboxCSS,
+  FieldsetElement,
+} from "../core";
+import { TransientProps } from "../helpers";
 
-import { Error, Clickable, Textbox, ClickableElement, Fieldset } from "../core";
-import { animated } from "../helpers";
+export const SelectField = memo(function <OptionData>({
+  name,
+  label,
+  error,
+  optionComponent: FieldOption,
+  displayStringForOption,
+  dropdownToggleInitialValue = false,
+  getOptionKey,
+  options,
+  selectedOption,
+  setSelectedOption,
+  adornmentStart,
+  textboxValue,
+  setTextboxValue,
+  textboxSize,
+  textboxPlaceholder: fieldTextboxPlaceholder,
+  onContainerBlur: onFieldContainerBlur,
+  ...props
+}: SelectFieldPropsWithHTMLAttributes<OptionData>) {
+  type OptionRenderer = VirtualListItemRenderer<
+    ColumnElement,
+    SelectInputOptionProps<OptionData>
+  >;
 
-export const SelectField = memo(
-  <Name extends string, OptionElement extends HTMLElement, OptionData>(
-    props: SelectFieldProps<Name, OptionElement, OptionData>,
-  ) => {
-    type OptionRenderer = SelectInputVirtualListItemRenderer<
-      ClickableElement,
-      SelectInputOptionItem<OptionData>
-    >;
+  const [dropdownToggleOn, setDropdownToggleValue] = useState(
+    dropdownToggleInitialValue,
+  );
 
-    const {
-      adornmentComponent,
-      containerComponent: FieldContainer = SelectFieldContainer,
-      dropdownComponent: FieldDropdown = SelectFieldDropdown,
-      error,
-      label,
-      name,
-      optionComponent: FieldOption,
-      textboxComponent: FieldTextBox = Textbox,
-      ...hookProps
-    } = props;
+  const onOptionSelect = useCallback(
+    (option: OptionData | null) => {
+      setSelectedOption(option);
 
-    const [errorDisplayModeEnabled, setErrorDisplayMode] = useState(false);
+      setTextboxValue?.("");
 
-    const enableErrorDisplayMode = useCallback(
-      () => setErrorDisplayMode(true),
-      [],
-    );
+      setDropdownToggleValue(false);
+    },
+    [setSelectedOption, setTextboxValue],
+  );
 
-    const {
-      handleBlur,
-      handleTextboxChange,
-      optionsItems,
-      showDropdown,
-      textboxValue,
-    } = useSelectInput({
-      ...hookProps,
-      onBlur: enableErrorDisplayMode,
-    });
+  const { stringForSelectedOption, optionsProps } = useSelectInput({
+    displayStringForOption,
+    getOptionKey,
+    options,
+    selectedOption,
+    onOptionSelect,
+  });
 
-    const displayedError = errorDisplayModeEnabled && error;
-    const inputInvalid = Boolean(displayedError);
+  const textboxInvalid = Boolean(error);
+  const textboxPlaceholder = stringForSelectedOption || fieldTextboxPlaceholder;
+  const textboxPlaceholderMuted = !stringForSelectedOption;
 
-    const renderOption = useCallback<OptionRenderer>(
-      ({ data, key, onClick }, ref) => (
-        <Clickable key={key} onClick={onClick} ref={ref} role="option">
-          <FieldOption data={data} />
+  const onContainerBlur = useCallback(
+    (event: FocusEvent<ContainerElement>) => {
+      const { currentTarget, relatedTarget } = event;
+
+      if (currentTarget.contains(relatedTarget)) return;
+
+      setTextboxValue?.("");
+
+      setDropdownToggleValue(false);
+
+      onFieldContainerBlur?.(event);
+    },
+    [onFieldContainerBlur, setTextboxValue],
+  );
+
+  const onCleanerClick = useCallback(() => {
+    setTextboxValue?.("");
+
+    setSelectedOption(null);
+  }, [setSelectedOption, setTextboxValue]);
+
+  const renderOption = useCallback<OptionRenderer>(
+    ({ option, key, onClick }, ref) => (
+      <Column key={key} ref={ref}>
+        <Clickable
+          onClick={onClick}
+          role="option"
+          disabled={selectedOption === option}
+        >
+          <Area paddingVertical={0.8} paddingHorizontal={1.6}>
+            <FieldOption option={option} />
+          </Area>
         </Clickable>
-      ),
-      [FieldOption],
-    );
+      </Column>
+    ),
+    [FieldOption, selectedOption],
+  );
 
-    return (
-      <Fieldset>
-        <ErrorAnimatedContainer>{displayedError}</ErrorAnimatedContainer>
+  return (
+    <Fieldset {...props}>
+      <ErrorSlided>{error}</ErrorSlided>
 
-        <FieldContainer onBlur={handleBlur} role="group" tabIndex={-1}>
-          <FieldTextBox
-            adornmentComponent={adornmentComponent}
-            invalid={inputInvalid}
+      <Grid gap={0.4}>
+        {label && <FieldLabel>{label}</FieldLabel>}
+
+        <ContainerStyled onBlur={onContainerBlur}>
+          <TextboxStyled
             name={name}
-            onChange={handleTextboxChange}
-            placeholder={label}
-            role="textbox"
+            before={adornmentStart}
+            after={
+              selectedOption && (
+                <Cleaner
+                  onClick={onCleanerClick}
+                  onMouseDown={e => e.stopPropagation()}
+                />
+              )
+            }
+            invalid={textboxInvalid}
+            setValue={setTextboxValue}
+            onMouseDown={() => setDropdownToggleValue(true)}
+            placeholder={textboxPlaceholder}
+            placeholderMuted={textboxPlaceholderMuted}
+            size={textboxSize}
             value={textboxValue}
-            variant="filled"
+            disabled={!setTextboxValue}
           />
 
-          {showDropdown && (
-            <FieldDropdown role="dialog">
-              <SelectInputVirtualList
-                items={optionsItems}
-                renderItem={renderOption}
-              />
-            </FieldDropdown>
-          )}
-        </FieldContainer>
-      </Fieldset>
-    );
-  },
-);
+          <DropdownStyled>
+            {optionsProps && optionsProps.length > 0 && dropdownToggleOn && (
+              <Paper elevation={1}>
+                <Area paddingVertical={0.8}>
+                  <VirtualList items={optionsProps} renderItem={renderOption} />
+                </Area>
+              </Paper>
+            )}
+          </DropdownStyled>
+        </ContainerStyled>
+      </Grid>
+    </Fieldset>
+  );
+});
 
-const SelectFieldContainer = styled.div<SelectInputContainerProps>`
+const ContainerStyled = styled.div.attrs({
+  role: "group",
+  tabIndex: -1,
+})`
   position: relative;
 `;
 
-SelectFieldContainer.displayName = "SelectFieldContainer";
+const TextboxStyled = styled(Textbox)`
+  ${FieldTextboxCSS};
 
-const SelectFieldDropdown = styled.div<SelectInputDropdownProps>`
-  position: absolute;
-  top: 100%;
-  z-index: ${1e15 - 1};
-  background-color: ${({ theme }) => theme.colors.primary.hex()};
-  box-shadow: ${({ theme }) =>
-    `0 3px 6px 0 ${theme.colors.primary.darken(0.15).hex()}`};
-  width: -webkit-fill-available;
-  overflow: hidden;
+  cursor: ${({ disabled }) => disabled && "pointer"};
 `;
 
-SelectFieldDropdown.displayName = "SelectFieldDropdown";
+const DropdownStyled = styled(animated(Area, "scale"))`
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+`;
 
-const ErrorAnimatedContainer = animated(Error, "fade");
+const ErrorSlided = animated(FieldError, "slide");
 
-export type SelectFieldProps<
-  Name extends string,
-  OptionElement extends HTMLElement,
-  OptionData,
-> = Omit<
-  SelectInputProps<Name, OptionElement, OptionData>,
-  "optionComponent"
-> & {
-  adornmentComponent?: FunctionComponent;
-  error?: string;
+const Cleaner = memo<ClickableProps>(props => (
+  <ClickableFlexCircleStyled
+    $size={2.4}
+    $justifyContent="center"
+    $alignItems="center"
+    {...props}
+  >
+    <CloseIcon size={1.6} />
+  </ClickableFlexCircleStyled>
+));
+
+const ClickableFlexCircleStyled = styled(Clickable)<
+  TransientProps<FlexStyledProps & CircleStyledProps>
+>`
+  ${FlexCSS}
+  ${CircleCSS}
+
+  opacity: 0.2;
+  transition: opacity 150ms;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+export interface SelectFieldProps<OptionData> extends FieldProps {
+  displayStringForOption?(option: OptionData): string;
+  getOptionKey?(option: OptionData): string | number;
+  options: OptionData[];
+  selectedOption: OptionData | null;
+  setSelectedOption(option: OptionData | null): void;
+  dropdownToggleInitialValue?: boolean;
   optionComponent: SelectFieldOptionComponent<OptionData>;
-};
+  adornmentStart?: ReactNode;
+  textboxValue?: string;
+  setTextboxValue?(value: string): void;
+  textboxSize?: TextboxSize;
+  textboxPlaceholder?: string;
+  onContainerBlur?(event: FocusEvent<HTMLDivElement>): void;
+}
 
-export type SelectFieldOptionComponent<OptionData> = FunctionComponent<{
-  data: OptionData;
+interface SelectFieldPropsWithHTMLAttributes<OptionData>
+  extends Omit<FieldsetHTMLAttributes<FieldsetElement>, "name">,
+    SelectFieldProps<OptionData> {}
+
+export type SelectFieldOptionComponent<OptionData> = FC<{
+  option: OptionData;
 }>;
 
-export type SelectFieldValue<OptionData> = SelectInputValue<OptionData>;
+type ContainerElement = ElementRef<typeof ContainerStyled>;

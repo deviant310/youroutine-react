@@ -1,13 +1,12 @@
-import { RouteAbstract } from "./route";
+import { Route } from "./route";
 
-export function initHomeRoute<Route extends RouteAbstract>(
-  route: Route,
-  ...params: Parameters<Route>
+export function initHomeRoute<RouteTemplate extends string>(
+  route: Route<RouteTemplate>,
+  ...params: Parameters<Route<RouteTemplate>["build"]>
 ) {
   if (window.location.pathname === "/") {
-    const [routeParams] = params;
-    const pathname = route(routeParams);
+    const pathname = route.build(...params);
 
-    history.replaceState(routeParams ?? null, "", pathname);
+    history.replaceState(params[0] ?? null, "", pathname);
   }
 }

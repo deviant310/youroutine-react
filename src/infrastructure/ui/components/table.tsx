@@ -2,6 +2,7 @@ import { FC, FunctionComponent, memo, ReactElement, useCallback } from "react";
 
 import { styled } from "styled-components";
 
+import { Paper } from "../core";
 import { getUnitWithMeasure } from "../helpers";
 
 export const Table: TableComponent = memo(props => {
@@ -58,14 +59,15 @@ const TableRow: TableRowComponent = memo(
 
     return (
       <TableRowStyled onClick={onClick}>
-        {Object.entries(item).map(([key, value]) => {
-          const Cell = cells[key as keyof typeof item] as
+        {Object.keys(cells).map(key => {
+          const value = item[key as keyof typeof item];
+          const Cell = cells[key as keyof typeof cells] as
             | CellComponent<typeof item, keyof typeof item>
             | undefined;
 
           return (
             <div key={key}>
-              {Cell ? <Cell value={value} item={item} /> : value}
+              {Cell ? <Cell value={value} item={item} /> : `${value}`}
             </div>
           );
         })}
@@ -74,20 +76,24 @@ const TableRow: TableRowComponent = memo(
   },
 );
 
-const TableContainerStyled = styled.div`
+const TableContainerStyled = styled(Paper).attrs({
+  elevation: 0.6,
+  backdrop: false,
+})`
   display: grid;
   gap: 2px;
-  overflow: hidden;
-  font-size: 88%;
+  font-size: ${getUnitWithMeasure(1.4)};
+  line-height: ${getUnitWithMeasure(2)};
 `;
 
 const TableRowStyled = styled.div`
   display: grid;
+  gap: ${getUnitWithMeasure(2.4)};
   grid-template-columns: repeat(
     ${({ children }) => (Array.isArray(children) ? children.length : 0)},
     1fr
   );
-  padding: ${getUnitWithMeasure(4)} ${getUnitWithMeasure(5)};
+  padding: ${getUnitWithMeasure(1.6)} ${getUnitWithMeasure(2)};
   background-color: ${({ theme }) => theme.colors.default[9].filled()};
 `;
 
@@ -97,43 +103,43 @@ const TableHeadStyled = styled(TableRowStyled)`
 `;
 
 interface TableComponent extends Omit<FC, number> {
-  <Item extends object>(props: TableProps<Item>): ReactElement;
+  <RowData extends object>(props: TableProps<RowData>): ReactElement;
 }
 
-interface TableProps<Item extends object> {
-  data: Array<Item>;
-  columns: TableColumns<Item>;
-  onRowClick?(rowData: Item): void;
+interface TableProps<RowData extends object> {
+  data: Array<RowData>;
+  columns: TableColumns<RowData>;
+  onRowClick?(rowData: RowData): void;
 }
 
-export type TableColumns<Item extends object> = {
-  [K in keyof Item]: TableColumn<Item, K>;
+export type TableColumns<RowData extends object> = {
+  [Key in keyof RowData]?: TableColumn<RowData, Key>;
 };
 
-interface TableColumn<Item extends object, Key extends keyof Item> {
+interface TableColumn<RowData extends object, Key extends keyof RowData> {
   caption: string;
-  cellComponent?: CellComponent<Item, Key>;
+  cellComponent?: CellComponent<RowData, Key>;
 }
 
 interface TableRowComponent extends Omit<FunctionComponent, number> {
-  <Item extends object>(props: TableRowProps<Item>): ReactElement;
+  <RowData extends object>(props: TableRowProps<RowData>): ReactElement;
 }
 
-interface TableRowProps<Item extends object> {
-  item: Item;
-  cells: { [K in keyof Item]: CellComponent<Item, K> | undefined };
-  onClick?(rowData: Item): void;
+interface TableRowProps<RowData extends object> {
+  item: RowData;
+  cells: { [Key in keyof RowData]: CellComponent<RowData, Key> | undefined };
+  onClick?(rowData: RowData): void;
 }
 
 interface TableHeadProps {
   captions: Record<string, string>;
 }
 
-type CellComponent<Item extends object, Key extends keyof Item> = FC<
-  CellProps<Item, Key>
+type CellComponent<RowData extends object, Key extends keyof RowData> = FC<
+  CellProps<RowData, Key>
 >;
 
-interface CellProps<Item extends object, Key extends keyof Item> {
-  value: Item[Key];
-  item: Item;
+interface CellProps<RowData extends object, Key extends keyof RowData> {
+  value: RowData[Key];
+  item: RowData;
 }

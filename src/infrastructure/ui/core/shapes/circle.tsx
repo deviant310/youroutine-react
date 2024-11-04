@@ -2,11 +2,7 @@ import { HTMLAttributes, memo } from "react";
 
 import { css, styled } from "styled-components";
 
-import {
-  getUnitWithMeasure,
-  TransientProps,
-  UnitMultiplier,
-} from "../../helpers";
+import { getUnitWithMeasure, TransientProps, UnitIndex } from "../../helpers";
 
 export const Circle = memo<CircleProps>(({ size, ...props }) => (
   <CircleStyled $size={size} {...props} />
@@ -27,7 +23,7 @@ const CircleStyled = styled.div<TransientProps<CircleStyledProps>>`
 Circle.displayName = "Circle";
 
 export interface CircleStyledProps {
-  size: UnitMultiplier;
+  size: UnitIndex;
 }
 
 export interface CircleProps

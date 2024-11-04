@@ -1,7 +1,7 @@
 import { createElement } from "react";
 import { createRoot } from "react-dom/client";
 
-import { getRootElement } from "~/rack/react";
+import { getRootElement } from "~/react";
 
 import { registerProviders } from "~/infrastructure/context";
 import { HttpProvider } from "~/infrastructure/http";

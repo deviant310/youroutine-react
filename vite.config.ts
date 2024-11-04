@@ -1,20 +1,25 @@
 import react from "@vitejs/plugin-react-swc";
-import { defineConfig, Plugin, PreviewServer, ViteDevServer } from "vite";
+import {
+  Connect,
+  defineConfig,
+  Plugin,
+  PreviewServer,
+  ViteDevServer,
+} from "vite";
 import checker from "vite-plugin-checker";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-import { LocalOverride } from "./.local-overrides/local-override";
-
 const proxyHost = process.env.DEV_SERVER_PROXY;
+const httpOverridesEnabled = "DEV_SERVER_HTTP_OVERRIDES" in process.env;
 
 /**
  * https://vitejs.dev/config/
  */
 export default defineConfig(async ({ command }) => {
-  const { default: localOverrides }: LocalOverridesDefaultImport = await import(
+  const { default: applyOverrides }: HttpOverridesDefaultImport = await import(
     // eslint-disable-next-line
     // @ts-ignore Local overrides index file can be missing
-    "./.local-overrides"
+    "./.http-overrides"
   ).catch(() => ({}));
 
   return {
@@ -37,24 +42,23 @@ export default defineConfig(async ({ command }) => {
           useFlatConfig: true,
         },
       }),
-      localOverrides &&
-        (() => {
-          const configureServer = (server: ViteDevServer | PreviewServer) => {
-            localOverrides.forEach(([route, handler]) => {
-              server.middlewares.use(route, handler);
-            });
-          };
+      (() => {
+        if (!httpOverridesEnabled) return;
 
-          return {
-            name: "local-overrides",
-            configureServer,
-            configurePreviewServer: configureServer,
-          } as Plugin;
-        })(),
+        const configureServer = (server: ViteDevServer | PreviewServer) => {
+          applyOverrides?.(server.middlewares);
+        };
+
+        return {
+          name: "local-overrides",
+          configureServer,
+          configurePreviewServer: configureServer,
+        } as Plugin;
+      })(),
     ],
   };
 });
 
-interface LocalOverridesDefaultImport {
-  default?: Array<LocalOverride>;
+interface HttpOverridesDefaultImport {
+  default?(server: Connect.Server): void;
 }

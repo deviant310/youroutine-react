@@ -1,83 +1,96 @@
-import { HTMLAttributes, memo, useCallback } from "react";
+import { HTMLAttributes, memo, useEffect } from "react";
 
 import { createPortal } from "react-dom";
 import { styled } from "styled-components";
 
-import { getRootElement } from "~/rack/react";
+import { getRootElement } from "~/react";
 
 import {
+  animated,
   Area,
+  AreaCSS,
+  AreaProps,
+  CircleCSS,
+  CircleStyledProps,
+  Clickable,
+  ClickableElement,
   CloseIcon,
   FlexCSS,
-  Paper,
   FlexStyledProps,
-  CircleCSS,
-  Clickable,
-  CircleStyledProps,
-  ClickableElement,
+  GridCSS,
+  GridStyledProps,
+  Paper,
 } from "../core";
-import { animated, TransientProps } from "../helpers";
+import { TransientProps } from "../helpers";
 
 export const Popup = memo<PopupProps>(props => {
-  const { children, visible, setVisibility } = props;
+  const { children, opened, onClose } = props;
 
-  const closePopup = useCallback(() => setVisibility(false), [setVisibility]);
+  useEffect(() => {
+    document.body.style.overflowY = opened ? "hidden" : "";
+  }, [opened]);
 
   return createPortal(
-    <PopupContainer>
-      <PopupOverlayAnimatedContainer>
-        {visible && <PopupOverlayStyled onMouseDown={closePopup} />}
-      </PopupOverlayAnimatedContainer>
+    <PopupRootStyled>
+      <AreaFaded position="fixed">
+        {opened && <PopupBackgroundStyled />}
+      </AreaFaded>
 
-      <PopupAnimatedContainer>
-        {visible && (
-          <Paper radius={4}>
-            <Area position="absolute" right={3} top={3}>
-              <PopupClose onClick={closePopup} />
-            </Area>
+      <GridArea
+        $justifyContent="center"
+        $alignItems="center"
+        $position="fixed"
+        $top={0}
+        $left={0}
+        $width="100vw"
+        $height="100vh"
+        $overflow="auto"
+        $disabled={!opened}
+        onMouseDown={({ target, currentTarget }) =>
+          target === currentTarget && onClose?.()
+        }
+      >
+        <AreaScaled marginVertical={2.4}>
+          {opened && (
+            <Paper radius={1.6}>
+              <Area position="relative">
+                <Area position="absolute" right={1.2} top={1.2}>
+                  {onClose && <PopupClose onClick={onClose} />}
+                </Area>
 
-            {children}
-          </Paper>
-        )}
-      </PopupAnimatedContainer>
-    </PopupContainer>,
+                {children}
+              </Area>
+            </Paper>
+          )}
+        </AreaScaled>
+      </GridArea>
+    </PopupRootStyled>,
     getRootElement(),
   );
 });
 
-const PopupContainer = styled.div`
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 0;
-  left: 0;
+const PopupRootStyled = styled.div`
+  position: relative;
   z-index: 2;
 `;
 
-const PopupOverlayStyled = styled.div`
+const PopupBackgroundStyled = styled.div`
   width: 100vw;
   height: 100vh;
-  background-color: rgb(0 0 0 / 15%);
+  background-color: ${({ theme }) => theme.colors.default[5].transparent()};
 `;
 
-const PopupOverlayAnimatedContainer = animated(
-  styled.div`
-    position: relative;
-  `,
-  "fade",
-);
+const GridArea = styled.div<TransientProps<GridStyledProps & AreaProps>>`
+  ${GridCSS}
+  ${AreaCSS}
+`;
 
-const PopupAnimatedContainer = animated(
-  styled.div`
-    position: absolute;
-  `,
-  "slide",
-);
+const AreaScaled = animated(Area, "scale");
+const AreaFaded = animated(Area, "fade");
 
 const PopupClose = memo<PopupCloseProps>(props => (
   <PopupCloseStyled
-    $size={9}
+    $size={3.6}
     $justifyContent="center"
     $alignItems="center"
     {...props}
@@ -93,9 +106,14 @@ const PopupCloseStyled = styled(Clickable)<
   ${CircleCSS}
 `;
 
-export interface PopupProps extends HTMLAttributes<HTMLDivElement> {
-  visible: boolean;
-  setVisibility(visible: boolean): void;
+export interface PopupStyledProps {
+  opened: boolean;
+}
+
+export interface PopupProps
+  extends HTMLAttributes<HTMLDivElement>,
+    PopupStyledProps {
+  onClose?(): void;
 }
 
 type PopupCloseProps = HTMLAttributes<ClickableElement>;

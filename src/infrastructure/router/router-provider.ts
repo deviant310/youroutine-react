@@ -1,114 +1,100 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  createContext,
   createElement,
   memo,
   useMemo,
   useCallback,
   useState,
   FC,
-  useContext,
   useEffect,
 } from "react";
 
-import { RouteAbstract } from "./route";
-
-const context = createContext<Router>({} as Router);
-const { Provider } = context;
+import { Provider, RouterContextValue } from "./context";
+import { Route } from "./route";
 
 export const RouterProvider = memo<RouterProviderProps>(props => {
   const { routesEntries } = props;
+  const routesMap = useMemo(() => new Map(routesEntries), [routesEntries]);
 
-  const [locationPathname, setLocationPathname] = useState(
-    window.location.pathname,
+  const [, updateState] = useState<object>();
+  const forceUpdate = useCallback(() => updateState({}), []);
+
+  const { pathname, search, hash } = window.location;
+
+  const getRouteFromPath = useCallback<RouterContextValue["getRouteFromPath"]>(
+    (path: string) => {
+      for (const [route] of routesMap) {
+        if (route.pattern.test(path)) return route;
+      }
+    },
+    [routesMap],
   );
 
-  const componentPatternToComponentMap = useMemo(() => {
-    const map = new Map<RegExp, FC>();
+  const route = useMemo(
+    () => getRouteFromPath(pathname),
+    [getRouteFromPath, pathname],
+  );
 
-    for (const [route, component] of routesEntries) {
-      const pathPattern = new RegExp(
-        route.parsed
-          .filter(({ value }) => value)
-          .map(({ type, value }) => {
-            if (type === "param")
-              return new RegExp(`/(?<${value}>\\w+)/?`).source;
+  const pathParams = useMemo(
+    () => (route && pathname.match(route.pattern)?.groups) || {},
+    [pathname, route],
+  );
 
-            return new RegExp(`/?${value}/?`).source;
-          })
-          .join("") + "$",
-      );
+  const component = useMemo(
+    () => (route && routesMap.get(route)) || NotFound,
+    [route, routesMap],
+  );
 
-      map.set(pathPattern, component);
-    }
+  const navigate = useCallback<RouterContextValue["navigate"]>(
+    to => {
+      history.pushState(null, "", to);
 
-    return map;
-  }, [routesEntries]);
+      forceUpdate();
+    },
+    [forceUpdate],
+  );
 
-  const { component, routeParams } = useMemo(() => {
-    for (const [
-      componentPattern,
-      component,
-    ] of componentPatternToComponentMap) {
-      if (componentPattern.test(locationPathname)) {
-        const routeParams = locationPathname.match(componentPattern)?.groups;
+  const anchor = hash ? parseRawAnchor(hash) : null;
 
-        return { component, routeParams };
+  const setAnchor = useCallback<RouterContextValue["setAnchor"]>(
+    anchor => {
+      if (anchor === null) {
+        history.pushState(null, "", pathname + search);
+
+        return forceUpdate();
       }
-    }
 
-    return { component: NotFound };
-  }, [componentPatternToComponentMap, locationPathname]);
-
-  const navigate = useCallback<Router["navigate"]>((route, ...params) => {
-    const [routeParams] = params;
-    const pathname = route(routeParams);
-
-    history.pushState(routeParams ?? null, "", pathname);
-
-    setLocationPathname(pathname);
-  }, []);
+      window.location.hash = `#${parseRawAnchor(anchor)}`;
+    },
+    [forceUpdate, pathname, search],
+  );
 
   const value = useMemo(
-    () => ({ navigate, routeParams }),
-    [navigate, routeParams],
+    () => ({ getRouteFromPath, navigate, pathParams, anchor, setAnchor }),
+    [anchor, getRouteFromPath, navigate, pathParams, setAnchor],
   );
 
-  const onPopState = useCallback(() => {
-    setLocationPathname(window.location.pathname);
-  }, []);
-
   useEffect(() => {
-    window.addEventListener("popstate", onPopState);
+    window.addEventListener("popstate", forceUpdate);
+    window.addEventListener("hashchange", forceUpdate);
 
-    return () => window.removeEventListener("popstate", onPopState);
-  }, [onPopState]);
+    return () => {
+      window.removeEventListener("popstate", forceUpdate);
+      window.removeEventListener("hashchange", forceUpdate);
+    };
+  }, [forceUpdate]);
 
   return createElement(Provider, { value }, createElement(component));
 });
 
-export const useNavigator = () => useContext(context).navigate;
+const parseRawAnchor = (rawAnchor: string) => {
+  const anchorParts = rawAnchor.split("#");
 
-export const useParams = <Route extends RouteAbstract = never>() => {
-  type RouteParams = Parameters<Route>[0];
-  type RouteStringParams = { [K in keyof RouteParams]?: string };
-
-  const { routeParams } = useContext(context);
-
-  return (routeParams ?? {}) satisfies RouteStringParams as RouteStringParams;
+  return anchorParts[anchorParts.length - 1];
 };
 
-const NotFound: FC = () => {
-  return "Not found";
-};
-
-interface Router {
-  routeParams?: Record<string, string>;
-  navigate<Route extends RouteAbstract>(
-    route: Route,
-    ...params: Parameters<Route>
-  ): void;
-}
+const NotFound: FC = () => "Not found";
 
 interface RouterProviderProps {
-  routesEntries: Array<readonly [RouteAbstract, FC]>;
+  routesEntries: Array<readonly [Route<any>, FC]>;
 }

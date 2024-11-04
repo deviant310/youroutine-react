@@ -2,63 +2,43 @@ import { createGlobalStyle } from "styled-components";
 
 import { getUnitWithMeasure } from "~/infrastructure/ui";
 
-import * as Fonts from "./fonts";
+import "./fonts.css";
 
 export const Canvas = createGlobalStyle`
-  @font-face {
-    font-family: 'Euclid Circular B';
-    font-display: swap;
-    src: url(${Fonts.EuclidCircularBRegular}) format("woff2");
-    font-weight: 400;
-    font-style: normal
+  html {
+    font-size: 62.5%;
   }
-
-  @font-face {
-    font-family: 'Euclid Circular B';
-    font-display: swap;
-    src: url(${Fonts.EuclidCircularBMedium}) format("woff2");
-    font-weight: 500;
-    font-style: normal
-  }
-
-  @font-face {
-    font-family: 'Euclid Circular B';
-    font-display: swap;
-    src: url(${Fonts.EuclidCircularBSemibold}) format("woff2");
-    font-weight: 600;
-    font-style: normal
-  }
-
-  @font-face {
-    font-family: 'Euclid Circular B';
-    font-display: swap;
-    src: url(${Fonts.EuclidCircularBRegularItalic}) format("woff2");
-    font-weight: 400;
-    font-style: italic;
-  }
-
-  @font-face {
-    font-family: 'Euclid Circular B';
-    font-display: swap;
-    src: url(${Fonts.EuclidCircularBMediumItalic}) format("woff2");
-    font-weight: 500;
-    font-style: italic
-  }
-
-  @font-face {
-    font-family: 'Euclid Circular B';
-    font-display: swap;
-    src: url(${Fonts.EuclidCircularBSemiboldItalic}) format("woff2");
-    font-weight: 600;
-    font-style: italic
-  }
-
 
   body {
     font-family: Euclid Circular B, system-ui, sans-serif;
-    font-size: ${getUnitWithMeasure(4)};
-    line-height: ${getUnitWithMeasure(4)};
+    font-size: ${getUnitWithMeasure(1.6)};
+    line-height: ${getUnitWithMeasure(2.4)};
     color: ${({ theme }) => theme.colors.default[1].filled()};
     background-color: ${({ theme }) => theme.colors.default[8].filled()};
+  }
+
+  hr {
+    border: none;
+    height: 3px;
+    background-color: ${({ theme }) => theme.colors.default[7].filled()};
+  }
+
+  a:not([href]) {
+    pointer-events: none;
+  }
+
+  fieldset {
+    border-width: 0;
+    padding: 0;
+    margin: 0 0 ${getUnitWithMeasure(1.4)} 0;
+  }
+
+  svg {
+    display: flex;
+    fill: currentColor;
+  }
+
+  :focus-visible {
+    outline: none;
   }
 `;

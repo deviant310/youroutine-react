@@ -167,23 +167,4 @@ export const GlobalStyle = createGlobalStyle`
     color: inherit;
     background-color: transparent;
   }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-weight: 500;
-  }
-
-  h2 {
-    font-size: 1.5em;
-  }
-
-  fieldset {
-    border-width: 0;
-    padding: 0;
-    margin: 0;
-  }
-
-  svg {
-    display: flex;
-    fill: inherit;
-  }
 `;

@@ -1,37 +1,35 @@
 import { memo, useCallback } from "react";
 
-import { useTitle } from "~/infrastructure/hooks";
+import { useDocumentTitle } from "~/react";
+
 import { useNavigator } from "~/infrastructure/router";
 import {
   Area,
   Button,
   Flex,
-  Paper,
-  Popup,
+  Loader,
   Table,
   TableColumns,
   Title,
 } from "~/infrastructure/ui";
 
-import { Header } from "~/concern/common/chunks";
-import { taskRoute } from "~/concern/common/routes";
-import { useTaskPopup } from "~/concern/common/stores";
-import { useTasks } from "~/concern/common/third-party";
-import { Task } from "~/concern/entities";
+import { Header } from "~/concern/chunks";
+import { useTasksRetrieving } from "~/concern/common/third-party";
+import { Task } from "~/concern/general/entities";
+import { taskRoute } from "~/concern/general/routes";
 
-import { CreateTaskForm } from "./create-task-form";
+import { TaskCreatePopup, useTaskCreatePopupToggle } from "./popups";
 
 export const TasksPage = memo(() => {
-  useTitle("Tasks");
+  useDocumentTitle("Tasks");
 
   const navigate = useNavigator();
-  const { tasks, loadingTasks } = useTasks();
-
-  const { taskPopupIsVisible, setTaskPopupVisibility } = useTaskPopup();
+  const { turnTaskCreatePopupToggleOn } = useTaskCreatePopupToggle();
+  const { tasks, retrievingTasks } = useTasksRetrieving();
 
   const onRowClick = useCallback(
     (task: Task) => {
-      navigate(taskRoute, { id: task.id });
+      navigate(taskRoute.build({ id: task.id }));
     },
     [navigate],
   );
@@ -41,39 +39,26 @@ export const TasksPage = memo(() => {
       <Header />
 
       <Area marginHorizontal="auto" maxWidth="1200px">
-        <Area marginBottom={2}>
+        <Area marginBottom={0.8}>
           <Flex justifyContent="between" alignItems="center">
-            <Title size={2}>Tasks</Title>
+            <Title size={3}>Tasks</Title>
 
-            <Button
-              variant="contained"
-              color="primary-light"
-              onClick={() => setTaskPopupVisibility(true)}
-            >
+            <Loader size={2} />
+
+            <Button type="primary-light" onClick={turnTaskCreatePopupToggleOn}>
               Create task
             </Button>
           </Flex>
         </Area>
 
-        {!tasks && loadingTasks && "Loading tasks..."}
+        {!tasks && retrievingTasks && "Loading tasks..."}
 
         {tasks && (
-          <Paper elevation={1} backdrop={false} radius={2}>
-            <Table data={tasks} columns={columns} onRowClick={onRowClick} />
-          </Paper>
+          <Table data={tasks} columns={columns} onRowClick={onRowClick} />
         )}
       </Area>
 
-      <Popup
-        visible={taskPopupIsVisible}
-        setVisibility={setTaskPopupVisibility}
-      >
-        <Area paddingHorizontal={10} paddingVertical={4}>
-          <Title size={3}>Create task</Title>
-
-          <CreateTaskForm />
-        </Area>
-      </Popup>
+      <TaskCreatePopup />
     </>
   );
 });
@@ -82,10 +67,6 @@ const columns: TableColumns<Task> = {
   id: { caption: "ID" },
   title: { caption: "Title" },
   description: { caption: "Description" },
-  approved: {
-    caption: "Approved",
-    cellComponent: ({ value }) => (value ? "Yes" : "No"),
-  },
 };
 
 TasksPage.displayName = "TasksPage";

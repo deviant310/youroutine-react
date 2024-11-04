@@ -1,40 +1,30 @@
-export const measure = "rem";
-
-export function getUnit(multiplier: UnitMultiplier) {
-  return {
-    0: 0,
-    1: 0.25,
-    2: 0.5,
-    3: 0.75,
-    4: 1,
-    5: 1.25,
-    6: 1.5,
-    7: 1.75,
-    8: 2,
-    9: 2.25,
-    10: 2.5,
-    11: 2.75,
-    12: 3,
-  }[multiplier];
-}
-
-export function getUnitWithMeasure(value: string | UnitMultiplier | undefined) {
-  if (typeof value === "number") return `${getUnit(value)}${measure}`;
+export function getUnitWithMeasure(value: UnitIndex | string | undefined) {
+  if (typeof value === "number") return `${value}rem`;
 
   return value;
 }
 
-export type UnitMultiplier =
+export type UnitIndex =
   | 0
+  | 0.2
+  | 0.4
+  | 0.6
+  | 0.8
   | 1
+  | 1.2
+  | 1.4
+  | 1.6
+  | 1.8
   | 2
+  | 2.2
+  | 2.4
+  | 2.6
+  | 2.8
   | 3
+  | 3.2
+  | 3.4
+  | 3.6
+  | 3.8
   | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | 9
-  | 10
-  | 11
-  | 12;
+  | 4.2
+  | 4.4;

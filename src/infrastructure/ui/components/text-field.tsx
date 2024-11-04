@@ -1,64 +1,75 @@
+import { ChangeEvent, FocusEvent, memo, ReactNode } from "react";
+
+import { styled } from "styled-components";
+
 import {
-  FunctionComponent,
-  ReactElement,
-  memo,
-  useState,
-  useCallback,
-} from "react";
+  animated,
+  FieldError,
+  FieldLabel,
+  FieldProps,
+  Fieldset,
+  FieldTextboxCSS,
+  Grid,
+  Textbox,
+  TextboxElement,
+  TextboxSize,
+} from "../core";
 
-import { TextInputProps, useTextInput } from "react-inputs/text-input";
-
-import { Error, Fieldset, Textbox } from "../core";
-import { animated } from "../helpers";
-
-export const TextField: TextFieldComponent = memo(props => {
+export const TextField = memo<TextFieldProps>(props => {
   const {
-    adornmentComponent,
-    error,
-    textboxComponent: FieldTextbox = Textbox,
-    label,
     name,
-    ...hookProps
+    label,
+    error,
+    adornmentStart,
+    adornmentEnd,
+    textboxPlaceholder,
+    textboxSize,
+    value,
+    setValue,
+    onTextboxChange,
+    onTextboxBlur,
+    ...restProps
   } = props;
 
-  const [errorDisplayModeEnabled, setErrorDisplayMode] = useState(false);
-
-  const enableErrorDisplayMode = useCallback(
-    () => setErrorDisplayMode(true),
-    [],
-  );
-
-  const { inputValue, onInputChange } = useTextInput(hookProps);
-  const displayedError = errorDisplayModeEnabled && error;
-  const inputInvalid = Boolean(displayedError);
+  const inputInvalid = Boolean(error);
 
   return (
-    <Fieldset>
-      <ErrorAnimatedContainer>{displayedError}</ErrorAnimatedContainer>
+    <Fieldset {...restProps}>
+      <FieldErrorSlided>{error}</FieldErrorSlided>
 
-      <FieldTextbox
-        adornmentComponent={adornmentComponent}
-        invalid={inputInvalid}
-        name={name}
-        onBlur={enableErrorDisplayMode}
-        onChange={onInputChange}
-        placeholder={label}
-        type="text"
-        value={inputValue}
-        variant="filled"
-      />
+      <Grid gap={0.4}>
+        {label && <FieldLabel>{label}</FieldLabel>}
+
+        <TextboxStyled
+          name={name}
+          before={adornmentStart}
+          after={adornmentEnd}
+          invalid={inputInvalid}
+          onBlur={onTextboxBlur}
+          setValue={setValue}
+          onChange={onTextboxChange}
+          placeholder={textboxPlaceholder}
+          value={value}
+          size={textboxSize}
+        />
+      </Grid>
     </Fieldset>
   );
 });
 
-const ErrorAnimatedContainer = animated(Error, "fade");
+const TextboxStyled = styled(Textbox)`
+  ${FieldTextboxCSS}
+`;
 
-export interface TextFieldComponent extends Omit<FunctionComponent, number> {
-  <Name extends string>(props: TextFieldProps<Name>): ReactElement;
-}
+const FieldErrorSlided = animated(FieldError, "slide");
 
-export interface TextFieldProps<Name extends string>
-  extends TextInputProps<Name> {
-  adornmentComponent?: FunctionComponent;
-  error?: string;
+export interface TextFieldProps extends FieldProps {
+  value: string;
+  setValue(value: string): void;
+  adornmentStart?: ReactNode;
+  adornmentEnd?: ReactNode;
+  textboxSize?: TextboxSize;
+  textboxPlaceholder?: string;
+  onTextboxChange?(event: ChangeEvent<TextboxElement>): void;
+  onTextboxBlur?(event: FocusEvent<TextboxElement>): void;
 }

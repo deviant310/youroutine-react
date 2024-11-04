@@ -1,6 +1,6 @@
 // inputs
 export * from "./button";
-export * from "./masked-field";
+//export * from "./masked-field";
 export * from "./select-field";
 export * from "./text-field";
 
@@ -10,5 +10,4 @@ export * from "./table";
 
 // typography
 export * from "./paragraph";
-export * from "./text";
 export * from "./title";

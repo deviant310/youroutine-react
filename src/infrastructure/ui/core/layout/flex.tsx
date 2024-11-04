@@ -2,11 +2,7 @@ import { HTMLAttributes, memo } from "react";
 
 import { css, styled } from "styled-components";
 
-import {
-  UnitMultiplier,
-  getUnitWithMeasure,
-  TransientProps,
-} from "../../helpers";
+import { UnitIndex, getUnitWithMeasure, TransientProps } from "../../helpers";
 
 export const Flex = memo<FlexProps>(props => {
   const { alignItems, gap, justifyContent, ...restProps } = props;
@@ -34,6 +30,7 @@ export const FlexCSS = css<TransientProps<FlexStyledProps>>`
       around: "space-around",
       between: "space-between",
       start: "start",
+      end: "end",
     }[$justifyContent]};
 
   gap: ${({ $gap }) => getUnitWithMeasure($gap)};
@@ -44,9 +41,9 @@ const FlexStyled = styled.div<TransientProps<FlexStyledProps>>`
 `;
 
 export type FlexStyledProps = {
+  justifyContent?: "center" | "start" | "end" | "around" | "between";
   alignItems?: "center" | "top" | "bottom" | "baseline";
-  justifyContent?: "center" | "start" | "around" | "between";
-  gap?: UnitMultiplier;
+  gap?: UnitIndex;
 };
 
 export interface FlexProps

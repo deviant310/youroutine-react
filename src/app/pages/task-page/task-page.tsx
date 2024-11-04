@@ -1,23 +1,28 @@
 import { memo } from "react";
 
-import { useTitle } from "~/infrastructure/hooks";
-import { useParams } from "~/infrastructure/router";
-import { Area, Title } from "~/infrastructure/ui";
+import { useDocumentTitle } from "~/react";
 
-import { Header } from "~/concern/common/chunks";
-import { taskRoute } from "~/concern/common/routes";
+import { usePathParams } from "~/infrastructure/router";
+import { Area, Flex, Title } from "~/infrastructure/ui";
+
+import { Header } from "~/concern/chunks";
+import { taskRoute } from "~/concern/general/routes";
 
 export const TaskPage = memo(() => {
-  const { id } = useParams<typeof taskRoute>();
+  const { id } = usePathParams<typeof taskRoute>();
 
-  useTitle(`Task ${id}`);
+  useDocumentTitle(`Task ${id}`);
 
   return (
     <>
       <Header />
 
       <Area marginHorizontal="auto" maxWidth="1200px">
-        <Title size={2}>Task {id}</Title>
+        <Area marginBottom={0.8}>
+          <Flex justifyContent="between" alignItems="center">
+            <Title size={3}>Task {id}</Title>
+          </Flex>
+        </Area>
       </Area>
     </>
   );
