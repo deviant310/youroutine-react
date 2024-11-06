@@ -1,5 +1,3 @@
-import Color from "color";
-
 import { Shade } from "./shade";
 
 export interface Theme {
@@ -15,7 +13,7 @@ export interface Theme {
       8: Shade;
       9: Shade;
     };
-    tension: {
+    primary: {
       0: Shade;
       1: Shade;
       2: Shade;
@@ -26,7 +24,7 @@ export interface Theme {
       7: Shade;
       8: Shade;
     };
-    accent: {
+    secondary: {
       0: Shade;
       1: Shade;
       2: Shade;
@@ -37,7 +35,9 @@ export interface Theme {
       7: Shade;
       8: Shade;
     };
-    danger: Color;
-    primary: Color;
+    error: {
+      0: Shade;
+      1: Shade;
+    };
   };
 }

@@ -1,6 +1,6 @@
-import { memo, useCallback } from "react";
+import { memo, useCallback, useEffect } from "react";
 
-import { Button, Flex } from "~/infrastructure/ui";
+import { Alert, Button, Flex } from "~/infrastructure/ui";
 
 import { useTaskCreating } from "~/concern/common/third-party";
 
@@ -13,29 +13,33 @@ import {
   TitleField,
 } from "./fields";
 
-export const TaskCreateForm = memo(() => (
-  <>
-    <TitleField />
+export const TaskCreateForm = memo(() => {
+  const { creatingTaskError } = useTaskCreating();
 
-    <DescriptionField />
+  return (
+    <>
+      <TitleField />
 
-    <Flex justifyContent="between" gap={2}>
-      <ProjectField />
+      <DescriptionField />
 
-      <PriorityField />
-    </Flex>
-  </>
-));
+      <Flex justifyContent="between" gap={2}>
+        <ProjectField />
+
+        <PriorityField />
+      </Flex>
+
+      {creatingTaskError instanceof Error && (
+        <Alert type="error">{creatingTaskError.message}</Alert>
+      )}
+    </>
+  );
+});
 
 export const TaskCreateFormSubmitButton = memo(() => {
-  const { createTask, creatingTask } = useTaskCreating();
+  const { task, createTask, creatingTask } = useTaskCreating();
+
   const form = useTaskCreateForm();
   const formValid = form.valid();
-
-  const onMouseDown = useCallback(() => {
-    setTimeout(() => form.clean(), 0);
-    setTimeout(() => form.stain(), 100);
-  }, [form]);
 
   const onClick = useCallback(() => {
     if (creatingTask) return;
@@ -52,8 +56,22 @@ export const TaskCreateFormSubmitButton = memo(() => {
     }
   }, [createTask, creatingTask, form.state.values, formValid]);
 
+  const onMouseDown = useCallback(() => {
+    setTimeout(() => form.clean(), 0);
+    setTimeout(() => form.stain(), 100);
+  }, [form]);
+
+  useEffect(() => {
+    if (task) console.log(task);
+  }, [task]);
+
   return (
-    <Button onClick={onClick} onMouseDown={onMouseDown} disabled={creatingTask}>
+    <Button
+      onClick={onClick}
+      onMouseDown={onMouseDown}
+      loading={creatingTask}
+      disabled={creatingTask}
+    >
       Create task
     </Button>
   );

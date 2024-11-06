@@ -15,6 +15,7 @@ import { useTaskCreateFormField } from "../../../stores";
 
 export const ProjectField = () => {
   const [searchValue, setSearchValue] = useState("");
+  // TODO переместить фильтрацию внутрь хука
   const { projects } = useProjectsRetrieving();
 
   const { name, value, setValue, error, dirty, stain } =
@@ -39,15 +40,15 @@ export const ProjectField = () => {
       name={name}
       label="Project"
       options={filteredProjects}
-      selectedOption={value}
-      setSelectedOption={setValue}
+      value={value}
+      onChange={setValue}
       displayStringForOption={Project.getInstanceName}
       getOptionKey={Project.getInstanceId}
       optionComponent={ProjectFieldOption}
       error={displayedError}
       onContainerBlur={stain}
       textboxValue={searchValue}
-      setTextboxValue={setSearchValue}
+      onTextboxChange={setSearchValue}
       textboxPlaceholder="Select project"
       textboxSize="auto"
     />

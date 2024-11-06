@@ -1,3 +1,5 @@
+import { UUID } from "node:crypto";
+
 import { buildRequest } from "~/infrastructure/http";
 
 import { baseUrl } from "../base-url";
@@ -9,10 +11,10 @@ export const buildTasksRetrieveRequest = () =>
   });
 
 export type TasksRetrieveResponseData = Array<{
-  id: number;
+  id: UUID;
   title: string;
   description: string;
-  projectId: number;
-  status: string | null;
-  priority: string;
+  projectId: UUID;
+  status: "underway" | "completed" | "rejected" | null;
+  priority: "low" | "medium" | "high";
 }>;

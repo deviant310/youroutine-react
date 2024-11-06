@@ -4,3 +4,4 @@ export * from "./row";
 export * from "./grid";
 export * from "./flex";
 export * from "./paper";
+export * from "./hidden";

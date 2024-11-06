@@ -9,31 +9,39 @@ import {
 
 import { Ripple } from "./ripple";
 
-export function useRipple<T extends HTMLElement | undefined>(element: T) {
-  const [, setRenderingMark] = useState({});
+export function useRipple<T extends HTMLElement | null>() {
+  const [, updateState] = useState<object>();
+  const forceUpdate = useCallback(() => updateState({}), []);
   const [rippleSize, setRippleSize] = useState(0);
-  //const ref = useRef<T>(null);
+  const ref = useRef<T>(null);
   const ripplesSet = useRef(new Set<ReactNode>());
   const ripples = Array.from(ripplesSet.current);
 
-  const removeRipple = useCallback((ripple: ReactNode) => {
-    ripplesSet.current.delete(ripple);
+  const removeRipple = useCallback(
+    (ripple: ReactNode) => {
+      ripplesSet.current.delete(ripple);
 
-    setRenderingMark({});
-  }, []);
+      forceUpdate();
+    },
+    [forceUpdate],
+  );
 
   const onMouseDown = useCallback(
     ({ button, clientX, clientY }: MouseEvent) => {
       if (button === 2) return;
 
-      requestAnimationFrame(() => {
+      setTimeout(() => {
+        const { current: element } = ref;
+
         if (!element) return;
 
         const { left, top } = element.getBoundingClientRect();
 
         const ripple = (
           <Ripple
-            onRippleEnd={() => removeRipple(ripple)}
+            onRippleLeave={() => {
+              removeRipple(ripple);
+            }}
             key={Math.floor(Math.random() * 1e15)}
             offsetLeft={clientX - left - rippleSize / 2}
             offsetTop={clientY - top - rippleSize / 2}
@@ -43,13 +51,15 @@ export function useRipple<T extends HTMLElement | undefined>(element: T) {
 
         ripplesSet.current.add(ripple);
 
-        setRenderingMark({});
-      });
+        forceUpdate();
+      }, 0);
     },
-    [element, removeRipple, rippleSize],
+    [forceUpdate, removeRipple, rippleSize],
   );
 
   useEffect(() => {
+    const { current: element } = ref;
+
     element?.addEventListener("mousedown", onMouseDown);
 
     setRippleSize((element?.offsetWidth ?? 0) * 2);
@@ -57,7 +67,7 @@ export function useRipple<T extends HTMLElement | undefined>(element: T) {
     return () => {
       element?.removeEventListener("mousedown", onMouseDown);
     };
-  }, [element, onMouseDown]);
+  }, [onMouseDown]);
 
-  return useMemo(() => ({ ripples }), [ripples]);
+  return useMemo(() => ({ ref, ripples }), [ripples]);
 }

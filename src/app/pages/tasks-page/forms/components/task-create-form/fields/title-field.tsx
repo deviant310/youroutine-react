@@ -16,7 +16,7 @@ export const TitleField = () => {
     <TextField
       name={name}
       label="Title"
-      setValue={setValue}
+      onChange={setValue}
       value={value}
       error={displayedError}
       onTextboxBlur={stain}

@@ -11,19 +11,3 @@ export const useProjectsRetrieving = () => {
 
   return { projects, retrievingProjects, retrievingProjectsError };
 };
-
-export const useProjectsLazyRetrieving = () => {
-  const {
-    data: projects,
-    perform: retrieveProjects,
-    isLoading: retrievingProjects,
-    error: retrievingProjectsError,
-  } = useQueryAction(retrieveProjectsAction, { keepData: "auto" });
-
-  return {
-    projects,
-    retrieveProjects,
-    retrievingProjects,
-    retrievingProjectsError,
-  };
-};

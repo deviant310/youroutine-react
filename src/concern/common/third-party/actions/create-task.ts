@@ -24,12 +24,19 @@ export const createTask = async (
   return mapTaskCreateResponseData(data);
 };
 
-export const mapTaskCreateResponseData = (data: TaskCreateResponseData) =>
+export const mapTaskCreateResponseData = ({
+  id,
+  title,
+  description,
+  projectId,
+  status,
+  priority,
+}: TaskCreateResponseData) =>
   new Task({
-    id: data.id,
-    title: data.title,
-    description: data.description,
-    projectId: data.projectId,
-    status: new TaskStatus(data.status as TaskStatus["key"]),
-    priority: new TaskPriority(data.priority as TaskPriority["key"]),
+    id,
+    title,
+    description,
+    projectId,
+    status: status ? new TaskStatus(status) : null,
+    priority: new TaskPriority(priority),
   });

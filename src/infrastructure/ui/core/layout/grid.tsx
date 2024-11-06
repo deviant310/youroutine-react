@@ -4,19 +4,25 @@ import { css, styled } from "styled-components";
 
 import { UnitIndex, getUnitWithMeasure, TransientProps } from "../../helpers";
 
-export const Grid = memo<GridProps>(props => {
-  const { alignItems, autoFlow, gap, justifyContent, ...restProps } = props;
-
-  return (
+export const Grid = memo<GridProps>(
+  ({
+    alignItems,
+    autoFlow,
+    gap,
+    justifyContent,
+    templateColumns,
+    ...props
+  }) => (
     <GridStyled
       $alignItems={alignItems}
       $autoFlow={autoFlow}
       $gap={gap}
       $justifyContent={justifyContent}
-      {...restProps}
+      $templateColumns={templateColumns}
+      {...props}
     />
-  );
-});
+  ),
+);
 
 Grid.displayName = "Grid";
 
@@ -36,6 +42,8 @@ export const GridCSS = css<TransientProps<GridStyledProps>>`
     }[$justifyContent]};
 
   gap: ${({ $gap }) => getUnitWithMeasure($gap)};
+
+  grid-template-columns: ${({ $templateColumns }) => $templateColumns};
 `;
 
 const GridStyled = styled.div<TransientProps<GridStyledProps>>`
@@ -46,6 +54,7 @@ export type GridStyledProps = {
   justifyContent?: "center" | "start" | "end" | "around" | "between";
   alignItems?: "center" | "top" | "bottom" | "baseline";
   autoFlow?: "row" | "column";
+  templateColumns?: string;
   gap?: UnitIndex;
 };
 

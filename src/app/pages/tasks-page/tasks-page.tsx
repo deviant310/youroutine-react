@@ -7,7 +7,6 @@ import {
   Area,
   Button,
   Flex,
-  Loader,
   Table,
   TableColumns,
   Title,
@@ -42,8 +41,6 @@ export const TasksPage = memo(() => {
         <Area marginBottom={0.8}>
           <Flex justifyContent="between" alignItems="center">
             <Title size={3}>Tasks</Title>
-
-            <Loader size={2} />
 
             <Button type="primary-light" onClick={turnTaskCreatePopupToggleOn}>
               Create task

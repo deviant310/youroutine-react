@@ -1,4 +1,4 @@
-export * from "./animated";
+export * from "./animations";
 export * from "./input";
 export * from "./layout";
 export * from "./shapes";

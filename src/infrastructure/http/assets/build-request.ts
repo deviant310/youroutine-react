@@ -2,14 +2,19 @@
 import { RequestPayload, ResponseType } from "../helpers";
 
 export const buildRequest: RequestBuilder = options => {
-  const { headers, method, url, responseType = "json" } = options;
+  const { headers: headersInit, method, url, responseType = "json" } = options;
+
+  const headers = new Headers({
+    "Content-Type": "application/json",
+    ...headersInit,
+  });
 
   return {
     request: new Request(url, {
       ...(("data" satisfies keyof RequestConfigWithData) in options && {
         body: JSON.stringify(options.data),
       }),
-      ...(headers && { headers: new Headers(headers) }),
+      headers,
       method,
     }),
     responseType,

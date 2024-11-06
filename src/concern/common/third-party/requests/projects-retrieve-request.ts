@@ -1,3 +1,5 @@
+import { UUID } from "node:crypto";
+
 import { buildRequest } from "~/infrastructure/http";
 
 import { baseUrl } from "../base-url";
@@ -9,7 +11,7 @@ export const buildProjectsRetrieveRequest = () =>
   });
 
 export type ProjectsRetrieveResponseData = Array<{
-  id: number;
+  id: UUID;
   name: string;
   description: string;
 }>;

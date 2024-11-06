@@ -28,7 +28,7 @@ export class Route<RouteTemplate extends string> {
         .filter(({ value }) => value)
         .map(({ type, value }) => {
           if (type === "param")
-            return new RegExp(`/(?<${value}>\\w+)/?`).source;
+            return new RegExp(`/(?<${value}>[A-Za-z0-9\\-]+)/?`).source;
 
           return new RegExp(`/?${value}/?`).source;
         })

@@ -23,9 +23,8 @@ export const RouterProvider = memo<RouterProviderProps>(props => {
 
   const getRouteFromPath = useCallback<RouterContextValue["getRouteFromPath"]>(
     (path: string) => {
-      for (const [route] of routesMap) {
+      for (const [route] of routesMap)
         if (route.pattern.test(path)) return route;
-      }
     },
     [routesMap],
   );

@@ -4,9 +4,10 @@ export * from "./button";
 export * from "./select-field";
 export * from "./text-field";
 
-// layout
+// surfaces
 export * from "./popup";
 export * from "./table";
+export * from "./alert";
 
 // typography
 export * from "./paragraph";

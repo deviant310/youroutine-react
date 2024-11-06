@@ -1,4 +1,11 @@
-import { ChangeEvent, FocusEvent, memo, ReactNode } from "react";
+import {
+  ChangeEvent,
+  FieldsetHTMLAttributes,
+  FocusEvent,
+  memo,
+  ReactNode,
+  useCallback,
+} from "react";
 
 import { styled } from "styled-components";
 
@@ -8,14 +15,16 @@ import {
   FieldLabel,
   FieldProps,
   Fieldset,
+  FieldsetElement,
   FieldTextboxCSS,
   Grid,
   Textbox,
   TextboxElement,
+  TextboxInputElement,
   TextboxSize,
 } from "../core";
 
-export const TextField = memo<TextFieldProps>(props => {
+export const TextField = memo<TextFieldPropsWithHTMLAttributes>(props => {
   const {
     name,
     label,
@@ -25,13 +34,19 @@ export const TextField = memo<TextFieldProps>(props => {
     textboxPlaceholder,
     textboxSize,
     value,
-    setValue,
-    onTextboxChange,
+    onChange,
     onTextboxBlur,
     ...restProps
   } = props;
 
   const inputInvalid = Boolean(error);
+
+  const onTextboxChange = useCallback(
+    ({ target }: ChangeEvent<TextboxInputElement>) => {
+      onChange?.(target.value);
+    },
+    [onChange],
+  );
 
   return (
     <Fieldset {...restProps}>
@@ -46,7 +61,6 @@ export const TextField = memo<TextFieldProps>(props => {
           after={adornmentEnd}
           invalid={inputInvalid}
           onBlur={onTextboxBlur}
-          setValue={setValue}
           onChange={onTextboxChange}
           placeholder={textboxPlaceholder}
           value={value}
@@ -65,11 +79,14 @@ const FieldErrorSlided = animated(FieldError, "slide");
 
 export interface TextFieldProps extends FieldProps {
   value: string;
-  setValue(value: string): void;
+  onChange?(value: string): void;
   adornmentStart?: ReactNode;
   adornmentEnd?: ReactNode;
   textboxSize?: TextboxSize;
   textboxPlaceholder?: string;
-  onTextboxChange?(event: ChangeEvent<TextboxElement>): void;
   onTextboxBlur?(event: FocusEvent<TextboxElement>): void;
 }
+
+interface TextFieldPropsWithHTMLAttributes
+  extends Omit<FieldsetHTMLAttributes<FieldsetElement>, "name" | "onChange">,
+    TextFieldProps {}

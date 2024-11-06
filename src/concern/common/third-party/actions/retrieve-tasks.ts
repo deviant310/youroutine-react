@@ -1,6 +1,6 @@
 import { performRequest } from "~/infrastructure/http";
 
-import { Task, TaskPriority } from "~/concern/general/entities";
+import { Task, TaskPriority, TaskStatus } from "~/concern/general/entities";
 
 import {
   buildTasksRetrieveRequest,
@@ -23,7 +23,7 @@ export const mapTasksRetrieveResponseData = (data: TasksRetrieveResponseData) =>
         title,
         description,
         projectId,
-        status: status as Task["status"],
-        priority: new TaskPriority(priority as TaskPriority["key"]),
+        status: status ? new TaskStatus(status) : null,
+        priority: new TaskPriority(priority),
       }),
   );

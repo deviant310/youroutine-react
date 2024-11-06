@@ -27,7 +27,7 @@ export const ProjectCreateForm = memo<FormProps>(
         <TextField
           name="name"
           label="Name"
-          setValue={setName}
+          onChange={setName}
           value={name}
           error={nameError}
           textboxPlaceholder="Project name"
@@ -37,7 +37,7 @@ export const ProjectCreateForm = memo<FormProps>(
         <TextField
           name="description"
           label="Description"
-          setValue={setDescription}
+          onChange={setDescription}
           value={description}
           textboxPlaceholder="Project description"
           textboxSize="auto"

@@ -25,7 +25,7 @@ export async function performRequest<Data>(
   if (response.status === 401)
     throw new RequestUnauthorizedError("Request needs authorization", response);
 
-  throw new RequestError("Request failed", response);
+  throw new RequestError(response.statusText, response);
 }
 
 interface ResponsePayload<Data> {

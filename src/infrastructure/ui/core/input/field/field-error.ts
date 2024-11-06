@@ -4,7 +4,7 @@ import { getUnitWithMeasure } from "../../../helpers";
 
 export const FieldError = styled.div`
   padding-top: ${getUnitWithMeasure(0.6)};
-  color: ${({ theme }) => theme.colors.danger.hex()};
+  color: ${({ theme }) => theme.colors.error[0].filled()};
   font-size: ${getUnitWithMeasure(1.2)};
   line-height: ${getUnitWithMeasure(1.2)};
 

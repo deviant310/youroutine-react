@@ -20,8 +20,8 @@ export const PriorityField = () => {
       name={name}
       label="Priority"
       options={TaskPriority.options}
-      selectedOption={value}
-      setSelectedOption={setValue}
+      value={value}
+      onChange={setValue}
       displayStringForOption={TaskPriority.getInstanceLabel}
       optionComponent={PriorityFieldOption}
       error={displayedError}

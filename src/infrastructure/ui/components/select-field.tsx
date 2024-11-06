@@ -1,4 +1,5 @@
 import {
+  ChangeEvent,
   ElementRef,
   FC,
   FieldsetHTMLAttributes,
@@ -30,15 +31,13 @@ import {
   FieldLabel,
   FieldProps,
   Fieldset,
-  FlexCSS,
-  FlexStyledProps,
   Grid,
   Paper,
   Textbox,
-  ClickableProps,
   TextboxSize,
   FieldTextboxCSS,
   FieldsetElement,
+  TextboxInputElement,
 } from "../core";
 import { TransientProps } from "../helpers";
 
@@ -51,11 +50,11 @@ export const SelectField = memo(function <OptionData>({
   dropdownToggleInitialValue = false,
   getOptionKey,
   options,
-  selectedOption,
-  setSelectedOption,
+  value,
+  onChange,
   adornmentStart,
   textboxValue,
-  setTextboxValue,
+  onTextboxChange: onFieldTextboxChange,
   textboxSize,
   textboxPlaceholder: fieldTextboxPlaceholder,
   onContainerBlur: onFieldContainerBlur,
@@ -70,28 +69,32 @@ export const SelectField = memo(function <OptionData>({
     dropdownToggleInitialValue,
   );
 
+  const showDropdown = useCallback(() => setDropdownToggleValue(true), []);
+  const hideDropdown = useCallback(() => setDropdownToggleValue(false), []);
+
   const onOptionSelect = useCallback(
     (option: OptionData | null) => {
-      setSelectedOption(option);
+      onChange?.(option);
 
-      setTextboxValue?.("");
+      onFieldTextboxChange?.("");
 
-      setDropdownToggleValue(false);
+      hideDropdown();
     },
-    [setSelectedOption, setTextboxValue],
+    [hideDropdown, onChange, onFieldTextboxChange],
   );
 
   const { stringForSelectedOption, optionsProps } = useSelectInput({
     displayStringForOption,
     getOptionKey,
     options,
-    selectedOption,
+    selectedOption: value,
     onOptionSelect,
   });
 
   const textboxInvalid = Boolean(error);
   const textboxPlaceholder = stringForSelectedOption || fieldTextboxPlaceholder;
   const textboxPlaceholderMuted = !stringForSelectedOption;
+  const textboxReadOnly = !onFieldTextboxChange;
 
   const onContainerBlur = useCallback(
     (event: FocusEvent<ContainerElement>) => {
@@ -99,36 +102,39 @@ export const SelectField = memo(function <OptionData>({
 
       if (currentTarget.contains(relatedTarget)) return;
 
-      setTextboxValue?.("");
+      onFieldTextboxChange?.("");
 
-      setDropdownToggleValue(false);
+      hideDropdown();
 
       onFieldContainerBlur?.(event);
     },
-    [onFieldContainerBlur, setTextboxValue],
+    [hideDropdown, onFieldContainerBlur, onFieldTextboxChange],
+  );
+
+  const onTextboxChange = useCallback(
+    ({ target }: ChangeEvent<TextboxInputElement>) => {
+      onFieldTextboxChange?.(target.value);
+    },
+    [onFieldTextboxChange],
   );
 
   const onCleanerClick = useCallback(() => {
-    setTextboxValue?.("");
+    onFieldTextboxChange?.("");
 
-    setSelectedOption(null);
-  }, [setSelectedOption, setTextboxValue]);
+    onChange?.(null);
+  }, [onChange, onFieldTextboxChange]);
 
   const renderOption = useCallback<OptionRenderer>(
     ({ option, key, onClick }, ref) => (
       <Column key={key} ref={ref}>
-        <Clickable
-          onClick={onClick}
-          role="option"
-          disabled={selectedOption === option}
-        >
+        <Clickable onClick={onClick} role="option" disabled={value === option}>
           <Area paddingVertical={0.8} paddingHorizontal={1.6}>
             <FieldOption option={option} />
           </Area>
         </Clickable>
       </Column>
     ),
-    [FieldOption, selectedOption],
+    [FieldOption, value],
   );
 
   return (
@@ -143,21 +149,20 @@ export const SelectField = memo(function <OptionData>({
             name={name}
             before={adornmentStart}
             after={
-              selectedOption && (
-                <Cleaner
-                  onClick={onCleanerClick}
-                  onMouseDown={e => e.stopPropagation()}
-                />
+              value && (
+                <ClickableCircleStyled $size={2.4} onClick={onCleanerClick}>
+                  <CloseIcon size={1.6} />
+                </ClickableCircleStyled>
               )
             }
             invalid={textboxInvalid}
-            setValue={setTextboxValue}
-            onMouseDown={() => setDropdownToggleValue(true)}
+            onChange={onTextboxChange}
+            onFocus={showDropdown}
             placeholder={textboxPlaceholder}
             placeholderMuted={textboxPlaceholderMuted}
             size={textboxSize}
             value={textboxValue}
-            disabled={!setTextboxValue}
+            readOnly={textboxReadOnly}
           />
 
           <DropdownStyled>
@@ -185,7 +190,7 @@ const ContainerStyled = styled.div.attrs({
 const TextboxStyled = styled(Textbox)`
   ${FieldTextboxCSS};
 
-  cursor: ${({ disabled }) => disabled && "pointer"};
+  cursor: ${({ disabled, readOnly }) => (disabled || readOnly) && "pointer"};
 `;
 
 const DropdownStyled = styled(animated(Area, "scale"))`
@@ -196,23 +201,14 @@ const DropdownStyled = styled(animated(Area, "scale"))`
 
 const ErrorSlided = animated(FieldError, "slide");
 
-const Cleaner = memo<ClickableProps>(props => (
-  <ClickableFlexCircleStyled
-    $size={2.4}
-    $justifyContent="center"
-    $alignItems="center"
-    {...props}
-  >
-    <CloseIcon size={1.6} />
-  </ClickableFlexCircleStyled>
-));
-
-const ClickableFlexCircleStyled = styled(Clickable)<
-  TransientProps<FlexStyledProps & CircleStyledProps>
+const ClickableCircleStyled = styled(Clickable)<
+  TransientProps<CircleStyledProps>
 >`
-  ${FlexCSS}
-  ${CircleCSS}
+  ${CircleCSS};
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
   opacity: 0.2;
   transition: opacity 150ms;
 
@@ -225,20 +221,20 @@ export interface SelectFieldProps<OptionData> extends FieldProps {
   displayStringForOption?(option: OptionData): string;
   getOptionKey?(option: OptionData): string | number;
   options: OptionData[];
-  selectedOption: OptionData | null;
-  setSelectedOption(option: OptionData | null): void;
+  value: OptionData | null;
+  onChange?(option: OptionData | null): void;
   dropdownToggleInitialValue?: boolean;
   optionComponent: SelectFieldOptionComponent<OptionData>;
   adornmentStart?: ReactNode;
   textboxValue?: string;
-  setTextboxValue?(value: string): void;
+  onTextboxChange?(value: string): void;
   textboxSize?: TextboxSize;
   textboxPlaceholder?: string;
   onContainerBlur?(event: FocusEvent<HTMLDivElement>): void;
 }
 
 interface SelectFieldPropsWithHTMLAttributes<OptionData>
-  extends Omit<FieldsetHTMLAttributes<FieldsetElement>, "name">,
+  extends Omit<FieldsetHTMLAttributes<FieldsetElement>, "name" | "onChange">,
     SelectFieldProps<OptionData> {}
 
 export type SelectFieldOptionComponent<OptionData> = FC<{

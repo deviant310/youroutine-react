@@ -1,7 +1,7 @@
 export const palette = {
   russianViolet: "#0B002E",
   folly: "#FF4C5C",
-  tomato: "#ed3948",
+  tomato: "#ED3948",
   mediumSlateBlue: "#6666FF",
   savoyBlue: "#415DE8",
 

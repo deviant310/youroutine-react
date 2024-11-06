@@ -1,3 +1,5 @@
+import { UUID } from "node:crypto";
+
 import { buildRequest } from "~/infrastructure/http";
 
 import { baseUrl } from "../base-url";
@@ -12,15 +14,15 @@ export const buildTaskCreateRequest = (data: TaskCreateRequestData) =>
 export type TaskCreateRequestData = {
   title: string;
   description: string;
-  projectId: number;
-  priority: string;
+  projectId: UUID;
+  priority: "low" | "medium" | "high";
 };
 
 export type TaskCreateResponseData = {
-  id: number;
+  id: UUID;
   title: string;
   description: string;
-  projectId: number;
-  status: string;
-  priority: string;
+  projectId: UUID;
+  status: "underway" | "completed" | "rejected" | null;
+  priority: "low" | "medium" | "high";
 };

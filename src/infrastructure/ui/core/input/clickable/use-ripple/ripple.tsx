@@ -1,70 +1,54 @@
 import {
-  AnimationEvent,
-  FunctionComponent,
   HTMLAttributes,
   memo,
   useCallback,
   useEffect,
   useMemo,
   useRef,
-  useState,
 } from "react";
 
 import { keyframes, styled } from "styled-components";
 
 import { TransientProps } from "../../../../helpers";
 
-export const Ripple = memo<RippleProps>(props => {
-  const { offsetLeft, offsetTop, size, onRippleEnd, ...restProps } = props;
+export const Ripple = memo<RippleProps>(
+  ({ offsetLeft, offsetTop, size, onRippleLeave, ...props }) => {
+    const ref = useRef<HTMLSpanElement>(null);
 
-  const [animationPlayState, setAnimationPlayState] =
-    useState<RippleAnimationPlayState>("paused");
-  const containerRef = useRef<HTMLElement>(null);
+    const containerStyle = useMemo(
+      () => ({
+        height: `${size}px`,
+        left: `${offsetLeft}px`,
+        top: `${offsetTop}px`,
+        width: `${size}px`,
+      }),
+      [offsetLeft, offsetTop, size],
+    );
 
-  const onAnimationEnd = useCallback(
-    ({ target }: AnimationEvent<HTMLElement>) => {
-      if (target === containerRef.current) onRippleEnd?.();
-    },
-    [onRippleEnd],
-  );
+    const onMouseUp = useCallback(() => {
+      if (ref.current) ref.current.style.animationPlayState = "running";
+    }, []);
 
-  const containerStyle = useMemo(
-    () => ({ animationPlayState }),
-    [animationPlayState],
-  );
+    useEffect(() => {
+      document.addEventListener("mouseup", onMouseUp, { once: true });
 
-  const rippleStyle = useMemo(
-    () => ({
-      height: `${size}px`,
-      left: `${offsetLeft}px`,
-      top: `${offsetTop}px`,
-      width: `${size}px`,
-    }),
-    [offsetLeft, offsetTop, size],
-  );
+      return () => {
+        document.removeEventListener("mouseup", onMouseUp);
+      };
+    }, [onMouseUp]);
 
-  const onMouseUp = useCallback(() => setAnimationPlayState("running"), []);
-
-  useEffect(() => {
-    document.addEventListener("mouseup", onMouseUp);
-
-    return () => {
-      document.removeEventListener("mouseup", onMouseUp);
-    };
-  }, [onMouseUp]);
-
-  return (
-    <StyledRippleContainer
-      ref={containerRef}
-      $size={size}
-      style={containerStyle}
-      onAnimationEnd={onAnimationEnd}
-      {...restProps}
-    >
-      <StyledRipple $size={size} style={rippleStyle} />
-    </StyledRippleContainer>
-  );
-});
+    return (
+      <StyledRippleContainer $size={size} style={containerStyle} {...props}>
+        <StyledRipple
+          style={{ animationPlayState: "paused" }}
+          onAnimationEnd={onRippleLeave}
+          $size={size}
+          ref={ref}
+        />
+      </StyledRippleContainer>
+    );
+  },
+);
 
 const rippleOpacityAnimation = keyframes`
   0% {
@@ -85,26 +69,26 @@ const rippleIncreaseAnimation = keyframes`
 `;
 
 const StyledRippleContainer = styled.span<TransientProps<RippleStyledProps>>`
-  animation-name: ${rippleOpacityAnimation};
-  animation-duration: ${({ $size }) => $size / 500 / 2}s;
-  animation-timing-function: ease-out;
-  animation-fill-mode: forwards;
-`;
-
-const StyledRipple = styled.span<TransientProps<RippleStyledProps>>`
   pointer-events: none;
   position: absolute;
-  background-color: var(--ripple-background-color);
   animation-name: ${rippleIncreaseAnimation};
   animation-duration: ${({ $size }) => $size / 500}s;
   animation-delay: 0ms;
   animation-timing-function: ease-out;
   animation-fill-mode: forwards;
-  border-radius: 50%;
-  transform: scale(0);
 `;
 
-export type RippleComponent = FunctionComponent<RippleProps>;
+const StyledRipple = styled.span<TransientProps<RippleStyledProps>>`
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: var(--ripple-background-color);
+  animation-name: ${rippleOpacityAnimation};
+  animation-duration: ${({ $size }) => $size / 500 / 2}s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+`;
 
 interface RippleStyledProps {
   size: number;
@@ -113,7 +97,7 @@ interface RippleStyledProps {
 export interface RippleProps
   extends HTMLAttributes<HTMLSpanElement>,
     RippleStyledProps {
-  onRippleEnd?(): void;
+  onRippleLeave?(): void;
   offsetLeft: number;
   offsetTop: number;
 }

@@ -28,14 +28,16 @@ const EditorStyle = createGlobalStyle<
     transition: box-shadow 150ms;
     box-shadow: 0 0 0 2px inset
     ${({ $invalid, theme }) =>
-      $invalid ? theme.colors.danger.hex() : theme.colors.default[7].filled()};
+      $invalid
+        ? theme.colors.error[0].filled()
+        : theme.colors.default[7].filled()};
 
     &:focus-within {
       box-shadow: 0 0 0 2px inset
       ${({ $invalid, theme }) =>
         $invalid
-          ? theme.colors.danger.hex()
-          : theme.colors.tension[2].filled()};
+          ? theme.colors.error[0].filled()
+          : theme.colors.primary[2].filled()};
     }
   }
 

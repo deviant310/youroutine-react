@@ -7,7 +7,7 @@ import { PropsWithRequiredChildren } from "~/react";
 
 import { RequestUnauthorizedError } from "../helpers";
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,

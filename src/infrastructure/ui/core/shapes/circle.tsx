@@ -13,7 +13,6 @@ export const CircleCSS = css<TransientProps<CircleStyledProps>>`
   height: ${({ $size }) => getUnitWithMeasure($size)};
   border-radius: 50%;
   overflow: hidden;
-  position: relative;
 `;
 
 const CircleStyled = styled.div<TransientProps<CircleStyledProps>>`
@@ -23,7 +22,7 @@ const CircleStyled = styled.div<TransientProps<CircleStyledProps>>`
 Circle.displayName = "Circle";
 
 export interface CircleStyledProps {
-  size: UnitIndex;
+  size?: UnitIndex;
 }
 
 export interface CircleProps

@@ -1,12 +1,15 @@
+// TODO can't use node types here
+import { UUID } from "node:crypto";
+
 import { OmitMethods } from "~/typescript";
 
 import { TaskPriority, TaskStatus } from "./properties";
 
 export class Task {
-  readonly id: number;
+  readonly id: UUID;
   title: string;
   description: string;
-  projectId: number;
+  projectId: UUID;
   readonly status: TaskStatus | null;
   priority: TaskPriority;
 

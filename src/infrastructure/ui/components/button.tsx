@@ -1,30 +1,27 @@
-import {
-  memo,
-  forwardRef,
-  ForwardRefExoticComponent,
-  RefAttributes,
-} from "react";
+import { memo, HTMLAttributes, ElementRef } from "react";
 
 import { styled } from "styled-components";
 
 import {
   Clickable,
-  ClickableElement,
   ClickableProps,
   ClickableStyledProps,
+  Flex,
+  Hidden,
+  Loader,
 } from "../core";
 import { getUnitWithMeasure, TransientProps } from "../helpers";
 
-export const Button: ButtonComponent = memo(
-  forwardRef((props, ref) => {
-    const { children, type = "primary", disabled, ...restProps } = props;
+export const Button = memo<ButtonPropsWithHTMLAttributes>(
+  ({ type = "primary", loading, disabled, children, ...props }) => (
+    <ButtonStyled $type={type} $disabled={disabled} {...props}>
+      <Flex justifyContent="center" alignItems="center">
+        {loading && <AbsoluteLoader size={2} />}
 
-    return (
-      <ButtonStyled $type={type} $disabled={disabled} {...restProps} ref={ref}>
-        {children}
-      </ButtonStyled>
-    );
-  }),
+        <Hidden on={loading}>{children}</Hidden>
+      </Flex>
+    </ButtonStyled>
+  ),
 );
 
 const ButtonStyled = styled(Clickable).attrs<TransientProps<ButtonStyledProps>>(
@@ -38,14 +35,14 @@ const ButtonStyled = styled(Clickable).attrs<TransientProps<ButtonStyledProps>>(
   border-radius: ${getUnitWithMeasure(1.2)};
 
   background-color: ${({ $type, theme }) => {
-    if ($type === "primary") return theme.colors.tension[2].filled();
-    if ($type === "primary-light") return theme.colors.tension[7].transparent();
+    if ($type === "primary") return theme.colors.primary[2].filled();
+    if ($type === "primary-light") return theme.colors.primary[7].transparent();
   }};
 
   color: ${({ $type, theme }) => {
     if ($type === "primary") return theme.colors.default[9].filled();
-    if ($type === "primary-light") return theme.colors.tension[2].filled();
-    if ($type === "link") return theme.colors.tension[2].filled();
+    if ($type === "primary-light") return theme.colors.primary[2].filled();
+    if ($type === "link") return theme.colors.primary[2].filled();
   }};
 
   opacity: ${({ $type, $disabled }) => {
@@ -58,21 +55,21 @@ const ButtonStyled = styled(Clickable).attrs<TransientProps<ButtonStyledProps>>(
 
   &:hover {
     background-color: ${({ $type, theme }) => {
-      if ($type === "primary") return theme.colors.tension[1].filled();
+      if ($type === "primary") return theme.colors.primary[1].filled();
       if ($type === "primary-light")
-        return theme.colors.tension[6].transparent();
+        return theme.colors.primary[6].transparent();
     }};
   }
 
   --ripple-background-color: ${({ $type, theme }) => {
-    if ($type === "primary") return theme.colors.tension[0].filled();
-    if ($type === "primary-light") return theme.colors.tension[7].transparent();
+    if ($type === "primary") return theme.colors.primary[0].filled();
+    if ($type === "primary-light") return theme.colors.primary[7].transparent();
   }};
 `;
 
-export type ButtonComponent = ForwardRefExoticComponent<
-  ButtonProps & RefAttributes<ClickableElement>
->;
+const AbsoluteLoader = styled(Loader)`
+  position: absolute;
+`;
 
 type ButtonType =
   | "primary"
@@ -87,5 +84,12 @@ export interface ButtonStyledProps extends ClickableStyledProps {
 }
 
 export interface ButtonProps extends ClickableProps, ButtonStyledProps {
+  loading?: boolean;
   children: string;
 }
+
+export type ButtonElement = ElementRef<typeof ButtonStyled>;
+
+interface ButtonPropsWithHTMLAttributes
+  extends Omit<HTMLAttributes<ButtonElement>, "children">,
+    ButtonProps {}

@@ -1,5 +1,3 @@
-import Color from "color";
-
 import { Shade, Theme } from "~/infrastructure/ui";
 
 import { palette } from "../palette";
@@ -17,7 +15,7 @@ export const ThemeLight: Theme = {
       8: new Shade(palette.russianViolet, 0.05),
       9: new Shade("white", 1),
     },
-    tension: {
+    primary: {
       0: new Shade(palette.mediumSlateBlue, 0.8, "black"),
       1: new Shade(palette.mediumSlateBlue, 0.9, "black"),
       2: new Shade(palette.mediumSlateBlue, 1),
@@ -28,8 +26,8 @@ export const ThemeLight: Theme = {
       7: new Shade(palette.mediumSlateBlue, 0.12),
       8: new Shade(palette.mediumSlateBlue, 0.06),
     },
-    accent: {
-      0: new Shade(palette.tomato, 1),
+    secondary: {
+      0: new Shade(palette.tomato, 0.9, "black"),
       1: new Shade(palette.tomato, 1),
       2: new Shade(palette.folly, 1),
       3: new Shade(palette.folly, 0.72),
@@ -39,7 +37,9 @@ export const ThemeLight: Theme = {
       7: new Shade(palette.folly, 0.16),
       8: new Shade(palette.folly, 0.1),
     },
-    danger: new Color(palette.tomato),
-    primary: new Color(palette.softEgg),
+    error: {
+      0: new Shade(palette.tomato, 1),
+      1: new Shade(palette.folly, 0.1),
+    },
   },
 };

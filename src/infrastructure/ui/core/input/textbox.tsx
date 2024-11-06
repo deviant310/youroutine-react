@@ -3,7 +3,6 @@ import {
   useCallback,
   useRef,
   ReactNode,
-  ChangeEvent,
   HTMLAttributes,
   ElementRef,
   useEffect,
@@ -17,11 +16,12 @@ export const Textbox = memo<TextboxPropsWithHTMLAttributes>(
   ({
     name,
     value,
-    setValue,
+    onChange,
     before,
     after,
     invalid,
     disabled,
+    readOnly,
     size,
     placeholder,
     placeholderMuted = true,
@@ -30,17 +30,10 @@ export const Textbox = memo<TextboxPropsWithHTMLAttributes>(
     const ref = useRef<TextboxElement>(null);
     const inputRef = useRef<TextboxInputElement>(null);
 
-    const onChange = useCallback(
-      ({ target }: ChangeEvent<HTMLInputElement>) => {
-        setValue?.(target.value);
-      },
-      [setValue],
-    );
-
-    const onMouseDown = useCallback(
-      () => setTimeout(() => inputRef.current?.focus(), 0),
-      [],
-    );
+    const onMouseDown = useCallback((event: MouseEvent) => {
+      if (event.target === ref.current)
+        setTimeout(() => inputRef.current?.focus(), 0);
+    }, []);
 
     useEffect(() => {
       const { current: element } = ref;
@@ -65,6 +58,7 @@ export const Textbox = memo<TextboxPropsWithHTMLAttributes>(
             onChange={onChange}
             placeholder={placeholder}
             disabled={disabled}
+            readOnly={readOnly}
             $placeholderMuted={placeholderMuted}
             $size={size}
             ref={inputRef}
@@ -95,14 +89,16 @@ const TextboxStyled = styled.div.attrs({ role: "textbox" })<
   transition: box-shadow 150ms;
   box-shadow: 0 0 0 2px inset
     ${({ $invalid, theme }) =>
-      $invalid ? theme.colors.danger.hex() : theme.colors.default[7].filled()};
+      $invalid
+        ? theme.colors.error[0].filled()
+        : theme.colors.default[7].filled()};
 
   &:focus-within {
     box-shadow: 0 0 0 2px inset
       ${({ $invalid, theme }) =>
         $invalid
-          ? theme.colors.danger.hex()
-          : theme.colors.tension[2].filled()};
+          ? theme.colors.error[0].filled()
+          : theme.colors.primary[2].filled()};
   }
 `;
 
@@ -121,7 +117,7 @@ const InputStyled = styled.input<TransientProps<TextboxStyledProps>>`
   padding: 0;
   border: none;
   outline: none;
-  pointer-events: ${({ disabled }) => disabled && "none"};
+  cursor: inherit;
 
   &::placeholder {
     color: ${({ theme, $placeholderMuted }) =>
@@ -152,10 +148,10 @@ export interface TextboxProps extends TextboxStyledProps {
   name?: string;
   placeholder?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   before?: ReactNode;
   after?: ReactNode;
   value?: string;
-  setValue?(value: string): void;
 }
 
 export type TextboxElement = ElementRef<typeof TextboxStyled>;

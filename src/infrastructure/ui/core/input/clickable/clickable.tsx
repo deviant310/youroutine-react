@@ -1,15 +1,4 @@
-import {
-  ForwardRefExoticComponent,
-  HTMLAttributes,
-  PropsWithChildren,
-  RefAttributes,
-  forwardRef,
-  memo,
-  useRef,
-  ElementRef,
-  useEffect,
-  useState,
-} from "react";
+import { HTMLAttributes, memo, ElementRef } from "react";
 
 import { styled } from "styled-components";
 
@@ -17,50 +6,39 @@ import { TransientProps } from "../../../helpers";
 
 import { useRipple } from "./use-ripple";
 // TODO type=primary|secondary...
-export const Clickable: ClickableComponent = memo(
-  forwardRef((props, forwardedRef) => {
-    const { children, disabled, ...restProps } = props;
-    const localRef = useRef<ClickableElement>(null);
-    const [element, setElement] = useState<ClickableElement>();
-
-    const ref = forwardedRef ?? localRef;
-
-    const { ripples } = useRipple(element);
-
-    useEffect(() => {
-      if ("current" in ref && ref.current) setElement(ref.current);
-    }, [ref]);
+export const Clickable = memo<ClickablePropsWithHTMLAttributes>(
+  ({ children, disabled, ...props }) => {
+    const { ref, ripples } = useRipple<ClickableElement>();
 
     return (
-      <ClickableStyled $disabled={disabled} {...restProps} ref={ref}>
+      <ClickableStyled $disabled={disabled} {...props} ref={ref}>
         <ClickableAreaStyled>{ripples}</ClickableAreaStyled>
         <ClickableContentStyled>{children}</ClickableContentStyled>
       </ClickableStyled>
     );
-  }),
+  },
 );
 
 const ClickableStyled = styled.div<TransientProps<ClickableStyledProps>>`
   user-select: none;
-  pointer-events: ${({ $disabled }) => ($disabled ? "none" : "auto")};
+  pointer-events: ${({ $disabled }) => $disabled && "none"};
   position: relative;
   overflow: hidden;
   cursor: pointer;
   opacity: ${({ $disabled }) => $disabled && "50%"};
   transition-duration: 150ms;
-  transition-property: background-color;
+  transition-property: background-color, opacity;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.tension[8].transparent()};
+    background-color: ${({ theme }) => theme.colors.primary[8].transparent()};
   }
 
   --ripple-background-color: ${({ theme }) =>
-    theme.colors.tension[8].transparent()};
+    theme.colors.primary[8].transparent()};
 `;
 
-ClickableStyled.displayName = "ClickableStyled";
-
 const ClickableAreaStyled = styled.div`
+  pointer-events: none;
   position: absolute;
   left: 0;
   top: 0;
@@ -73,17 +51,14 @@ const ClickableContentStyled = styled.div`
   pointer-events: none;
 `;
 
-export type ClickableComponent = ForwardRefExoticComponent<
-  ClickableProps & RefAttributes<ClickableElement>
->;
-
 export interface ClickableStyledProps {
   disabled?: boolean;
 }
 
-export interface ClickableProps
+export type ClickableProps = ClickableStyledProps;
+
+interface ClickablePropsWithHTMLAttributes
   extends HTMLAttributes<ClickableElement>,
-    ClickableStyledProps,
-    PropsWithChildren {}
+    ClickableProps {}
 
 export type ClickableElement = ElementRef<typeof ClickableStyled>;
