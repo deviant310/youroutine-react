@@ -1,4 +1,4 @@
-import { UUID } from "node:crypto";
+import { UUID } from "~/typescript";
 
 import { buildRequest } from "~/infrastructure/http";
 

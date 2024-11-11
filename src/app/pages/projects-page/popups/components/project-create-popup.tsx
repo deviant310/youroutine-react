@@ -38,7 +38,7 @@ export const ProjectCreatePopup = memo(() => {
 
         <Area marginHorizontal={4} marginTop={1.2}>
           <Flex gap={0.8} justifyContent="end">
-            <Button type="link" onClick={turnProjectCreatePopupToggleOff}>
+            <Button type="text" onClick={turnProjectCreatePopupToggleOff}>
               Cancel
             </Button>
 

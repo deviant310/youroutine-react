@@ -62,8 +62,10 @@ export const TaskCreateFormSubmitButton = memo(() => {
   }, [form]);
 
   useEffect(() => {
-    if (task) console.log(task);
-  }, [task]);
+    if (task) {
+      form.reset();
+    }
+  }, [form, task]);
 
   return (
     <Button

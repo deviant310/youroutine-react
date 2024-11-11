@@ -42,7 +42,7 @@ export const TasksPage = memo(() => {
           <Flex justifyContent="between" alignItems="center">
             <Title size={3}>Tasks</Title>
 
-            <Button type="primary-light" onClick={turnTaskCreatePopupToggleOn}>
+            <Button color="primary-light" onClick={turnTaskCreatePopupToggleOn}>
               Create task
             </Button>
           </Flex>

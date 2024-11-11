@@ -1,7 +1,4 @@
-// TODO can't use node types here
-import { UUID } from "node:crypto";
-
-import { OmitMethods } from "~/typescript";
+import { OmitMethods, UUID } from "~/typescript";
 
 import { TaskPriority, TaskStatus } from "./properties";
 

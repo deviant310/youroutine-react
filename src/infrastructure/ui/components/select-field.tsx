@@ -127,7 +127,13 @@ export const SelectField = memo(function <OptionData>({
   const renderOption = useCallback<OptionRenderer>(
     ({ option, key, onClick }, ref) => (
       <Column key={key} ref={ref}>
-        <Clickable onClick={onClick} role="option" disabled={value === option}>
+        <Clickable
+          onClick={onClick}
+          role="option"
+          disabled={value === option}
+          rippleable
+          hoverable
+        >
           <Area paddingVertical={0.8} paddingHorizontal={1.6}>
             <FieldOption option={option} />
           </Area>
@@ -201,16 +207,20 @@ const DropdownStyled = styled(animated(Area, "scale"))`
 
 const ErrorSlided = animated(FieldError, "slide");
 
-const ClickableCircleStyled = styled(Clickable)<
-  TransientProps<CircleStyledProps>
->`
+const ClickableCircleStyled = styled(Clickable).attrs({
+  rippleable: true,
+  hoverable: true,
+})<TransientProps<CircleStyledProps>>`
   ${CircleCSS};
 
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: 0.2;
-  transition: opacity 150ms;
+  transition-duration: 150ms;
+  transition-property: opacity;
+  background-color: ${({ theme }) => theme.colors.default[8].transparent()};
+  color: ${({ theme }) => theme.colors.default[2].filled()};
+  opacity: 0.5;
 
   &:hover {
     opacity: 1;

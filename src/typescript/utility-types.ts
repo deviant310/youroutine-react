@@ -37,3 +37,5 @@ export type PartialDiff<A, B extends A> = {
     ? B[K]
     : never;
 };
+
+export type UUID = `${string}-${string}-${string}-${string}-${string}`;

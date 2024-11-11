@@ -7,18 +7,23 @@ import { TransientProps } from "../../../helpers";
 import { useRipple } from "./use-ripple";
 // TODO type=primary|secondary...
 export const Clickable = memo<ClickablePropsWithHTMLAttributes>(
-  ({ children, disabled, ...props }) => {
+  ({ children, disabled, rippleable, hoverable, ...props }) => {
     const { ref, ripples } = useRipple<ClickableElement>();
 
     return (
-      <ClickableStyled $disabled={disabled} {...props} ref={ref}>
-        <ClickableAreaStyled>{ripples}</ClickableAreaStyled>
+      <ClickableStyled
+        $disabled={disabled}
+        $hoverable={hoverable}
+        {...props}
+        ref={ref}
+      >
+        {rippleable && <ClickableAreaStyled>{ripples}</ClickableAreaStyled>}
         <ClickableContentStyled>{children}</ClickableContentStyled>
       </ClickableStyled>
     );
   },
 );
-
+// TODO сделать hover через :after (так цвет ховера будет зависеть от основного)
 const ClickableStyled = styled.div<TransientProps<ClickableStyledProps>>`
   user-select: none;
   pointer-events: ${({ $disabled }) => $disabled && "none"};
@@ -29,12 +34,14 @@ const ClickableStyled = styled.div<TransientProps<ClickableStyledProps>>`
   transition-duration: 150ms;
   transition-property: background-color, opacity;
 
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.primary[8].transparent()};
+  &:hover,
+  &:active {
+    background-color: ${({ theme, $hoverable }) =>
+      $hoverable && theme.colors.default[8].transparent()};
   }
 
   --ripple-background-color: ${({ theme }) =>
-    theme.colors.primary[8].transparent()};
+    theme.colors.default[8].transparent()};
 `;
 
 const ClickableAreaStyled = styled.div`
@@ -53,9 +60,12 @@ const ClickableContentStyled = styled.div`
 
 export interface ClickableStyledProps {
   disabled?: boolean;
+  hoverable?: boolean;
 }
 
-export type ClickableProps = ClickableStyledProps;
+export interface ClickableProps extends ClickableStyledProps {
+  rippleable?: boolean;
+}
 
 interface ClickablePropsWithHTMLAttributes
   extends HTMLAttributes<ClickableElement>,

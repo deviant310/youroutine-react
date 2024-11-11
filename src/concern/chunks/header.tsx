@@ -10,7 +10,6 @@ import {
   Area,
   ChevronIcon,
   Clickable,
-  Column,
   Flex,
   getUnitWithMeasure,
   Grid,
@@ -47,10 +46,12 @@ export const Header = memo(() => {
             </Flex>
 
             <Area position="relative" onBlur={hideDropdown} tabIndex={-1}>
-              <Flex alignItems="center" gap={0.4} onClick={toggleDropdown}>
-                <Text>Anton Lebedev</Text>
-                <ChevronIcon />
-              </Flex>
+              <Clickable onClick={toggleDropdown}>
+                <Flex alignItems="center" gap={0.4}>
+                  <Text>Anton Lebedev</Text>
+                  <ChevronIcon />
+                </Flex>
+              </Clickable>
 
               <AnimatedArea
                 position="absolute"
@@ -62,29 +63,25 @@ export const Header = memo(() => {
                 {dropdownIsVisible && (
                   <Paper elevation={1.2}>
                     <Area paddingVertical={0.8}>
-                      <Column>
-                        <Clickable onClick={hideDropdown}>
-                          <Area paddingHorizontal={1.6}>
-                            <Flex alignItems="center" gap={0.8}>
-                              <SettingsIcon />
+                      <Clickable onClick={hideDropdown} hoverable rippleable>
+                        <Area paddingHorizontal={1.6}>
+                          <Flex alignItems="center" gap={0.8}>
+                            <SettingsIcon />
 
-                              <Text>Settings</Text>
-                            </Flex>
-                          </Area>
-                        </Clickable>
-                      </Column>
+                            <Text>Settings</Text>
+                          </Flex>
+                        </Area>
+                      </Clickable>
 
-                      <Column>
-                        <Clickable onClick={hideDropdown}>
-                          <Area paddingHorizontal={1.6}>
-                            <Flex alignItems="center" gap={0.8}>
-                              <SignOutIcon />
+                      <Clickable onClick={hideDropdown} hoverable rippleable>
+                        <Area paddingHorizontal={1.6}>
+                          <Flex alignItems="center" gap={0.8}>
+                            <SignOutIcon />
 
-                              <Text>Log out</Text>
-                            </Flex>
-                          </Area>
-                        </Clickable>
-                      </Column>
+                            <Text>Log out</Text>
+                          </Flex>
+                        </Area>
+                      </Clickable>
                     </Area>
                   </Paper>
                 )}

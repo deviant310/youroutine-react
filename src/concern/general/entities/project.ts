@@ -1,6 +1,4 @@
-import { UUID } from "node:crypto";
-
-import { OmitMethods } from "~/typescript";
+import { OmitMethods, UUID } from "~/typescript";
 
 export class Project {
   id: UUID;

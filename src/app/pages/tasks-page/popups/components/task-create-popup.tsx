@@ -29,7 +29,11 @@ export const TaskCreatePopup = memo(() => {
 
         <Area marginHorizontal={4} marginTop={1.2}>
           <Flex gap={0.8} justifyContent="end">
-            <Button type="link" onClick={turnTaskCreatePopupToggleOff}>
+            <Button
+              type="text"
+              color="primary-light"
+              onClick={turnTaskCreatePopupToggleOff}
+            >
               Cancel
             </Button>
 
