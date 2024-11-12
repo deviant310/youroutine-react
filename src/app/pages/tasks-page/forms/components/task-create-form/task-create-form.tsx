@@ -39,6 +39,7 @@ export const TaskCreateFormSubmitButton = memo(() => {
   const { task, createTask, creatingTask } = useTaskCreating();
 
   const form = useTaskCreateForm();
+
   const formValid = form.valid();
 
   const onClick = useCallback(() => {

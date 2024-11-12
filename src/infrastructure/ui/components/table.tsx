@@ -61,7 +61,9 @@ const TableRow: TableRowComponent = memo(
       <TableRowStyled onClick={onClick}>
         {Object.keys(cells).map(key => {
           const value = item[key as keyof typeof item];
-          const Cell = cells[key as keyof typeof cells];
+          const Cell = cells[key as keyof typeof cells] as
+            | CellComponent<typeof item, keyof typeof item>
+            | undefined;
 
           return (
             <div key={key}>
