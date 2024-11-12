@@ -10,8 +10,8 @@ import {
 import { styled } from "styled-components";
 
 import {
-  animated,
-  FieldError,
+  animate,
+  FieldErrorh,
   FieldLabel,
   FieldProps,
   Fieldset,

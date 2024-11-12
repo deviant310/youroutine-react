@@ -4,7 +4,17 @@ import { defineConfig, Plugin, PreviewServer, ViteDevServer } from "vite";
 import checker from "vite-plugin-checker";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-const proxyHost = process.env.DEV_SERVER_PROXY;
+const {
+  DEV_SERVER_HOST,
+  DEV_SERVER_PORT,
+  DEV_SERVER_PROXY,
+  DEV_SERVER_HTTP_OVERRIDES,
+} = process.env;
+
+const host = DEV_SERVER_HOST;
+const port = DEV_SERVER_PORT && parseInt(DEV_SERVER_PORT);
+const proxyHost = DEV_SERVER_PROXY;
+const httpOverridesEnabled = Boolean(DEV_SERVER_HTTP_OVERRIDES);
 
 /**
  * https://vitejs.dev/config/
@@ -14,6 +24,8 @@ export default defineConfig(async ({ command }) => ({
     proxy: {
       ...(proxyHost && { "/api": proxyHost }),
     },
+    ...(host && { host }),
+    ...(port && { port }),
   },
   build: {
     target: "es2020",
@@ -29,13 +41,11 @@ export default defineConfig(async ({ command }) => ({
         useFlatConfig: true,
       },
     }),
-    httpOverridesPlugin(),
+    httpOverridesEnabled && httpOverridesPlugin(),
   ],
 }));
 
 async function httpOverridesPlugin(): Promise<Plugin> {
-  const httpOverridesEnabled = "DEV_SERVER_HTTP_OVERRIDES" in process.env;
-
   const express = ExpressApp();
 
   express.use(ExpressApp.json());
@@ -49,7 +59,7 @@ async function httpOverridesPlugin(): Promise<Plugin> {
   const configureServer = (server: ViteDevServer | PreviewServer) => {
     server.middlewares.use(express);
 
-    if (httpOverridesEnabled) applyOverrides?.(express);
+    applyOverrides?.(express);
   };
 
   return {

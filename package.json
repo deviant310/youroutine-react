@@ -1,4 +1,5 @@
 {
+  "name": "youroutine-react",
   "type": "module",
   "scripts": {
     "start": "vite",

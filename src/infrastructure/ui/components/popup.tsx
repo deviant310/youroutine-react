@@ -1,4 +1,4 @@
-import { HTMLAttributes, memo, useEffect } from "react";
+import { ElementRef, HTMLAttributes, memo, useEffect } from "react";
 
 import { createPortal } from "react-dom";
 import { styled } from "styled-components";
@@ -13,17 +13,14 @@ import {
   CircleCSS,
   CircleStyledProps,
   Clickable,
-  ClickableElement,
   CloseIcon,
-  FlexCSS,
-  FlexStyledProps,
   GridCSS,
   GridStyledProps,
   Paper,
 } from "../core";
 import { TransientProps } from "../helpers";
 
-export const Popup = memo<PopupProps>(props => {
+export const Popup = memo<PopupPropsWithHTMLAttributes>(props => {
   const { children, opened, onClose } = props;
 
   useEffect(() => {
@@ -31,7 +28,7 @@ export const Popup = memo<PopupProps>(props => {
   }, [opened]);
 
   return createPortal(
-    <PopupRootStyled>
+    <PopupContainerStyled>
       <AreaFaded position="fixed">
         {opened && <PopupBackgroundStyled />}
       </AreaFaded>
@@ -54,8 +51,12 @@ export const Popup = memo<PopupProps>(props => {
           {opened && (
             <Paper radius={1.6}>
               <Area position="relative">
-                <Area position="absolute" right={1.2} top={1.2}>
-                  {onClose && <PopupClose onClick={onClose} />}
+                <Area position="absolute" right={1} top={1.2}>
+                  {onClose && (
+                    <ClickableCircleStyled $size={3.6} onClick={onClose}>
+                      <CloseIcon size={2.4} />
+                    </ClickableCircleStyled>
+                  )}
                 </Area>
 
                 {children}
@@ -64,12 +65,12 @@ export const Popup = memo<PopupProps>(props => {
           )}
         </AreaScaled>
       </GridArea>
-    </PopupRootStyled>,
+    </PopupContainerStyled>,
     getRootElement(),
   );
 });
 
-const PopupRootStyled = styled.div`
+const PopupContainerStyled = styled.div`
   position: relative;
   z-index: 2;
 `;
@@ -88,32 +89,28 @@ const GridArea = styled.div<TransientProps<GridStyledProps & AreaProps>>`
 const AreaScaled = animated(Area, "scale");
 const AreaFaded = animated(Area, "fade");
 
-const PopupClose = memo<PopupCloseProps>(props => (
-  <PopupCloseStyled
-    $size={3.6}
-    $justifyContent="center"
-    $alignItems="center"
-    {...props}
-  >
-    <CloseIcon />
-  </PopupCloseStyled>
-));
+const ClickableCircleStyled = styled(Clickable).attrs({
+  rippleable: true,
+  hoverable: true,
+})<TransientProps<CircleStyledProps>>`
+  ${CircleCSS};
 
-const PopupCloseStyled = styled(Clickable)<
-  TransientProps<FlexStyledProps & CircleStyledProps>
->`
-  ${FlexCSS}
-  ${CircleCSS}
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition-duration: 150ms;
+  transition-property: opacity;
+  background-color: ${({ theme }) => theme.colors.default[8].transparent()};
 `;
 
 export interface PopupStyledProps {
   opened: boolean;
 }
 
-export interface PopupProps
-  extends HTMLAttributes<HTMLDivElement>,
+export interface PopupPropsWithHTMLAttributes
+  extends HTMLAttributes<PopupElement>,
     PopupStyledProps {
   onClose?(): void;
 }
 
-type PopupCloseProps = HTMLAttributes<ClickableElement>;
+export type PopupElement = ElementRef<typeof PopupContainerStyled>;
