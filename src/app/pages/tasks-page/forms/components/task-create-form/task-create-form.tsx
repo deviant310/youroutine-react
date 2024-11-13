@@ -46,11 +46,11 @@ export const TaskCreateFormSubmitButton = memo(() => {
     if (creatingTask) return;
 
     if (formValid) {
-      const { title, project, priority } = form.state.values;
+      const { title, description, project, priority } = form.state.values;
 
       createTask({
         title,
-        description: "",
+        description,
         projectId: project.id,
         priority,
       });

@@ -12,8 +12,8 @@
     "vscode": {
       "extensions": [
         "dbaeumer.vscode-eslint",
-        "eamodio.gitlens",
-        "styled-components.vscode-styled-components"
+        "styled-components.vscode-styled-components",
+        "waderyan.gitblame"
       ]
     }
   },

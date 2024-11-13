@@ -12,6 +12,9 @@ export const { useForm: useTaskCreateForm, useField: useTaskCreateFormField } =
         return value;
       },
     },
+    description: {
+      initialValue: "",
+    },
     project: {
       initialValue: null,
       validate(value) {
@@ -32,12 +35,14 @@ export const { useForm: useTaskCreateForm, useField: useTaskCreateFormField } =
 
 interface TaskCreateFormValues {
   title: string;
+  description: string;
   project: Project | null;
   priority: TaskPriority | null;
 }
 
 interface TaskCreateFormValidValues {
   title: string;
+  description: string;
   project: Project;
   priority: TaskPriority;
 }
