@@ -8,6 +8,13 @@
   "customizations": {
     "jetbrains": {
       "backend": "WebStorm"
+    },
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "eamodio.gitlens",
+        "styled-components.vscode-styled-components"
+      ]
     }
   },
   "mounts": [
