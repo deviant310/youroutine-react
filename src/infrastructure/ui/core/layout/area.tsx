@@ -15,6 +15,7 @@ export const Area: AreaComponent = memo(
   forwardRef((props, ref) => {
     const {
       overflow,
+      textOverflow,
       disabled,
       inline,
       position,
@@ -46,6 +47,7 @@ export const Area: AreaComponent = memo(
     return (
       <AreaStyled
         $overflow={overflow}
+        $textOverflow={textOverflow}
         $disabled={disabled}
         $inline={inline}
         $position={position}
@@ -83,6 +85,7 @@ Area.displayName = "Area";
 export const AreaCSS = css<TransientProps<AreaStyledProps>>`
   display: ${({ $inline }) => $inline && "inline-block"};
   overflow: ${({ $overflow }) => $overflow};
+  text-overflow: ${({ $textOverflow }) => $textOverflow};
   pointer-events: ${({ $disabled }) => $disabled && "none"};
   position: ${({ $position }) => $position};
   top: ${({ $top }) => getUnitWithMeasure($top)};
@@ -133,6 +136,7 @@ interface AreaStyledProps {
   right?: string | UnitIndex;
   left?: string | UnitIndex;
   overflow?: "hidden" | "auto";
+  textOverflow?: "ellipsis";
   disabled?: boolean;
   width?: string | UnitIndex;
   height?: string | UnitIndex;

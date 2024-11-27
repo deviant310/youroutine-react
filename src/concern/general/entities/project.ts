@@ -1,21 +1,50 @@
-import { OmitMethods, UUID } from "~/typescript";
+import { UUID } from "~/typescript";
 
-export class Project {
-  id: UUID;
-  name: string;
-  description: string;
+import { Entity } from "~/infrastructure/entity";
 
+export class Project<
+  Attributes extends ProjectAttributes = ProjectAttributes,
+> extends Entity<Attributes> {
   static getInstanceId(project: Project) {
-    return project.id;
+    return project.$payload.id;
   }
 
   static getInstanceName(project: Project) {
-    return project.name;
+    return project.$payload.name;
   }
 
-  constructor(attributes: OmitMethods<Project>) {
-    this.id = attributes.id;
-    this.name = attributes.name;
-    this.description = attributes.description;
+  get id() {
+    return this.$payload.id;
+  }
+
+  get name() {
+    return this.$payload.name;
+  }
+
+  set name(value: ProjectAttributes["name"]) {
+    this.$payload.name = value;
+  }
+
+  get description() {
+    return this.$payload.description;
+  }
+
+  set description(value: ProjectAttributes["description"]) {
+    this.$payload.description = value;
+  }
+
+  toString() {
+    return this.$payload.name;
   }
 }
+
+export interface ProjectAttributes {
+  readonly id: UUID;
+  name: string;
+  description: string;
+}
+
+export type ProjectCreateAttributes = Pick<
+  ProjectAttributes,
+  "name" | "description"
+>;

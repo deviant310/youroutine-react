@@ -2,15 +2,7 @@ import { randomUUID } from "node:crypto";
 
 import { Express } from "express";
 
-import {
-  TaskCreateRequestData,
-  TaskCreateResponseData,
-} from "../src/concern/common/third-party/requests";
-
-import {
-  projectsRetrieveResponseData,
-  tasksRetrieveResponseData,
-} from "./responses";
+import { projects, tasks } from "./responses";
 
 export default function (express: Express) {
   /**
@@ -26,17 +18,44 @@ export default function (express: Express) {
    */
   express.get("/api/tasks", (_, response) => {
     response.statusCode = 200;
-    response.json(tasksRetrieveResponseData);
+    response.json(tasks);
+  });
+
+  express.get("/api/tasks/:id", (request, response) => {
+    const task = tasks.find(({ id }) => id === request.params.id);
+
+    if (!task) {
+      response.statusCode = 400;
+      response.statusMessage = "Task not found";
+      response.end();
+
+      return;
+    }
+
+    response.statusCode = 200;
+    response.json(task);
   });
 
   express.post("/api/tasks", (request, response) => {
-    const task: TaskCreateResponseData = {
-      ...(request.body as TaskCreateRequestData),
+    const project = projects.find(({ id }) => id === request.body.projectId);
+
+    if (!project) {
+      response.statusCode = 500;
+      response.end("Project not found");
+
+      return;
+    }
+
+    const task = {
       id: randomUUID(),
+      title: request.body.title,
+      description: request.body.description,
+      project,
+      priority: request.body.priority,
       status: null,
     };
 
-    tasksRetrieveResponseData.push(task);
+    tasks.push(task);
 
     response.statusCode = 200;
     response.json(task);
@@ -47,6 +66,6 @@ export default function (express: Express) {
    */
   express.get("/api/projects", (_, response) => {
     response.statusCode = 200;
-    response.json(projectsRetrieveResponseData);
+    response.json(projects);
   });
 }

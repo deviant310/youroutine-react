@@ -13,7 +13,8 @@
       "extensions": [
         "dbaeumer.vscode-eslint",
         "styled-components.vscode-styled-components",
-        "waderyan.gitblame"
+        "waderyan.gitblame",
+        "streetsidesoftware.code-spell-checker"
       ]
     }
   },

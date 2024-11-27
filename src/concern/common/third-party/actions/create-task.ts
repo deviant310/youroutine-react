@@ -1,6 +1,7 @@
 import { performRequest } from "~/infrastructure/http";
 
 import {
+  Project,
   Task,
   TaskCreateAttributes,
   TaskPriority,
@@ -9,14 +10,12 @@ import {
 
 import { buildTaskCreateRequest, TaskCreateResponseData } from "../requests";
 
-export const createTask = async (
-  attributes: TaskCreateAttributes,
-): Promise<Task> => {
+export const createTask = async (attributes: CreateAttributes) => {
   const taskCreateRequest = buildTaskCreateRequest({
     title: attributes.title,
     description: attributes.description,
     projectId: attributes.projectId,
-    priority: attributes.priority.toString(),
+    priority: attributes.priority.$payload,
   });
 
   const { data } = await performRequest(taskCreateRequest);
@@ -28,7 +27,7 @@ export const mapTaskCreateResponseData = ({
   id,
   title,
   description,
-  projectId,
+  project: projectAttributes,
   status,
   priority,
 }: TaskCreateResponseData) =>
@@ -36,7 +35,14 @@ export const mapTaskCreateResponseData = ({
     id,
     title,
     description,
-    projectId,
-    status: status ? new TaskStatus(status) : null,
-    priority: new TaskPriority(priority),
+    status: status ? new TaskStatus(status as TaskStatus["$payload"]) : null,
+    priority: new TaskPriority(priority as TaskPriority["$payload"]),
+    project: new Project(projectAttributes),
   });
+
+interface TaskCreateRelatedEntitiesAttributes {
+  projectId: Project["id"];
+}
+
+type CreateAttributes = TaskCreateAttributes &
+  TaskCreateRelatedEntitiesAttributes;

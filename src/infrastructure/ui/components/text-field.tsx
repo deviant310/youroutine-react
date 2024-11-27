@@ -50,7 +50,7 @@ export const TextField = memo<TextFieldPropsWithHTMLAttributes>(props => {
 
   return (
     <Fieldset {...restProps}>
-      <FieldErrorSlided>{error}</FieldErrorSlided>
+      <FieldErrorSlidable>{error}</FieldErrorSlidable>
 
       <Grid gap={0.4}>
         {label && <FieldLabel>{label}</FieldLabel>}
@@ -75,7 +75,7 @@ const TextboxStyled = styled(Textbox)`
   ${FieldTextboxCSS}
 `;
 
-const FieldErrorSlided = animated(FieldError, "slide");
+const FieldErrorSlidable = animated(FieldError, "slide");
 
 export interface TextFieldProps extends FieldProps {
   value: string;

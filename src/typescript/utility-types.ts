@@ -28,7 +28,7 @@ export type OmitReadable<T> = Omit<T, ReadableKeys<T>>;
 export type OmitMethods<T> = Pick<
   T,
   {
-    [K in keyof T]: T[K] extends (...args: Array<any>) => any ? never : K;
+    [K in keyof T]: ((...args: Array<any>) => any) extends T[K] ? never : K;
   }[keyof T]
 >;
 

@@ -49,7 +49,7 @@ export const Popup = memo<PopupPropsWithHTMLAttributes>(props => {
       >
         <AreaScaled marginVertical={2.4}>
           {opened && (
-            <Paper radius={1.6}>
+            <Paper radius={1.6} elevation={1.6}>
               <Area position="relative">
                 <Area position="absolute" right={1} top={1.2}>
                   {onClose && (

@@ -14,7 +14,6 @@ export type TasksRetrieveResponseData = Array<{
   id: UUID;
   title: string;
   description: string;
-  projectId: UUID;
   status: "underway" | "completed" | "rejected" | null;
   priority: "low" | "medium" | "high";
 }>;

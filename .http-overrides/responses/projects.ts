@@ -1,8 +1,6 @@
-import { randomUUID } from "node:crypto";
+import { randomUUID } from "crypto";
 
-import { ProjectsRetrieveResponseData } from "../../src/concern/common/third-party/requests";
-
-export const projectsRetrieveResponseData: ProjectsRetrieveResponseData = [
+export const projects = [
   {
     id: randomUUID(),
     name: "YouRoutine",

@@ -1,4 +1,5 @@
 import {
+  NotFoundError,
   RequestError,
   RequestPayload,
   RequestUnauthorizedError,
@@ -22,10 +23,11 @@ export async function performRequest<Data>(
     };
   }
 
-  if (response.status === 401)
-    throw new RequestUnauthorizedError("Request needs authorization", response);
+  if (response.status === 400) throw new NotFoundError(response);
 
-  throw new RequestError(response.statusText, response);
+  if (response.status === 401) throw new RequestUnauthorizedError(response);
+
+  throw new RequestError(response);
 }
 
 interface ResponsePayload<Data> {

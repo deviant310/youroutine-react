@@ -3,20 +3,18 @@ import { memo, useMemo, useState } from "react";
 import {
   Grid,
   SelectField,
-  SelectFieldOptionComponent,
+  SelectInputOptionComponent,
   Text,
-  useTheme,
 } from "~/infrastructure/ui";
 
 import { useProjectsRetrieving } from "~/concern/common/third-party";
 import { Project } from "~/concern/general/entities";
 
-import { useTaskCreateFormField } from "../../../stores";
+import { useTaskCreateFormField } from "../../../hooks";
 
 export const ProjectField = () => {
-  const [searchValue, setSearchValue] = useState("");
-  // TODO переместить фильтрацию внутрь хука
-  const { projects } = useProjectsRetrieving();
+  const [nameEntry, setNameEntry] = useState("");
+  const { getProjectsFilteredByNameEntry } = useProjectsRetrieving();
 
   const { name, value, setValue, error, dirty, stain } =
     useTaskCreateFormField("project");
@@ -26,11 +24,8 @@ export const ProjectField = () => {
   }, [dirty, error]);
 
   const filteredProjects = useMemo(
-    () =>
-      projects?.filter(project =>
-        project.name.toLowerCase().includes(searchValue.toLowerCase()),
-      ),
-    [projects, searchValue],
+    () => getProjectsFilteredByNameEntry(nameEntry),
+    [getProjectsFilteredByNameEntry, nameEntry],
   );
 
   if (!filteredProjects) return null;
@@ -46,25 +41,24 @@ export const ProjectField = () => {
       getOptionKey={Project.getInstanceId}
       optionComponent={ProjectFieldOption}
       error={displayedError}
-      onContainerBlur={stain}
-      textboxValue={searchValue}
-      onTextboxChange={setSearchValue}
+      onInputBlur={stain}
+      textboxValue={nameEntry}
+      onTextboxChange={setNameEntry}
       textboxPlaceholder="Select project"
       textboxSize="auto"
     />
   );
 };
 
-const ProjectFieldOption: SelectFieldOptionComponent<Project> = memo(
+const ProjectFieldOption: SelectInputOptionComponent<Project> = memo(
   ({ option }) => {
     const { name, description } = option;
-    const { colors } = useTheme();
 
     return (
       <Grid>
         <Text>{name}</Text>
 
-        <Text size="xsmall" color={colors.default[2].filled()}>
+        <Text type="light" size="xsmall">
           {description}
         </Text>
       </Grid>

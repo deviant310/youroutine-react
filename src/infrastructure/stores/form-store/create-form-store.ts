@@ -1,6 +1,7 @@
 import { PartialDiff } from "~/typescript";
 
-import { FormStore, FormFieldsConfig } from "./form-store";
+import { FormStore } from "./form-store";
+import { FormFieldsConfig } from "./form-store-init";
 import { useFormInstance, useFormInstanceField } from "./hooks";
 
 export const createFormStore = <

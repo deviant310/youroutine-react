@@ -22,6 +22,7 @@ export const Textbox = memo<TextboxPropsWithHTMLAttributes>(
     invalid,
     disabled,
     readOnly,
+    implicit,
     size,
     placeholder,
     placeholderMuted = true,
@@ -44,7 +45,13 @@ export const Textbox = memo<TextboxPropsWithHTMLAttributes>(
     }, [onMouseDown]);
 
     return (
-      <TextboxStyled $invalid={invalid} $size={size} {...props} ref={ref}>
+      <TextboxStyled
+        $invalid={invalid}
+        $implicit={implicit}
+        $size={size}
+        {...props}
+        ref={ref}
+      >
         <RowStyled>
           {before && (
             <AdornmentContainerStyled>
@@ -83,17 +90,33 @@ const TextboxStyled = styled.div.attrs({ role: "textbox" })<
   width: ${({ $size }) => $size === "auto" && "100%"};
   display: inline-block;
   cursor: text;
-  background-color: ${({ theme }) => theme.colors.default[9].filled()};
+  background-color: ${({ theme, $implicit }) =>
+    !$implicit && theme.colors.main};
   padding: ${getUnitWithMeasure(0.8)} ${getUnitWithMeasure(1.6)};
   border-radius: ${getUnitWithMeasure(0.8)};
-  transition: box-shadow 150ms;
-  box-shadow: 0 0 0 2px inset
-    ${({ $invalid, theme }) =>
-      $invalid
-        ? theme.colors.error[0].filled()
-        : theme.colors.default[7].filled()};
+  transition-duration: 150ms;
+  transition-property: background-color, box-shadow;
+  box-shadow: ${({ theme, $invalid, $implicit }) =>
+    `0 0 0 2px inset ${
+      $implicit
+        ? "transparent"
+        : $invalid
+          ? theme.colors.error[0].filled()
+          : theme.colors.default[7].filled()
+    }`};
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.main};
+    box-shadow: ${({ theme, $invalid }) =>
+      `0 0 0 2px inset ${
+        $invalid
+          ? theme.colors.error[0].filled()
+          : theme.colors.default[7].filled()
+      }`};
+  }
 
   &:focus-within {
+    background-color: ${({ theme }) => theme.colors.main};
     box-shadow: 0 0 0 2px inset
       ${({ $invalid, theme }) =>
         $invalid
@@ -142,6 +165,7 @@ export interface TextboxStyledProps {
   invalid?: boolean;
   size?: TextboxSize;
   placeholderMuted?: boolean;
+  implicit?: boolean;
 }
 
 export interface TextboxProps extends TextboxStyledProps {

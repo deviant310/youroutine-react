@@ -1,8 +1,9 @@
 // inputs
 export * from "./button";
 //export * from "./masked-field";
-export * from "./select-field";
+export * from "./select";
 export * from "./text-field";
+export * from "./rich-text-editor-field";
 
 // surfaces
 export * from "./popup";

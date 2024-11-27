@@ -7,7 +7,7 @@ import {
   TasksRetrieveResponseData,
 } from "../requests";
 
-export const retrieveTasks = async (): Promise<Task[]> => {
+export const retrieveTasks = async () => {
   const tasksRetrieveRequest = buildTasksRetrieveRequest();
 
   const { data } = await performRequest(tasksRetrieveRequest);
@@ -17,12 +17,11 @@ export const retrieveTasks = async (): Promise<Task[]> => {
 
 export const mapTasksRetrieveResponseData = (data: TasksRetrieveResponseData) =>
   data.map(
-    ({ id, title, description, projectId, status, priority }) =>
+    ({ id, title, description, status, priority }) =>
       new Task({
         id,
         title,
         description,
-        projectId,
         status: status ? new TaskStatus(status) : null,
         priority: new TaskPriority(priority),
       }),

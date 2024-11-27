@@ -1,10 +1,10 @@
-import { memo, useCallback, useEffect } from "react";
+import { memo } from "react";
 
 import { Alert, Button, Flex } from "~/infrastructure/ui";
 
 import { useTaskCreating } from "~/concern/common/third-party";
 
-import { useTaskCreateForm } from "../../stores";
+import { useTaskCreateForm } from "../../hooks";
 
 import {
   DescriptionField,
@@ -36,44 +36,18 @@ export const TaskCreateForm = memo(() => {
 });
 
 export const TaskCreateFormSubmitButton = memo(() => {
-  const { task, createTask, creatingTask } = useTaskCreating();
-
-  const form = useTaskCreateForm();
-
-  const formValid = form.valid();
-
-  const onClick = useCallback(() => {
-    if (creatingTask) return;
-
-    if (formValid) {
-      const { title, description, project, priority } = form.state.values;
-
-      createTask({
-        title,
-        description,
-        projectId: project.id,
-        priority,
-      });
-    }
-  }, [createTask, creatingTask, form.state.values, formValid]);
-
-  const onMouseDown = useCallback(() => {
-    setTimeout(() => form.clean(), 0);
-    setTimeout(() => form.stain(), 100);
-  }, [form]);
-
-  useEffect(() => {
-    if (task) {
-      form.reset();
-    }
-  }, [form, task]);
+  const {
+    submitTaskCreateForm,
+    submittingTaskCreateForm,
+    highlightTaskCreateFormErrors,
+  } = useTaskCreateForm();
 
   return (
     <Button
-      onClick={onClick}
-      onMouseDown={onMouseDown}
-      loading={creatingTask}
-      disabled={creatingTask}
+      onClick={submitTaskCreateForm}
+      onMouseDown={highlightTaskCreateFormErrors}
+      loading={submittingTaskCreateForm}
+      disabled={submittingTaskCreateForm}
     >
       Create task
     </Button>

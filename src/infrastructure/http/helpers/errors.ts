@@ -1,10 +1,8 @@
 export class RequestError extends Error {
-  constructor(
-    message: string,
-    public response: Response,
-  ) {
-    super(message);
+  constructor(public response: Response) {
+    super(response.statusText);
   }
 }
 
+export class NotFoundError extends RequestError {}
 export class RequestUnauthorizedError extends RequestError {}

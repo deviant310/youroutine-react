@@ -11,7 +11,7 @@
       "type": "node-terminal",
       "env": {
         "DEV_SERVER_HTTP_OVERRIDES": "1"
-      }
+      },
     }
   ]
 }

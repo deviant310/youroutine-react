@@ -1,23 +1,26 @@
-import {
-  FieldError,
-  FieldLabel,
-  Fieldset,
-  Grid,
-  RichTextEditor,
-} from "~/infrastructure/ui";
+import { useMemo } from "react";
+
+import { RichTextEditorField } from "~/infrastructure/ui";
+
+import { useTaskCreateFormField } from "../../../hooks";
 
 export const DescriptionField = () => {
-  const initialValue = "<p>Hello World!</p><p></p>";
+  const { name, value, setValue, error, dirty, stain } =
+    useTaskCreateFormField("description");
+
+  const displayedError = useMemo(() => {
+    if (dirty) return error;
+  }, [dirty, error]);
 
   return (
-    <Fieldset>
-      <FieldError></FieldError>
-
-      <Grid gap={0.4}>
-        <FieldLabel>Description</FieldLabel>
-
-        <RichTextEditor initialValue={initialValue} />
-      </Grid>
-    </Fieldset>
+    <RichTextEditorField
+      name={name}
+      label="Description"
+      value={value}
+      onChange={setValue}
+      error={displayedError}
+      onEditorBlur={stain}
+      editorMinHeight="100px"
+    />
   );
 };

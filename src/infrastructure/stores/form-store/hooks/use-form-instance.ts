@@ -12,7 +12,7 @@ export const useFormInstance = <
 ) => {
   useSyncExternalStore(
     listener => form.onChange(listener),
-    () => form.state,
+    () => form.getState(),
   );
 
   return form;

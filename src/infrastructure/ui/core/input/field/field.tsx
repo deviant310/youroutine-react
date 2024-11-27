@@ -1,5 +1,5 @@
 export interface FieldProps {
-  name: string;
+  name?: string;
   label?: string;
   error?: string;
 }

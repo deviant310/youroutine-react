@@ -1,3 +1,1 @@
-export class ValidationError {
-  constructor(public message: string) {}
-}
+export class ValidationError extends Error {}

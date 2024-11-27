@@ -4,6 +4,7 @@ export const palette = {
   tomato: "#ED3948",
   mediumSlateBlue: "#6666FF",
   savoyBlue: "#415DE8",
+  white: "#fff",
 
   softEgg: "#f4f5f6",
   atmosphere: "#415de8",

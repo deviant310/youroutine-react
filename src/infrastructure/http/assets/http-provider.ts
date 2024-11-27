@@ -5,13 +5,14 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { PropsWithRequiredChildren } from "~/react";
 
-import { RequestUnauthorizedError } from "../helpers";
+import { NotFoundError, RequestUnauthorizedError } from "../helpers";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
       retry(failureCount, error: unknown) {
+        if (error instanceof NotFoundError) return false;
         if (error instanceof RequestUnauthorizedError) return false;
 
         return failureCount < 3;

@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 
-import { createValueStore } from "~/infrastructure/stores";
+import { createPrimitiveStore } from "~/infrastructure/stores";
 
-const { useValue } = createValueStore(false);
+const { useValue } = createPrimitiveStore(false);
 
 export const useProjectCreatePopupToggle = () => {
   const { value: projectCreatePopupToggleIsOn, setValue } = useValue();

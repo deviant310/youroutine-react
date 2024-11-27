@@ -1,6 +1,6 @@
 import { Event, EventListener } from "~/typescript";
 
-export class ValueStore<Value> {
+export class PrimitiveStore<Value> {
   private value: Value;
   private changeEvent = new Event();
 

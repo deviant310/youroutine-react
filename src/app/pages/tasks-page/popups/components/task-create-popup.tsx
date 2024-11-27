@@ -1,13 +1,23 @@
-import { memo } from "react";
+import { memo, useEffect } from "react";
 
 import { Area, Button, Flex, Popup, Title } from "~/infrastructure/ui";
 
-import { TaskCreateForm, TaskCreateFormSubmitButton } from "../../forms";
-import { useTaskCreatePopupToggle } from "../stores";
+import {
+  TaskCreateForm,
+  TaskCreateFormSubmitButton,
+  useTaskCreateForm,
+} from "../../forms";
+import { useTaskCreatePopupToggle } from "../hooks";
 
 export const TaskCreatePopup = memo(() => {
   const { taskCreatePopupToggleOn, turnTaskCreatePopupToggleOff } =
     useTaskCreatePopupToggle();
+
+  const { taskCreateFormSubmitted } = useTaskCreateForm();
+
+  useEffect(() => {
+    if (taskCreateFormSubmitted) turnTaskCreatePopupToggleOff();
+  }, [taskCreateFormSubmitted, turnTaskCreatePopupToggleOff]);
 
   return (
     <Popup
@@ -29,11 +39,7 @@ export const TaskCreatePopup = memo(() => {
 
         <Area marginHorizontal={4} marginTop={1.2}>
           <Flex gap={0.8} justifyContent="end">
-            <Button
-              type="text"
-              color="primary-light"
-              onClick={turnTaskCreatePopupToggleOff}
-            >
+            <Button type="link" onClick={turnTaskCreatePopupToggleOff}>
               Cancel
             </Button>
 

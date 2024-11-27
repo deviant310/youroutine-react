@@ -23,6 +23,15 @@ export const Canvas = createGlobalStyle`
     background-color: ${({ theme }) => theme.colors.default[7].filled()};
   }
 
+  p {
+    margin-block-start: 1.6rem;
+    margin-block-end: 1.6rem;
+  }
+
+  p:first-child {
+    margin-block-start: 0;
+  }
+
   a:not([href]) {
     pointer-events: none;
   }

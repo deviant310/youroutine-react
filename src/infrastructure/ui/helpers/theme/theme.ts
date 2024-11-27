@@ -2,6 +2,7 @@ import { Shade } from "./shade";
 
 export interface Theme {
   colors: {
+    main: string;
     default: {
       1: Shade;
       2: Shade;

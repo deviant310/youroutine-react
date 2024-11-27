@@ -13,7 +13,7 @@ import {
 
 import { Header } from "~/concern/chunks";
 import { useProjectsRetrieving } from "~/concern/common/third-party";
-import { Project } from "~/concern/general/entities";
+import { ProjectAttributes } from "~/concern/general/entities";
 
 import { ProjectCreatePopup, useProjectCreatePopupToggle } from "./popups";
 
@@ -33,7 +33,7 @@ export const ProjectsPage = memo(() => {
             <Title size={3}>Projects</Title>
 
             <Button
-              color="primary-light"
+              type="primary-light"
               onClick={turnProjectCreatePopupToggleOn}
             >
               Create project
@@ -43,7 +43,7 @@ export const ProjectsPage = memo(() => {
 
         {!projects && retrievingProjects && "Loading projects..."}
 
-        {projects && <Table data={projects} columns={columns} />}
+        {projects && <Table rowsData={projects} columns={columns} />}
       </Area>
 
       <ProjectCreatePopup />
@@ -51,7 +51,7 @@ export const ProjectsPage = memo(() => {
   );
 });
 
-const columns: TableColumns<Project> = {
+const columns: TableColumns<ProjectAttributes> = {
   id: { caption: "ID" },
   name: { caption: "Name" },
   description: { caption: "Description" },

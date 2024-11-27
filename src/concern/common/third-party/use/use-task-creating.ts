@@ -13,11 +13,12 @@ export const useTaskCreating = () => {
     perform: createTask,
     isLoading: creatingTask,
     error: creatingTaskError,
+    isSuccess: taskCreated,
   } = useQueryAction(createTaskAction, {
     onSuccess() {
       invalidateTasks();
     },
   });
 
-  return { task, createTask, creatingTask, creatingTaskError };
+  return { task, createTask, creatingTask, creatingTaskError, taskCreated };
 };

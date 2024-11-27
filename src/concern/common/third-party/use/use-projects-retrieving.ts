@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+
 import { useQueryAction } from "use-query-action";
 
 import { retrieveProjects as retrieveProjectsAction } from "../actions";
@@ -9,5 +11,18 @@ export const useProjectsRetrieving = () => {
     error: retrievingProjectsError,
   } = useQueryAction(retrieveProjectsAction, [], { refetchOnMount: false });
 
-  return { projects, retrievingProjects, retrievingProjectsError };
+  const getProjectsFilteredByNameEntry = useCallback(
+    (nameEntry: string) =>
+      projects?.filter(project =>
+        project.name.toLowerCase().includes(nameEntry.toLowerCase()),
+      ),
+    [projects],
+  );
+
+  return {
+    projects,
+    getProjectsFilteredByNameEntry,
+    retrievingProjects,
+    retrievingProjectsError,
+  };
 };

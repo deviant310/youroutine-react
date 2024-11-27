@@ -9,10 +9,10 @@ import {
   TextStyledProps,
   TransientProps,
 } from "~/infrastructure/ui";
-// TODO нужно как-то засунуть в infrastructure
+
 export const TextLink = memo<TextLinkProps>(
-  ({ size, weight, color, ...props }) => (
-    <TextLinkStyled $color={color} $size={size} $weight={weight} {...props} />
+  ({ type, size, weight, ...props }) => (
+    <TextLinkStyled $type={type} $size={size} $weight={weight} {...props} />
   ),
 );
 

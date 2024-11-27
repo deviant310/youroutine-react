@@ -48,7 +48,7 @@ export const Header = memo(() => {
             <Area position="relative" onBlur={hideDropdown} tabIndex={-1}>
               <Clickable onClick={toggleDropdown}>
                 <Flex alignItems="center" gap={0.4}>
-                  <Text>Anton Lebedev</Text>
+                  Anton Lebedev
                   <ChevronIcon />
                 </Flex>
               </Clickable>
@@ -67,8 +67,7 @@ export const Header = memo(() => {
                         <Area paddingHorizontal={1.6}>
                           <Flex alignItems="center" gap={0.8}>
                             <SettingsIcon />
-
-                            <Text>Settings</Text>
+                            Settings
                           </Flex>
                         </Area>
                       </Clickable>
@@ -77,8 +76,7 @@ export const Header = memo(() => {
                         <Area paddingHorizontal={1.6}>
                           <Flex alignItems="center" gap={0.8}>
                             <SignOutIcon />
-
-                            <Text>Log out</Text>
+                            Log out
                           </Flex>
                         </Area>
                       </Clickable>

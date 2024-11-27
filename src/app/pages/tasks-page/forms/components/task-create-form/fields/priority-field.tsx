@@ -1,10 +1,10 @@
 import { memo, useMemo } from "react";
 
-import { SelectField, SelectFieldOptionComponent } from "~/infrastructure/ui";
+import { SelectField, SelectInputOptionComponent } from "~/infrastructure/ui";
 
 import { TaskPriority } from "~/concern/general/entities";
 
-import { useTaskCreateFormField } from "../../../stores";
+import { useTaskCreateFormField } from "../../../hooks";
 
 export const PriorityField = () => {
   // TODO запретить на уровне eslint устанавливать здесь дефолтные значения
@@ -22,16 +22,17 @@ export const PriorityField = () => {
       options={TaskPriority.options}
       value={value}
       onChange={setValue}
+      getOptionKey={TaskPriority.getInstanceKey}
       displayStringForOption={TaskPriority.getInstanceLabel}
       optionComponent={PriorityFieldOption}
       error={displayedError}
-      onContainerBlur={stain}
+      onInputBlur={stain}
       textboxPlaceholder="Select priority"
       textboxSize="auto"
     />
   );
 };
 
-const PriorityFieldOption: SelectFieldOptionComponent<TaskPriority> = memo(
+const PriorityFieldOption: SelectInputOptionComponent<TaskPriority> = memo(
   ({ option: priority }) => priority.label,
 );

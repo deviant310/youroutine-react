@@ -41,13 +41,13 @@
             "~/pages"
           ],
           "**/app/pages/*/popups/components/**": [
-            "../stores",
+            "../hooks",
             "../../forms",
           ],
           "**/app/pages/*/forms/components/**": [
-            "../stores",
-            "../../stores",
-            "../../../stores",
+            "../hooks",
+            "../../hooks",
+            "../../../hooks",
           ],
           "**/concern/**": [
             "~/infrastructure/*",
@@ -106,14 +106,20 @@
           ],
           "**/infrastructure/ui/components/**": [
             "../core",
+            "../../core",
             "../hooks",
-            "../helpers"
+            "../helpers",
+            "../../helpers",
           ],
           "**/infrastructure/ui/core/**": [
             "../../helpers",
             "../../../helpers",
             "../../../../helpers",
             "../../hooks"
+          ],
+          "**/infrastructure/ui/core/input/**": [
+            "@tiptap/react",
+            "@tiptap/starter-kit"
           ],
           "**/infrastructure/ui/hooks/**": [
             "../helpers"
@@ -144,5 +150,5 @@
   },
   "include": [
     "./src/**/*"
-  ]
+  ],
 }

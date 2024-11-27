@@ -1,9 +1,10 @@
 import { Shade, Theme } from "~/infrastructure/ui";
 
 import { palette } from "../palette";
-
+// TODO create Tint class
 export const ThemeDark: Theme = {
   colors: {
+    main: palette.white,
     default: {
       1: new Shade(palette.russianViolet, 1),
       2: new Shade(palette.russianViolet, 0.64),
@@ -13,7 +14,7 @@ export const ThemeDark: Theme = {
       6: new Shade(palette.russianViolet, 0.12),
       7: new Shade(palette.russianViolet, 0.08),
       8: new Shade(palette.russianViolet, 0.05),
-      9: new Shade("white", 1),
+      9: new Shade(palette.russianViolet, 0.02),
     },
     primary: {
       0: new Shade(palette.mediumSlateBlue, 0.8, "black"),
