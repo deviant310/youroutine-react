@@ -32,7 +32,7 @@ export type OmitMethods<T> = Pick<
   }[keyof T]
 >;
 
-export type PartialDiff<A, B extends A> = {
+export type PartialMatch<A, B extends A> = {
   [K in keyof A]: Extract<A[K], undefined> extends Extract<B[K], undefined>
     ? B[K]
     : never;

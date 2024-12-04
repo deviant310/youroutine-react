@@ -5,10 +5,10 @@ import { useToggle } from "~/react";
 import { Area, Button, Flex, Popup, Title } from "~/infrastructure/ui";
 
 import { ProjectCreateForm } from "../../forms";
-import { useProjectCreatePopupToggle } from "../stores";
+import { useProjectCreatePopupToggle } from "../hooks";
 
 export const ProjectCreatePopup = memo(() => {
-  const { projectCreatePopupToggleIsOn, turnProjectCreatePopupToggleOff } =
+  const { projectCreatePopupToggleOn, turnProjectCreatePopupToggleOff } =
     useProjectCreatePopupToggle();
 
   const {
@@ -19,7 +19,7 @@ export const ProjectCreatePopup = memo(() => {
 
   return (
     <Popup
-      opened={projectCreatePopupToggleIsOn}
+      opened={projectCreatePopupToggleOn}
       onClose={turnProjectCreatePopupToggleOff}
     >
       <Area paddingVertical={1.6} width="500px" maxWidth="100%">

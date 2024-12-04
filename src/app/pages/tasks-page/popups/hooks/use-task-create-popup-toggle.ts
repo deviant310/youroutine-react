@@ -1,21 +1,13 @@
-import { useCallback } from "react";
-
 import { createPrimitiveStore } from "~/infrastructure/stores";
 
-const { useValue } = createPrimitiveStore(false);
+const { useStore } = createPrimitiveStore(false);
 
 export const useTaskCreatePopupToggle = () => {
-  const { value: taskCreatePopupToggleOn, setValue } = useValue();
-
-  const turnTaskCreatePopupToggleOn = useCallback(
-    () => setValue(true),
-    [setValue],
-  );
-
-  const turnTaskCreatePopupToggleOff = useCallback(
-    () => setValue(false),
-    [setValue],
-  );
+  const {
+    value: taskCreatePopupToggleOn,
+    setValueOn: turnTaskCreatePopupToggleOn,
+    setValueOff: turnTaskCreatePopupToggleOff,
+  } = useStore();
 
   return {
     taskCreatePopupToggleOn,

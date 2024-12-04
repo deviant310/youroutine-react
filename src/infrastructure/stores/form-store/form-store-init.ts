@@ -3,7 +3,7 @@ import {
   Event,
   EventListener,
   isDefined,
-  PartialDiff,
+  PartialMatch,
 } from "~/typescript";
 
 import { ValidationError } from "./validation-error";
@@ -11,7 +11,7 @@ import { ValidationError } from "./validation-error";
 export abstract class FormStoreInit<
   FormValues,
   FormValidValues extends FormValues &
-    PartialDiff<FormValues, FormValidValues> = FormValues,
+    PartialMatch<FormValues, FormValidValues> = FormValues,
 > {
   protected changeEvent = new Event();
 

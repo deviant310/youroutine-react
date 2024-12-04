@@ -1,21 +1,21 @@
-import { PartialDiff } from "~/typescript";
+import { PartialMatch } from "~/typescript";
 
 import { FormStore } from "./form-store";
 import { FormFieldsConfig } from "./form-store-init";
-import { useFormInstance, useFormInstanceField } from "./hooks";
+import { useFormStoreInstance, useFormStoreInstanceField } from "./hooks";
 
 export const createFormStore = <
   Values,
-  ValidValues extends Values & PartialDiff<Values, ValidValues> = Values,
+  ValidValues extends Values & PartialMatch<Values, ValidValues> = Values,
 >(
   fieldsConfig: FormFieldsConfig<Values, ValidValues>,
 ) => {
-  const form = new FormStore<Values, ValidValues>(fieldsConfig);
+  const store = new FormStore<Values, ValidValues>(fieldsConfig);
 
-  const useForm = () => useFormInstance(form);
+  const useForm = () => useFormStoreInstance(store);
 
   const useField = <Name extends keyof Values>(name: Name) =>
-    useFormInstanceField(form, name);
+    useFormStoreInstanceField(store, name);
 
-  return { useForm, useField } as const;
+  return { useForm, useField };
 };

@@ -1,10 +1,10 @@
-import { PartialDiff } from "~/typescript";
+import { PartialMatch } from "~/typescript";
 
 import { FormFieldState, FormStoreInit } from "./form-store-init";
 
 export class FormStore<
   Values,
-  ValidValues extends Values & PartialDiff<Values, ValidValues> = Values,
+  ValidValues extends Values & PartialMatch<Values, ValidValues> = Values,
 > extends FormStoreInit<Values, ValidValues> {
   getState() {
     return this.formState as this extends FormStore<ValidValues>
