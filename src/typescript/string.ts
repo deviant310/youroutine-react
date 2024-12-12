@@ -4,6 +4,12 @@ export function capitalize<Value extends string>(value: Value) {
   return <Capitalize<Value>>capitalizedValue;
 }
 
+export function camelize<Value extends string>(value: Value) {
+  const capitalizedValue = value.charAt(0).toLowerCase() + value.slice(1);
+
+  return <Uncapitalize<Value>>capitalizedValue;
+}
+
 export function split<Value extends string, Splitter extends string>(
   value: Value,
   splitter: Splitter,

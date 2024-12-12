@@ -2,6 +2,7 @@ import react from "@vitejs/plugin-react-swc";
 import ExpressApp, { Express } from "express";
 import { defineConfig, Plugin, PreviewServer, ViteDevServer } from "vite";
 import checker from "vite-plugin-checker";
+import svgr from "vite-plugin-svgr";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 const {
@@ -32,6 +33,24 @@ export default defineConfig(async ({ command }) => ({
     sourcemap: command === "serve",
   },
   plugins: [
+    svgr({
+      svgrOptions: {
+        plugins: ["@svgr/plugin-svgo", "@svgr/plugin-jsx"],
+        svgoConfig: {
+          floatPrecision: 2,
+          plugins: [
+            {
+              name: "preset-default",
+              params: {
+                overrides: {
+                  removeViewBox: false,
+                },
+              },
+            },
+          ],
+        },
+      },
+    }),
     tsconfigPaths(),
     react(),
     checker({

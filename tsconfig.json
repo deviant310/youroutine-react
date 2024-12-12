@@ -104,18 +104,22 @@
             "styled-normalize",
             "use-react-input/*"
           ],
-          "**/infrastructure/ui/components/**": [
+          "**/infrastructure/ui/components/*": [
             "../core",
             "../../core",
             "../hooks",
             "../helpers",
             "../../helpers",
           ],
-          "**/infrastructure/ui/core/**": [
+          "**/infrastructure/ui/core/*/*": [
             "../../helpers",
-            "../../../helpers",
-            "../../../../helpers",
             "../../hooks"
+          ],
+          "**/infrastructure/ui/core/typography/*/*": [
+            "../../../helpers",
+          ],
+          "**/infrastructure/ui/core/typography/components/*": [
+            "../helpers",
           ],
           "**/infrastructure/ui/core/input/**": [
             "@tiptap/react",
@@ -150,5 +154,5 @@
   },
   "include": [
     "./src/**/*"
-  ],
+, "vite-env.d.ts"  ],
 }

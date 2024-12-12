@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createContext } from "react";
+import { createContext, useContext } from "react";
 
 import { Route } from "./route";
 
-export const context = createContext({} as RouterContextValue);
+const context = createContext({} as RouterContextValue);
 
-export const { Provider } = context;
+export const { Provider: RouterProvider } = context;
+
+export const useRouter = () => useContext(context);
 
 export interface RouterContextValue {
   pathParams: Record<string, string>;

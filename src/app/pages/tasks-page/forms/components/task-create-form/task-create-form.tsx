@@ -1,10 +1,8 @@
 import { memo } from "react";
 
-import { Alert, Button, Flex } from "~/infrastructure/ui";
+import { Alert, Flex } from "~/infrastructure/ui";
 
 import { useTaskCreating } from "~/concern/common/third-party";
-
-import { useTaskCreateForm } from "../../hooks";
 
 import {
   DescriptionField,
@@ -32,24 +30,5 @@ export const TaskCreateForm = memo(() => {
         <Alert type="error">{creatingTaskError.message}</Alert>
       )}
     </>
-  );
-});
-
-export const TaskCreateFormSubmitButton = memo(() => {
-  const {
-    submitTaskCreateForm,
-    submittingTaskCreateForm,
-    highlightTaskCreateFormErrors,
-  } = useTaskCreateForm();
-
-  return (
-    <Button
-      onClick={submitTaskCreateForm}
-      onMouseDown={highlightTaskCreateFormErrors}
-      loading={submittingTaskCreateForm}
-      disabled={submittingTaskCreateForm}
-    >
-      Create task
-    </Button>
   );
 });

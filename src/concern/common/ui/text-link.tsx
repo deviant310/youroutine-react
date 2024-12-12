@@ -11,8 +11,8 @@ import {
 } from "~/infrastructure/ui";
 
 export const TextLink = memo<TextLinkProps>(
-  ({ type, size, weight, ...props }) => (
-    <TextLinkStyled $type={type} $size={size} $weight={weight} {...props} />
+  ({ color, size, weight, ...props }) => (
+    <TextLinkStyled $color={color} $size={size} $weight={weight} {...props} />
   ),
 );
 

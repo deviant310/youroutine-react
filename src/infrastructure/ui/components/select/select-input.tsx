@@ -24,9 +24,9 @@ import {
   CircleCSS,
   CircleStyledProps,
   Clickable,
-  CloseIcon,
   Column,
   ColumnElement,
+  Icon,
   Paper,
   Textbox,
   TextboxSize,
@@ -147,7 +147,7 @@ export const SelectInput = memo(function <OptionData>({
               $implicit={implicit}
               onClick={onCleanerClick}
             >
-              <CloseIcon size={1.6} />
+              <Icon type="close" size="xsmall" />
             </ClickableCircleStyled>
           )
         }

@@ -58,7 +58,7 @@ const ProjectFieldOption: SelectInputOptionComponent<Project> = memo(
       <Grid>
         <Text>{name}</Text>
 
-        <Text type="light" size="xsmall">
+        <Text color="light" size="xsmall">
           {description}
         </Text>
       </Grid>

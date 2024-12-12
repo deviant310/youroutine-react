@@ -13,7 +13,7 @@ import {
   CircleCSS,
   CircleStyledProps,
   Clickable,
-  CloseIcon,
+  Icon,
   GridCSS,
   GridStyledProps,
   Paper,
@@ -54,7 +54,7 @@ export const Popup = memo<PopupPropsWithHTMLAttributes>(props => {
                 <Area position="absolute" right={1} top={1.2}>
                   {onClose && (
                     <ClickableCircleStyled $size={3.6} onClick={onClose}>
-                      <CloseIcon size={2.4} />
+                      <Icon type="close" /*size={2.4}*/ />
                     </ClickableCircleStyled>
                   )}
                 </Area>

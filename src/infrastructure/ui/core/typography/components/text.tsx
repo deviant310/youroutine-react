@@ -3,11 +3,12 @@ import { ElementRef, HTMLAttributes, memo } from "react";
 import { css, styled } from "styled-components";
 
 import { getUnitWithMeasure, TransientProps } from "../../../helpers";
+import { GlyphCSS, GlyphSize, GlyphStyledProps } from "../helpers";
 
 export const Text = memo<TextPropsWithHTMLAttributes>(
-  ({ type, size, weight, nowrap, ...props }) => (
+  ({ color, size = "medium", weight, nowrap, ...props }) => (
     <TextStyled
-      $type={type}
+      $color={color}
       $size={size}
       $weight={weight}
       $nowrap={nowrap}
@@ -19,6 +20,8 @@ export const Text = memo<TextPropsWithHTMLAttributes>(
 Text.displayName = "Text";
 
 export const TextCSS = css<TransientProps<TextStyledProps>>`
+  ${GlyphCSS};
+
   white-space: ${({ $nowrap }) => $nowrap && "nowrap"};
 
   line-height: ${({ $size }) => {
@@ -40,24 +43,14 @@ export const TextCSS = css<TransientProps<TextStyledProps>>`
     if ($weight === "medium") return 500;
     if ($weight === "semibold") return 600;
   }};
-
-  color: ${({ theme, $type }) => {
-    if ($type === "default") return theme.colors.default[1].filled();
-    if ($type === "light") return theme.colors.default[2].filled();
-    if ($type === "xlight") return theme.colors.default[3].filled();
-    if ($type === "action") return theme.colors.primary[2].filled();
-  }};
 `;
 
 const TextStyled = styled.span<TransientProps<TextStyledProps>>`
   ${TextCSS}
 `;
 
-export type TextType = "default" | "light" | "xlight" | "action";
-
-export interface TextStyledProps {
-  type?: TextType;
-  size?: "large" | "medium" | "small" | "xsmall";
+export interface TextStyledProps extends GlyphStyledProps {
+  size?: GlyphSize;
   weight?: TextWeight;
   nowrap?: boolean;
 }
@@ -67,7 +60,7 @@ export interface TextProps extends TextStyledProps {
 }
 
 export interface TextPropsWithHTMLAttributes
-  extends Omit<HTMLAttributes<TextElement>, "children">,
+  extends Omit<HTMLAttributes<TextElement>, "children" | "color">,
     TextProps {}
 
 export type TextWeight = "regular" | "medium" | "semibold";

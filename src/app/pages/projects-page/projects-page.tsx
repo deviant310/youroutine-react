@@ -33,7 +33,7 @@ export const ProjectsPage = memo(() => {
             <Title size={3}>Projects</Title>
 
             <Button
-              type="primary-light"
+              color="primary-light"
               onClick={turnProjectCreatePopupToggleOn}
             >
               Create project

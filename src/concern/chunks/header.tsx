@@ -8,20 +8,19 @@ import { Link, LinkProps } from "~/infrastructure/router";
 import {
   animated,
   Area,
-  ChevronIcon,
   Clickable,
   Flex,
   getUnitWithMeasure,
   Grid,
-  LogoIcon,
+  Icon,
   Paper,
-  SettingsIcon,
-  SignOutIcon,
   Text,
   TransientProps,
 } from "~/infrastructure/ui";
 
 import { projectsRoute, tasksRoute } from "~/concern/general/routes";
+
+import { FinomLogo } from "../common/theme";
 
 // TODO Вынести dropdown в infrastructure/ui
 export const Header = memo(() => {
@@ -37,7 +36,7 @@ export const Header = memo(() => {
         <Area marginHorizontal="auto" maxWidth="1200px">
           <Grid autoFlow="column" justifyContent="between" alignItems="center">
             <Flex alignItems="center" gap={3.2}>
-              <LogoIcon />
+              <FinomLogo />
 
               <Flex gap={1.2}>
                 <HeaderNavLink text="Tasks" to={tasksRoute.build()} />
@@ -49,7 +48,7 @@ export const Header = memo(() => {
               <Clickable onClick={toggleDropdown}>
                 <Flex alignItems="center" gap={0.4}>
                   Anton Lebedev
-                  <ChevronIcon />
+                  <Icon type="chevron" />
                 </Flex>
               </Clickable>
 
@@ -66,7 +65,7 @@ export const Header = memo(() => {
                       <Clickable onClick={hideDropdown} hoverable rippleable>
                         <Area paddingHorizontal={1.6}>
                           <Flex alignItems="center" gap={0.8}>
-                            <SettingsIcon />
+                            <Icon type="settings" />
                             Settings
                           </Flex>
                         </Area>
@@ -75,7 +74,7 @@ export const Header = memo(() => {
                       <Clickable onClick={hideDropdown} hoverable rippleable>
                         <Area paddingHorizontal={1.6}>
                           <Flex alignItems="center" gap={0.8}>
-                            <SignOutIcon />
+                            <Icon type="signOut" />
                             Log out
                           </Flex>
                         </Area>
@@ -109,7 +108,7 @@ export const HeaderBarStyled = styled.div`
   width: 100%;
   top: 0;
   left: 0;
-  background-color: ${({ theme }) => theme.colors.default[6].filled()};
+  background-color: ${({ theme }) => theme.colors.default[7].filled()};
 `;
 
 const HeaderNavLink = memo<HeaderNavLinkProps>(({ text, to, ...props }) => {

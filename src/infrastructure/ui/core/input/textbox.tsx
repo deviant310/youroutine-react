@@ -101,7 +101,7 @@ const TextboxStyled = styled.div.attrs({ role: "textbox" })<
       $implicit
         ? "transparent"
         : $invalid
-          ? theme.colors.error[0].filled()
+          ? theme.colors.error[1].filled()
           : theme.colors.default[7].filled()
     }`};
 
@@ -110,7 +110,7 @@ const TextboxStyled = styled.div.attrs({ role: "textbox" })<
     box-shadow: ${({ theme, $invalid }) =>
       `0 0 0 2px inset ${
         $invalid
-          ? theme.colors.error[0].filled()
+          ? theme.colors.error[1].filled()
           : theme.colors.default[7].filled()
       }`};
   }
@@ -120,7 +120,7 @@ const TextboxStyled = styled.div.attrs({ role: "textbox" })<
     box-shadow: 0 0 0 2px inset
       ${({ $invalid, theme }) =>
         $invalid
-          ? theme.colors.error[0].filled()
+          ? theme.colors.error[1].filled()
           : theme.colors.primary[2].filled()};
   }
 `;

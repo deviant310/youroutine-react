@@ -4,18 +4,11 @@ import { ThemeProvider as StyledComponentsThemeProvider } from "styled-component
 
 import { Theme } from "../theme";
 
-import { GlobalStyle } from "./global-style";
+import "./normalize.css";
 
-export const ThemeProvider = memo<ThemeProviderProps>(props => {
-  const { children, theme } = props;
-
-  return createElement(
-    StyledComponentsThemeProvider,
-    { theme },
-    createElement(GlobalStyle),
-    children,
-  );
-});
+export const ThemeProvider = memo<ThemeProviderProps>(({ children, theme }) =>
+  createElement(StyledComponentsThemeProvider, { theme }, children),
+);
 
 type ThemeProviderProps = PropsWithChildren<{
   theme: Theme;

@@ -6,8 +6,14 @@ import { Clickable, ClickableProps, Flex, Hidden, Loader } from "../core";
 import { getUnitWithMeasure, TransientProps } from "../helpers";
 
 export const Button = memo<ButtonPropsWithHTMLAttributes>(
-  ({ type = "primary", loading, children, ...props }) => (
-    <ButtonStyled $type={type} {...props}>
+  ({
+    color = "primary",
+    variant = "contained",
+    loading,
+    children,
+    ...props
+  }) => (
+    <ButtonStyled $color={color} $variant={variant} {...props}>
       <Flex justifyContent="center" alignItems="center">
         {loading && <AbsoluteLoader size={2} />}
 
@@ -25,20 +31,26 @@ const ButtonStyled = styled(Clickable).attrs(({ rippleable = true }) => ({
   padding: ${getUnitWithMeasure(0.8)} ${getUnitWithMeasure(2.4)};
   border-radius: ${getUnitWithMeasure(1.2)};
 
-  background-color: ${({ $type, theme }) => {
-    if ($type === "primary") return theme.colors.primary[2].filled();
-    if ($type === "primary-light") return theme.colors.primary[7].transparent();
+  background-color: ${({ $color, $variant, theme }) => {
+    if ($variant === "contained") {
+      if ($color === "primary") return theme.colors.primary[2].filled();
+      if ($color === "primary-light")
+        return theme.colors.primary[7].transparent();
+    }
   }};
 
-  color: ${({ $type, theme }) => {
-    if ($type === "primary") return theme.colors.main;
-    if ($type === "primary-light") return theme.colors.primary[2].filled();
-    if ($type === "link") return theme.colors.primary[2].filled();
+  color: ${({ $color, $variant, theme }) => {
+    if ($variant === "contained") {
+      if ($color === "primary") return theme.colors.main;
+      if ($color === "primary-light") return theme.colors.primary[2].filled();
+    }
+
+    if ($variant === "link") return theme.colors.primary[2].filled();
   }};
 
-  opacity: ${({ $type, disabled }) => {
+  opacity: ${({ $color, disabled }) => {
     if (disabled) {
-      if ($type === "primary") return "32%";
+      if ($color === "primary") return "32%";
 
       return "50%";
     }
@@ -46,17 +58,21 @@ const ButtonStyled = styled(Clickable).attrs(({ rippleable = true }) => ({
 
   &:hover,
   &:active {
-    background-color: ${({ $type, theme }) => {
-      if ($type === "primary") return theme.colors.primary[1].filled();
-      if ($type === "primary-light")
-        return theme.colors.primary[6].transparent();
-      if ($type === "link") return theme.colors.primary[6].transparent();
+    background-color: ${({ $color, $variant, theme }) => {
+      if ($variant === "contained") {
+        if ($color === "primary") return theme.colors.primary[1].filled();
+        if ($color === "primary-light")
+          return theme.colors.primary[6].transparent();
+      }
+
+      if ($variant === "link") return theme.colors.primary[6].transparent();
     }};
   }
 
-  --ripple-background-color: ${({ $type, theme }) => {
-    if ($type === "primary") return theme.colors.primary[0].filled();
-    if ($type === "primary-light") return theme.colors.primary[7].transparent();
+  --ripple-background-color: ${({ $color, theme }) => {
+    if ($color === "primary") return theme.colors.primary[0].filled();
+    if ($color === "primary-light")
+      return theme.colors.primary[7].transparent();
   }};
 `;
 
@@ -64,10 +80,12 @@ const AbsoluteLoader = styled(Loader)`
   position: absolute;
 `;
 
-type ButtonType = "primary" | "primary-light" | "link";
+type ButtonVariant = "contained" | "link";
+type ButtonColor = "primary" | "primary-light";
 
 export interface ButtonStyledProps {
-  type?: ButtonType;
+  color?: ButtonColor;
+  variant?: ButtonVariant;
 }
 
 export interface ButtonProps

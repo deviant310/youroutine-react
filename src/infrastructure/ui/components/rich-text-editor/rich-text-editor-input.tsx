@@ -76,7 +76,7 @@ const ContainerStyled = styled.div.attrs({ role: "textbox" })<
     border-color: ${({ theme }) => theme.colors.default[4].filled()};
   }
 `;
-
+// TODO переделать на локальные стили (см. реализацию icon)
 const EditorStyle = createGlobalStyle<Pick<RichTextEditorProps, "minHeight">>`
   .tiptap {
     min-height: ${({ minHeight }) => minHeight};

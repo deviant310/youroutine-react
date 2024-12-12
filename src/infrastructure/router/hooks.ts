@@ -1,10 +1,8 @@
-import { useContext } from "react";
-
-import { context } from "./context";
+import { useRouter } from "./context";
 import { Route } from "./route";
 
 export const useNavigator = () => {
-  const { navigate } = useContext(context);
+  const { navigate } = useRouter();
 
   return navigate;
 };
@@ -14,13 +12,13 @@ export const usePathParams = <R>() => {
   type RouteParams = Parameters<Route<RouteTemplate>["build"]>[0];
   type RouteStringParams = { [K in keyof RouteParams]?: string };
 
-  const { pathParams } = useContext(context);
+  const { pathParams } = useRouter();
 
   return (pathParams ?? {}) satisfies RouteStringParams as RouteStringParams;
 };
 
 export const useAnchor = () => {
-  const { anchor, setAnchor } = useContext(context);
+  const { anchor, setAnchor } = useRouter();
 
   return <const>[anchor, setAnchor];
 };

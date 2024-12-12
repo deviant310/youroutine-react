@@ -4,14 +4,13 @@ import {
   memo,
   MouseEvent,
   useCallback,
-  useContext,
 } from "react";
 
-import { context } from "./context";
+import { useRouter } from "./context";
 
 export const Link = memo<LinkPropsWithHTMLAttributes>(
   ({ to, onClick: handleClickEvent, ...props }) => {
-    const { getRouteFromPath, navigate } = useContext(context);
+    const { getRouteFromPath, navigate } = useRouter();
 
     const onClick = useCallback(
       (event: MouseEvent<LinkElement>) => {

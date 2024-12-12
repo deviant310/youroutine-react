@@ -3,15 +3,18 @@ import {
   PropsWithChildren,
   createElement,
   memo,
-  NamedExoticComponent,
+  FC,
+  ComponentProps,
 } from "react";
 
 import { PropsWithRequiredChildren } from "~/react";
 
 export function registerProviders<
   Providers extends {
-    [K in keyof Providers]: NamedExoticComponent<PropsWithRequiredChildren> extends Providers[K]
-      ? Providers[K]
+    [K in keyof Providers]: Providers[K] extends FC<any>
+      ? ComponentProps<Providers[K]> extends PropsWithRequiredChildren
+        ? Providers[K]
+        : never
       : never;
   },
 >(...providers: Providers extends Array<any> ? Providers : never) {

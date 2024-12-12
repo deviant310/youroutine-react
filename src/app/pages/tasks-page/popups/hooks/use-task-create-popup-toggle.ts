@@ -4,13 +4,13 @@ const { useStore } = createPrimitiveStore(false);
 
 export const useTaskCreatePopupToggle = () => {
   const {
-    value: taskCreatePopupToggleOn,
+    value: taskCreatePopupToggleIsOn,
     setValueOn: turnTaskCreatePopupToggleOn,
     setValueOff: turnTaskCreatePopupToggleOff,
   } = useStore();
 
   return {
-    taskCreatePopupToggleOn,
+    taskCreatePopupToggleIsOn,
     turnTaskCreatePopupToggleOn,
     turnTaskCreatePopupToggleOff,
   };

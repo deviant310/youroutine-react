@@ -44,12 +44,12 @@ export const useTaskCreateForm = () => {
   const {
     task,
     createTask,
-    creatingTask: submittingTaskCreateForm,
+    creatingTask: taskCreateFormSubmitting,
     taskCreated: taskCreateFormSubmitted,
   } = useTaskCreating();
 
-  const submitTaskCreateForm = useCallback(() => {
-    if (submittingTaskCreateForm) return;
+  const taskCreateFormSubmit = useCallback(() => {
+    if (taskCreateFormSubmitting) return;
     if (!form.valid()) return;
 
     const { title, description, project, priority } = form.getState().values;
@@ -60,9 +60,9 @@ export const useTaskCreateForm = () => {
       projectId: project.id,
       priority,
     });
-  }, [createTask, form, submittingTaskCreateForm]);
+  }, [createTask, form, taskCreateFormSubmitting]);
 
-  const highlightTaskCreateFormErrors = useCallback(() => {
+  const taskCreateFormHighlightErrors = useCallback(() => {
     requestAnimationFrame(() => form.clean());
     requestAnimationFrame(() => form.stain());
   }, [form]);
@@ -71,10 +71,10 @@ export const useTaskCreateForm = () => {
 
   return {
     task,
-    submitTaskCreateForm,
-    submittingTaskCreateForm,
-    highlightTaskCreateFormErrors,
+    taskCreateFormSubmit,
+    taskCreateFormSubmitting,
     taskCreateFormSubmitted,
+    taskCreateFormHighlightErrors,
   };
 };
 

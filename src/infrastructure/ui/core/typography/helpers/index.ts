@@ -1,2 +1,2 @@
-export * from "./types";
-export * from "./use-glyph";
+export * from "./text";
+export * from "./glyph";
