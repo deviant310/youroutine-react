@@ -9,7 +9,6 @@ export const useTaskCreating = () => {
   const { invalidate: invalidateTasks } = useQueryAction(retrieveTasksAction);
 
   const {
-    data: task,
     perform: createTask,
     isLoading: creatingTask,
     error: creatingTaskError,
@@ -20,5 +19,5 @@ export const useTaskCreating = () => {
     },
   });
 
-  return { task, createTask, creatingTask, creatingTaskError, taskCreated };
+  return { createTask, creatingTask, creatingTaskError, taskCreated };
 };

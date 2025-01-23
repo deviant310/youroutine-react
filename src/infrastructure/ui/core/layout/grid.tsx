@@ -41,7 +41,7 @@ export const GridCSS = css<TransientProps<GridStyledProps>>`
       center: "center",
       baseline: "baseline",
       top: "start",
-      bottom: "start",
+      bottom: "end",
     }[$alignItems]};
 
   align-self: ${({ $alignSelf }) =>
@@ -50,7 +50,7 @@ export const GridCSS = css<TransientProps<GridStyledProps>>`
       center: "center",
       baseline: "baseline",
       top: "start",
-      bottom: "start",
+      bottom: "end",
     }[$alignSelf]};
 
   justify-content: ${({ $justifyContent }) =>

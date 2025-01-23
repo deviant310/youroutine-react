@@ -1,31 +1,28 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PrimitiveStore } from "./primitive-store";
 import {
-  PrimitiveStoreState,
-  ToggleStoreState,
+  UseBooleanStoreInstanceResult,
   usePrimitiveStoreInstance,
+  UsePrimitiveStoreInstanceResult,
 } from "./use-primitive-store-instance";
 
 export const createPrimitiveStore: CreatePrimitiveStore = (
-  initialValue: any,
+  initialValue: unknown,
 ) => {
   const store = new PrimitiveStore(initialValue);
 
-  const useStore = () => usePrimitiveStoreInstance(store);
-
-  return { useStore };
+  return () =>
+    usePrimitiveStoreInstance(
+      store,
+    ) as UsePrimitiveStoreInstanceResult<unknown> &
+      UseBooleanStoreInstanceResult;
 };
 
 interface CreatePrimitiveStore {
-  <Value>(initialValue: Value): {
-    useStore(): PrimitiveStoreState<Value>;
-  };
+  <Value>(initialValue: Value): () => UsePrimitiveStoreInstanceResult<Value>;
 }
 
 interface CreatePrimitiveStore {
-  <Value extends boolean>(
+  <Value extends boolean | undefined>(
     initialValue: Value,
-  ): {
-    useStore(): ToggleStoreState;
-  };
+  ): () => UseBooleanStoreInstanceResult<Value>;
 }

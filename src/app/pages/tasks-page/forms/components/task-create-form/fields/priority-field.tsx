@@ -4,7 +4,7 @@ import { SelectField, SelectInputOptionComponent } from "~/infrastructure/ui";
 
 import { TaskPriority } from "~/concern/general/entities";
 
-import { useTaskCreateFormField } from "../../../hooks";
+import { useTaskCreateFormField } from "../../../handlers";
 
 export const PriorityField = () => {
   // TODO запретить на уровне eslint устанавливать здесь дефолтные значения

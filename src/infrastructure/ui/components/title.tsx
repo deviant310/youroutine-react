@@ -39,7 +39,7 @@ export const Title = memo<TitleProps>(props => {
 Title.displayName = "Title";
 
 const TitleStyled = styled.div<TransientProps<TitleStyledProps>>`
-  margin: ${getUnitWithMeasure(1.6)} 0;
+  margin: ${getUnitWithMeasure(1)} 0;
   font-weight: 600;
   text-align: ${({ $textAlign }) =>
     $textAlign &&

@@ -12,4 +12,38 @@ export const Canvas = createGlobalStyle`
     color: ${({ theme }) => theme.colors.default[1].filled()};
     background-color: ${({ theme }) => theme.colors.default[8].filled()};
   }
+
+  p, ul, ol {
+    margin-block-start: 1rem;
+    margin-block-end: 1rem;
+  }
+
+  p:first-child, ul:first-child, ol:first-child {
+    margin-block-start: 0;
+  }
+
+  p:last-child, ul:last-child, ol:last-child {
+    margin-block-end: 0;
+  }
+
+  hr {
+    border: none;
+    height: 3px;
+    background-color: ${({ theme }) => theme.colors.default[7].filled()};
+  }
+
+  fieldset {
+    border-width: 0;
+    padding: 0;
+    margin: 0 0 ${getUnitWithMeasure(1.4)} 0;
+  }
+
+  /* svg {
+    display: flex;
+    fill: currentColor;
+  }
+
+  svg path {
+    fill: currentColor;
+  } */
 `;

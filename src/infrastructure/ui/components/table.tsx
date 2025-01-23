@@ -105,9 +105,16 @@ const TableRowStyled = styled.div`
 
   padding: ${getUnitWithMeasure(1.6)} ${getUnitWithMeasure(2)};
   background-color: ${({ theme }) => theme.colors.main};
+
+  &:last-child {
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+  }
 `;
 
 const TableHeadStyled = styled(TableRowStyled)`
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
   background-color: ${({ theme }) => theme.colors.default[2].filled()};
   color: ${({ theme }) => theme.colors.main};
 `;

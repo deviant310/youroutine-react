@@ -8,7 +8,7 @@ import { GlyphCSS, GlyphSize, GlyphStyledProps } from "../../helpers";
 import * as Icons from "./icons";
 
 export const Icon = memo<IconProps>(
-  ({ type, color, size = "medium" }) =>
+  ({ type, color, size }) =>
     ({
       chevron: <ChevronIcon $size={size} $color={color} />,
       close: <CloseIcon $size={size} $color={color} />,

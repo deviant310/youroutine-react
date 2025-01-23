@@ -20,6 +20,7 @@
     "sourceMap": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "experimentalDecorators": true,
     "plugins": [
       {
         "name": "ts-allow-imports-plugin",
@@ -41,13 +42,13 @@
             "~/pages"
           ],
           "**/app/pages/*/popups/components/**": [
-            "../hooks",
+            "../toggles",
             "../../forms",
           ],
           "**/app/pages/*/forms/components/**": [
-            "../hooks",
-            "../../hooks",
-            "../../../hooks",
+            "../handlers",
+            "../../handlers",
+            "../../../handlers",
           ],
           "**/concern/**": [
             "~/infrastructure/*",

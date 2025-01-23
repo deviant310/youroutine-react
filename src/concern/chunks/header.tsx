@@ -30,6 +30,8 @@ export const Header = memo(() => {
     toggle: toggleDropdown,
   } = useToggle();
 
+  // const { theme, setTheme } = useTheme();
+
   return (
     <HeaderContainerStyled>
       <HeaderBarStyled>

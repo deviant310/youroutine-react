@@ -26,7 +26,7 @@ export class FormStore<
       this.updateFieldState(name, { value, error, dirty: true });
     }
 
-    this.changeEvent.emit();
+    this.change();
   }
 
   stain() {
@@ -34,7 +34,7 @@ export class FormStore<
       this.updateFieldState(name, { dirty: true });
     }
 
-    this.changeEvent.emit();
+    this.change();
   }
 
   clean() {
@@ -42,7 +42,7 @@ export class FormStore<
       this.updateFieldState(name, { dirty: false });
     }
 
-    this.changeEvent.emit();
+    this.change();
   }
 
   reset() {
@@ -56,7 +56,7 @@ export class FormStore<
       });
     }
 
-    this.changeEvent.emit();
+    this.change();
   }
 
   getFieldState<Name extends keyof Values>(name: Name) {
@@ -71,19 +71,19 @@ export class FormStore<
 
     this.updateFieldState(name, { value, error, dirty: true });
 
-    this.changeEvent.emit();
+    this.change();
   }
 
   setFieldError(name: keyof Values, error: string | undefined) {
     this.updateFieldState(name, { error });
 
-    this.changeEvent.emit();
+    this.change();
   }
 
   stainField(name: keyof Values) {
     this.updateFieldState(name, { dirty: true });
 
-    this.changeEvent.emit();
+    this.change();
   }
 
   resetField(name: keyof Values) {
@@ -94,6 +94,6 @@ export class FormStore<
       error: this.getFieldError(name, initialValue),
     });
 
-    this.changeEvent.emit();
+    this.change();
   }
 }

@@ -19,7 +19,6 @@ export const Paper = memo<PaperProps>(props => {
 });
 // TODO theme[any] must be forbidden
 export const PaperCSS = css<TransientProps<PaperStyledProps>>`
-  overflow: hidden;
   background-color: ${({ theme, $fill = theme.colors.main }) => $fill};
 
   box-shadow: ${({ $elevation, theme }) => {

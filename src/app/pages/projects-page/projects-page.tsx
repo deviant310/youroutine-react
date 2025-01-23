@@ -20,7 +20,7 @@ import { ProjectCreatePopup, useProjectCreatePopupToggle } from "./popups";
 export const ProjectsPage = memo(() => {
   useDocumentTitle("Projects");
 
-  const { turnProjectCreatePopupToggleOn } = useProjectCreatePopupToggle();
+  const popupToggle = useProjectCreatePopupToggle();
   const { projects, retrievingProjects } = useProjectsRetrieving();
 
   return (
@@ -32,10 +32,7 @@ export const ProjectsPage = memo(() => {
           <Flex justifyContent="between" alignItems="center">
             <Title size={3}>Projects</Title>
 
-            <Button
-              color="primary-light"
-              onClick={turnProjectCreatePopupToggleOn}
-            >
+            <Button color="primary-light" onClick={popupToggle.setValueOn}>
               Create project
             </Button>
           </Flex>

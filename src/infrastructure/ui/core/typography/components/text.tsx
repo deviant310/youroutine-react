@@ -6,7 +6,7 @@ import { getUnitWithMeasure, TransientProps } from "../../../helpers";
 import { GlyphCSS, GlyphSize, GlyphStyledProps } from "../helpers";
 
 export const Text = memo<TextPropsWithHTMLAttributes>(
-  ({ color, size = "medium", weight, nowrap, ...props }) => (
+  ({ color, size, weight, nowrap, ...props }) => (
     <TextStyled
       $color={color}
       $size={size}

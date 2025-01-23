@@ -33,7 +33,7 @@ export const Popup = memo<PopupPropsWithHTMLAttributes>(props => {
         {opened && <PopupBackgroundStyled />}
       </AreaFaded>
 
-      <GridArea
+      <GridAreaStyled
         $justifyContent="center"
         $alignItems="center"
         $position="fixed"
@@ -64,7 +64,7 @@ export const Popup = memo<PopupPropsWithHTMLAttributes>(props => {
             </Paper>
           )}
         </AreaScaled>
-      </GridArea>
+      </GridAreaStyled>
     </PopupContainerStyled>,
     getRootElement(),
   );
@@ -81,7 +81,7 @@ const PopupBackgroundStyled = styled.div`
   background-color: ${({ theme }) => theme.colors.default[5].transparent()};
 `;
 
-const GridArea = styled.div<TransientProps<GridStyledProps & AreaProps>>`
+const GridAreaStyled = styled.div<TransientProps<GridStyledProps & AreaProps>>`
   ${GridCSS}
   ${AreaCSS}
 `;

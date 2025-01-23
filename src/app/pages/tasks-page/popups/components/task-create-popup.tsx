@@ -3,28 +3,18 @@ import { memo, useEffect } from "react";
 import { Area, Button, Flex, Popup, Title } from "~/infrastructure/ui";
 
 import { TaskCreateForm, useTaskCreateForm } from "../../forms";
-import { useTaskCreatePopupToggle } from "../hooks";
+import { useTaskCreatePopupToggle } from "../toggles";
 
 export const TaskCreatePopup = memo(() => {
-  const { taskCreatePopupToggleIsOn, turnTaskCreatePopupToggleOff } =
-    useTaskCreatePopupToggle();
-
-  const {
-    taskCreateFormSubmit,
-    taskCreateFormSubmitting,
-    taskCreateFormSubmitted,
-    taskCreateFormHighlightErrors,
-  } = useTaskCreateForm();
+  const popupToggle = useTaskCreatePopupToggle();
+  const taskCreateForm = useTaskCreateForm();
 
   useEffect(() => {
-    if (taskCreateFormSubmitted) turnTaskCreatePopupToggleOff();
-  }, [taskCreateFormSubmitted, turnTaskCreatePopupToggleOff]);
+    if (taskCreateForm.submitted) popupToggle.setValueOff();
+  }, [popupToggle, taskCreateForm.submitted]);
 
   return (
-    <Popup
-      opened={taskCreatePopupToggleIsOn}
-      onClose={turnTaskCreatePopupToggleOff}
-    >
+    <Popup opened={popupToggle.value} onClose={popupToggle.setValueOff}>
       <Area paddingVertical={1.6} width="800px" maxWidth="100%">
         <Area marginHorizontal={4}>
           <Title size={4}>Create task</Title>
@@ -40,15 +30,15 @@ export const TaskCreatePopup = memo(() => {
 
         <Area marginHorizontal={4} marginTop={1.2}>
           <Flex gap={0.8} justifyContent="end">
-            <Button variant="link" onClick={turnTaskCreatePopupToggleOff}>
+            <Button variant="link" onClick={popupToggle.setValueOff}>
               Cancel
             </Button>
 
             <Button
-              onClick={taskCreateFormSubmit}
-              onMouseDown={taskCreateFormHighlightErrors}
-              loading={taskCreateFormSubmitting}
-              disabled={taskCreateFormSubmitting}
+              onClick={taskCreateForm.submit}
+              onMouseDown={taskCreateForm.highlightErrors}
+              loading={taskCreateForm.submitting}
+              disabled={taskCreateForm.submitting}
             >
               Create task
             </Button>

@@ -1,16 +1,10 @@
 import { performRequest } from "~/infrastructure/http";
 
-import {
-  Project,
-  Task,
-  TaskCreateAttributes,
-  TaskPriority,
-  TaskStatus,
-} from "~/concern/general/entities";
+import { Project, TaskAttributes } from "~/concern/general/entities";
 
-import { buildTaskCreateRequest, TaskCreateResponseData } from "../requests";
+import { buildTaskCreateRequest } from "../requests";
 
-export const createTask = async (attributes: CreateAttributes) => {
+export async function createTask(attributes: TaskCreateAttributes) {
   const taskCreateRequest = buildTaskCreateRequest({
     title: attributes.title,
     description: attributes.description,
@@ -20,29 +14,10 @@ export const createTask = async (attributes: CreateAttributes) => {
 
   const { data } = await performRequest(taskCreateRequest);
 
-  return mapTaskCreateResponseData(data);
-};
-
-export const mapTaskCreateResponseData = ({
-  id,
-  title,
-  description,
-  project: projectAttributes,
-  status,
-  priority,
-}: TaskCreateResponseData) =>
-  new Task({
-    id,
-    title,
-    description,
-    status: status ? new TaskStatus(status as TaskStatus["$payload"]) : null,
-    priority: new TaskPriority(priority as TaskPriority["$payload"]),
-    project: new Project(projectAttributes),
-  });
-
-interface TaskCreateRelatedEntitiesAttributes {
-  projectId: Project["id"];
+  return data;
 }
 
-type CreateAttributes = TaskCreateAttributes &
-  TaskCreateRelatedEntitiesAttributes;
+export interface TaskCreateAttributes
+  extends Pick<TaskAttributes, "title" | "description" | "priority"> {
+  projectId: Project["id"];
+}

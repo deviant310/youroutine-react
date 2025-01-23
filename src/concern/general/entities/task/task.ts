@@ -59,8 +59,3 @@ export interface TaskAttributes {
   readonly status: TaskStatus | null;
   priority: TaskPriority;
 }
-
-export type TaskCreateAttributes = Pick<
-  TaskAttributes,
-  "title" | "description" | "priority"
->;

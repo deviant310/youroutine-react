@@ -1,10 +1,4 @@
-import {
-  Defined,
-  Event,
-  EventListener,
-  isDefined,
-  PartialMatch,
-} from "~/typescript";
+import { Defined, isDefined, PartialMatch } from "~/typescript";
 
 import { ValidationError } from "./validation-error";
 
@@ -13,7 +7,7 @@ export abstract class FormStoreInit<
   FormValidValues extends FormValues &
     PartialMatch<FormValues, FormValidValues> = FormValues,
 > {
-  protected changeEvent = new Event();
+  private listeners = new Set<() => void>();
 
   protected formState: FormState<FormValues>;
 
@@ -111,10 +105,14 @@ export abstract class FormStoreInit<
     }
   }
 
-  onChange(listener: EventListener) {
-    this.changeEvent.addListener(listener);
+  protected change() {
+    this.listeners.forEach(listener => listener());
+  }
 
-    return () => this.changeEvent.removeListener(listener);
+  onChange(listener: () => void) {
+    this.listeners.add(listener);
+
+    return () => this.listeners.delete(listener);
   }
 }
 
