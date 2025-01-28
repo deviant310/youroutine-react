@@ -18,6 +18,7 @@ export const Area: AreaComponent = memo(
       textOverflow,
       disabled,
       inline,
+      alignContents,
       position,
       top,
       bottom,
@@ -50,6 +51,7 @@ export const Area: AreaComponent = memo(
         $textOverflow={textOverflow}
         $disabled={disabled}
         $inline={inline}
+        $alignContents={alignContents}
         $position={position}
         $top={top}
         $bottom={bottom}
@@ -84,6 +86,7 @@ Area.displayName = "Area";
 
 export const AreaCSS = css<TransientProps<AreaStyledProps>>`
   display: ${({ $inline }) => $inline && "inline-block"};
+  align-content: ${({ $alignContents }) => $alignContents};
   overflow: ${({ $overflow }) => $overflow};
   text-overflow: ${({ $textOverflow }) => $textOverflow};
   pointer-events: ${({ $disabled }) => $disabled && "none"};
@@ -128,8 +131,9 @@ const AreaStyled = styled.div<TransientProps<AreaStyledProps>>`
   ${AreaCSS};
 `;
 
-interface AreaStyledProps {
+export interface AreaStyledProps {
   inline?: boolean;
+  alignContents?: "center";
   position?: "absolute" | "relative" | "fixed" | "sticky";
   top?: string | UnitIndex;
   bottom?: string | UnitIndex;

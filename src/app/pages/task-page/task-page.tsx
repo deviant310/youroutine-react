@@ -59,13 +59,11 @@ export const TaskPage = memo(() => {
 
         {task && (
           <Grid gap={2}>
-            <Area>
-              <Flex justifyContent="between" alignItems="center">
-                <Title size={3}>{task.title}</Title>
+            <Flex justifyContent="between" alignItems="center">
+              <Title size={3}>{task.title}</Title>
 
-                <Button color="primary-light">Take to work</Button>
-              </Flex>
-            </Area>
+              <Button color="primary-light">Take to work</Button>
+            </Flex>
 
             <Alert type="warning" bordered>
               Info text

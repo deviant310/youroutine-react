@@ -2,7 +2,7 @@ import { memo } from "react";
 
 import { useDocumentTitle } from "~/react";
 
-import { Area, Button, Flex, Title } from "~/infrastructure/ui";
+import { Area, Button, Flex, Grid, Title } from "~/infrastructure/ui";
 
 import { Header } from "~/concern/chunks";
 
@@ -19,7 +19,7 @@ export const TasksPage = memo(() => {
       <Header />
 
       <Area marginHorizontal="auto" maxWidth="1200px">
-        <Area marginBottom={0.8}>
+        <Grid gap={2}>
           <Flex justifyContent="between" alignItems="center">
             <Title size={3}>Tasks</Title>
 
@@ -27,9 +27,9 @@ export const TasksPage = memo(() => {
               Create task
             </Button>
           </Flex>
-        </Area>
 
-        <TasksTable />
+          <TasksTable />
+        </Grid>
       </Area>
 
       <TaskCreatePopup />

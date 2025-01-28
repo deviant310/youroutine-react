@@ -4,7 +4,7 @@ import {
   useCallback,
   memo,
   forwardRef,
-  ForwardRefExoticComponent,
+  NamedExoticComponent,
 } from "react";
 
 import { css, RuleSet, styled } from "styled-components";
@@ -12,7 +12,7 @@ import { css, RuleSet, styled } from "styled-components";
 import { TransientProps } from "../../helpers";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function animated<Component extends ForwardRefExoticComponent<any>>(
+export function animated<Component extends NamedExoticComponent<any>>(
   component: Component,
   animationType: AnimationType,
 ) {
