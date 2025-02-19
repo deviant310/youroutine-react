@@ -38,12 +38,13 @@ const { useForm, useField } = createFormStore<
   },
 });
 
-export const useTaskCreateForm = () => {
+export const useTaskCreatingForm = () => {
   const form = useForm();
 
   const {
     createTask,
     creatingTask: submitting,
+    creatingTaskError: submittingError,
     taskCreated: submitted,
   } = useTaskCreating();
 
@@ -51,7 +52,9 @@ export const useTaskCreateForm = () => {
     if (submitting) return;
     if (!form.valid()) return;
 
-    const { title, description, project, priority } = form.getState().values;
+    const { values } = form.getState();
+
+    const { title, description, project, priority } = values;
 
     createTask({
       title,
@@ -73,6 +76,7 @@ export const useTaskCreateForm = () => {
   return {
     submit,
     submitting,
+    submittingError,
     submitted,
     highlightErrors,
   };
@@ -87,9 +91,7 @@ interface TaskCreateFormValues {
   priority: TaskPriority | null;
 }
 
-interface TaskCreateFormValidValues {
-  title: string;
-  description: string;
+interface TaskCreateFormValidValues extends TaskCreateFormValues {
   project: Project;
   priority: TaskPriority;
 }

@@ -2,7 +2,6 @@ import {
   useState,
   useEffect,
   useCallback,
-  memo,
   forwardRef,
   NamedExoticComponent,
 } from "react";
@@ -24,34 +23,32 @@ export function animated<Component extends NamedExoticComponent<any>>(
     ${({ $visible }) => ($visible ? animationIn : animationOut)}
   `;
 
-  const Animated = memo(
-    forwardRef(({ children, ...props }, ref) => {
-      const [node, setNode] = useState(children);
+  const Animated = forwardRef(({ children, ...props }, ref) => {
+    const [node, setNode] = useState(children);
 
-      const onTransitionEnd = useCallback(
-        (event: AnimationEvent) => {
-          if (children) return;
-          if (event.currentTarget === event.target) setNode(children);
-        },
-        [children],
-      );
+    const onTransitionEnd = useCallback(
+      (event: TransitionEvent) => {
+        if (children) return;
+        if (event.currentTarget === event.target) setNode(children);
+      },
+      [children],
+    );
 
-      useEffect(() => {
-        if (children) setNode(children);
-      }, [children]);
+    useEffect(() => {
+      if (children) setNode(children);
+    }, [children]);
 
-      return (
-        <AnimatedContainerStyled
-          $visible={Boolean(children)}
-          onTransitionEnd={onTransitionEnd}
-          {...props}
-          ref={ref}
-        >
-          {node}
-        </AnimatedContainerStyled>
-      );
-    }),
-  ) as typeof component;
+    return (
+      <AnimatedContainerStyled
+        $visible={Boolean(children)}
+        onTransitionEnd={onTransitionEnd}
+        {...props}
+        ref={ref}
+      >
+        {node}
+      </AnimatedContainerStyled>
+    );
+  }) as typeof component;
 
   Animated.displayName = "Animated";
 

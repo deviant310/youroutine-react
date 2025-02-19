@@ -2,7 +2,7 @@ import { PrimitiveStore } from "./primitive-store";
 import {
   UseBooleanStoreInstanceResult,
   usePrimitiveStoreInstance,
-  UsePrimitiveStoreInstanceResult,
+  UseUnknownStoreInstanceResult,
 } from "./use-primitive-store-instance";
 
 export const createPrimitiveStore: CreatePrimitiveStore = (
@@ -11,14 +11,12 @@ export const createPrimitiveStore: CreatePrimitiveStore = (
   const store = new PrimitiveStore(initialValue);
 
   return () =>
-    usePrimitiveStoreInstance(
-      store,
-    ) as UsePrimitiveStoreInstanceResult<unknown> &
+    usePrimitiveStoreInstance(store) as UseUnknownStoreInstanceResult<unknown> &
       UseBooleanStoreInstanceResult;
 };
 
 interface CreatePrimitiveStore {
-  <Value>(initialValue: Value): () => UsePrimitiveStoreInstanceResult<Value>;
+  <Value>(initialValue: Value): () => UseUnknownStoreInstanceResult<Value>;
 }
 
 interface CreatePrimitiveStore {

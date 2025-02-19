@@ -28,4 +28,14 @@ export type GlyphColor =
   | "warning"
   | "danger";
 
-export type GlyphSize = "large" | "medium" | "small" | "xsmall";
+export type GlyphSize =
+  | "tiny"
+  | "small"
+  | "compact"
+  | "normal"
+  | "medium"
+  | "large"
+  | "big"
+  | "huge"
+  | "massive"
+  | "colossal";

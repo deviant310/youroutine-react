@@ -27,6 +27,8 @@ export const useFormStoreInstanceField = <
     [name, store],
   );
 
+  const reset = useCallback(() => store.resetField(name), [name, store]);
+
   const stain = useCallback(() => store.stainField(name), [name, store]);
 
   return {
@@ -37,5 +39,6 @@ export const useFormStoreInstanceField = <
     setError,
     dirty,
     stain,
+    reset,
   };
 };

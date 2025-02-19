@@ -5,8 +5,37 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "npm start",
-      "name": "start",
+      "name": "preview",
+      "request": "launch",
+      "runtimeArgs": [
+        "run",
+        "preview"
+      ],
+      "runtimeExecutable": "npm",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node",
+      "env": {
+        "DEV_SERVER_HTTP_OVERRIDES": "1"
+      },
+    },
+    {
+      "name": "build",
+      "request": "launch",
+      "runtimeArgs": [
+        "run",
+        "build"
+      ],
+      "runtimeExecutable": "npm",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    },
+    {
+      "command": "npm run dev",
+      "name": "dev",
       "request": "launch",
       "type": "node-terminal",
       "env": {

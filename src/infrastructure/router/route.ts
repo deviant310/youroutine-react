@@ -4,7 +4,7 @@ import { split } from "~/typescript";
 export class Route<RouteTemplate extends string> {
   constructor(private routeTemplate: RouteTemplate) {}
 
-  get parsed() {
+  private get parsed() {
     const templateParts = split(this.routeTemplate, "/");
 
     return templateParts.map(part => {

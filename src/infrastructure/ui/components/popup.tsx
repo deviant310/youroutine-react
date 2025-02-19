@@ -8,7 +8,6 @@ import { getRootElement } from "~/react";
 import {
   animated,
   Area,
-  AreaCSS,
   CircleCSS,
   CircleStyledProps,
   Clickable,
@@ -16,7 +15,6 @@ import {
   GridCSS,
   GridStyledProps,
   Paper,
-  AreaStyledProps,
 } from "../core";
 import { TransientProps } from "../helpers";
 
@@ -33,38 +31,37 @@ export const Popup = memo<PopupPropsWithHTMLAttributes>(props => {
         {opened && <PopupBackgroundStyled />}
       </AreaFaded>
 
-      <GridArea
+      <GridAreaScaled
         $justifyContent="center"
         $alignItems="center"
-        $position="fixed"
-        $top={0}
-        $left={0}
-        $width="100vw"
-        $height="100vh"
-        $overflow="auto"
-        $disabled={!opened}
+        position="fixed"
+        top={0}
+        left={0}
+        width="100vw"
+        height="100vh"
+        overflow="auto"
+        paddingVertical={2.4}
+        disabled={!opened}
         onMouseDown={({ target, currentTarget }) =>
           target === currentTarget && onClose?.()
         }
       >
-        <AreaScaled marginVertical={2.4} inline>
-          {opened && (
-            <Paper radius={1.6} elevation={1.6}>
-              <Area position="relative">
-                <Area position="absolute" right={1} top={1.2}>
-                  {onClose && (
-                    <ClickableCircleStyled $size={3.6} onClick={onClose}>
-                      <Icon type="close" />
-                    </ClickableCircleStyled>
-                  )}
-                </Area>
-
-                {children}
+        {opened && (
+          <Paper radius={1.6} elevation={1.6}>
+            <Area position="relative">
+              <Area position="absolute" right={1} top={1.2}>
+                {onClose && (
+                  <ClickableCircleStyled $size={3.6} onClick={onClose}>
+                    <Icon type="close" />
+                  </ClickableCircleStyled>
+                )}
               </Area>
-            </Paper>
-          )}
-        </AreaScaled>
-      </GridArea>
+
+              {children}
+            </Area>
+          </Paper>
+        )}
+      </GridAreaScaled>
     </PopupContainerStyled>,
     getRootElement(),
   );
@@ -81,12 +78,12 @@ const PopupBackgroundStyled = styled.div`
   background-color: ${({ theme }) => theme.colors.default[5].transparent()};
 `;
 
-const GridArea = styled.div<TransientProps<GridStyledProps & AreaStyledProps>>`
+const GridAreaScaled = styled(animated(Area, "scale"))<
+  TransientProps<GridStyledProps>
+>`
   ${GridCSS}
-  ${AreaCSS}
 `;
 
-const AreaScaled = animated(Area, "scale");
 const AreaFaded = animated(Area, "fade");
 
 const ClickableCircleStyled = styled(Clickable).attrs({

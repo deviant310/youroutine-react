@@ -2,7 +2,7 @@ import { memo } from "react";
 
 import { Alert, Flex } from "~/infrastructure/ui";
 
-import { useTaskCreating } from "~/concern/common/third-party";
+import { useTaskCreatingForm } from "../../handlers";
 
 import {
   DescriptionField,
@@ -11,8 +11,8 @@ import {
   TitleField,
 } from "./fields";
 
-export const TaskCreateForm = memo(() => {
-  const { creatingTaskError } = useTaskCreating();
+export const TaskCreatingForm = memo(() => {
+  const { submittingError } = useTaskCreatingForm();
 
   return (
     <>
@@ -26,8 +26,8 @@ export const TaskCreateForm = memo(() => {
         <PriorityField />
       </Flex>
 
-      {creatingTaskError instanceof Error && (
-        <Alert type="error">{creatingTaskError.message}</Alert>
+      {submittingError instanceof Error && (
+        <Alert type="error">{submittingError.message}</Alert>
       )}
     </>
   );

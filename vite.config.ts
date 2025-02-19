@@ -8,14 +8,18 @@ import tsconfigPaths from "vite-tsconfig-paths";
 const {
   DEV_SERVER_HOST,
   DEV_SERVER_PORT,
-  DEV_SERVER_PROXY,
+  DEV_SERVER_API_PROXY,
   DEV_SERVER_HTTP_OVERRIDES,
 } = process.env;
 
-const host = DEV_SERVER_HOST;
-const port = DEV_SERVER_PORT && parseInt(DEV_SERVER_PORT);
-const proxyHost = DEV_SERVER_PROXY;
-const httpOverridesEnabled = Boolean(DEV_SERVER_HTTP_OVERRIDES);
+const { host, port, apiProxy, httpOverridesEnabled } = {
+  host: DEV_SERVER_HOST,
+  get port() {
+    if (DEV_SERVER_PORT) return parseInt(DEV_SERVER_PORT);
+  },
+  apiProxy: DEV_SERVER_API_PROXY,
+  httpOverridesEnabled: Boolean(DEV_SERVER_HTTP_OVERRIDES),
+};
 
 /**
  * https://vitejs.dev/config/
@@ -23,10 +27,13 @@ const httpOverridesEnabled = Boolean(DEV_SERVER_HTTP_OVERRIDES);
 export default defineConfig(async ({ command }) => ({
   server: {
     proxy: {
-      ...(proxyHost && { "/api": proxyHost }),
+      ...(apiProxy && { "/api": apiProxy }),
     },
-    ...(host && { host }),
-    ...(port && { port }),
+    host,
+    port,
+  },
+  preview: {
+    port,
   },
   build: {
     target: "es2020",

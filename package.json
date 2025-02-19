@@ -2,7 +2,7 @@
   "name": "youroutine-react",
   "type": "module",
   "scripts": {
-    "start": "vite",
+    "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },

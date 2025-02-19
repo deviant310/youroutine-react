@@ -1,4 +1,4 @@
-import { useCallback, useSyncExternalStore } from "react";
+import { useCallback, useMemo, useSyncExternalStore } from "react";
 
 import { PrimitiveStore } from "./primitive-store";
 
@@ -19,36 +19,31 @@ export const usePrimitiveStoreInstance: UsePrimitiveStoreInstance = (
 
   const setValueOff = useCallback(() => store.setValue(false), [store]);
 
-  const reset = useCallback(() => store.reset(), [store]);
+  const resetValue = useCallback(() => store.reset(), [store]);
 
-  return {
-    value,
-    setValue,
-    setValueOn,
-    setValueOff,
-    reset,
-  };
+  const dispatchers = useMemo(
+    () => ({ setValue, setValueOn, setValueOff, resetValue }),
+    [resetValue, setValue, setValueOff, setValueOn],
+  );
+
+  return <const>[value, dispatchers];
 };
 
 interface UsePrimitiveStoreInstance {
-  <Value>(store: PrimitiveStore<Value>): UsePrimitiveStoreInstanceResult<Value>;
+  <Value>(store: PrimitiveStore<Value>): UseUnknownStoreInstanceResult<Value>;
 }
 
 interface UsePrimitiveStoreInstance {
   <Value extends boolean | undefined>(
-    store: PrimitiveStore<Value>,
+    store: PrimitiveStore<boolean>,
   ): UseBooleanStoreInstanceResult<Value>;
 }
 
-export interface UsePrimitiveStoreInstanceResult<Value> {
-  value: Value;
-  setValue(value: Value): void;
-}
+export type UseUnknownStoreInstanceResult<Value = unknown> = readonly [
+  Value,
+  { setValue(value: Value): void; resetValue(): void },
+];
 
-export interface UseBooleanStoreInstanceResult<
+export type UseBooleanStoreInstanceResult<
   Value extends boolean | undefined = boolean | undefined,
-> {
-  value: Value;
-  setValueOn(): void;
-  setValueOff(): void;
-}
+> = readonly [Value, { setValueOn(): void; setValueOff(): void }];

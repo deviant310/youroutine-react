@@ -5,7 +5,7 @@ import {
   buildTasksRoutes,
   buildUserRoutes,
 } from "./routes";
-
+// TODO remove this redundant initialization, move to plugin
 export default function (express: Express) {
   buildUserRoutes(express);
 

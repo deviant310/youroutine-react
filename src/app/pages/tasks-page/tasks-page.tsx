@@ -2,7 +2,7 @@ import { memo } from "react";
 
 import { useDocumentTitle } from "~/react";
 
-import { Area, Button, Flex, Grid, Title } from "~/infrastructure/ui";
+import { Area, Button, Flex, Grid, Text } from "~/infrastructure/ui";
 
 import { Header } from "~/concern/chunks";
 
@@ -12,16 +12,18 @@ import { TasksTable } from "./tasks-table";
 export const TasksPage = memo(() => {
   useDocumentTitle("Tasks");
 
-  const popupToggle = useTaskCreatePopupToggle();
+  const [, popupToggle] = useTaskCreatePopupToggle();
 
   return (
     <>
       <Header />
 
-      <Area marginHorizontal="auto" maxWidth="1200px">
+      <Area marginHorizontal="auto" maxWidth="1200px" marginBottom={4.4}>
         <Grid gap={2}>
           <Flex justifyContent="between" alignItems="center">
-            <Title size={3}>Tasks</Title>
+            <Text size="huge" weight="semibold">
+              Tasks
+            </Text>
 
             <Button color="primary-light" onClick={popupToggle.setValueOn}>
               Create task

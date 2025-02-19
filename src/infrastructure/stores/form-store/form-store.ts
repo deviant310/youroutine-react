@@ -29,6 +29,7 @@ export class FormStore<
     this.change();
   }
 
+  // TODO refactor to touch
   stain() {
     for (const name in this.fieldsConfig) {
       this.updateFieldState(name, { dirty: true });

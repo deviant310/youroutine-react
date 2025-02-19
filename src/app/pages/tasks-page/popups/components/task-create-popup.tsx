@@ -1,28 +1,28 @@
 import { memo, useEffect } from "react";
 
-import { Area, Button, Flex, Popup, Title } from "~/infrastructure/ui";
+import { Area, Button, Flex, Popup, Heading } from "~/infrastructure/ui";
 
-import { TaskCreateForm, useTaskCreateForm } from "../../forms";
+import { TaskCreatingForm, useTaskCreatingForm } from "../../forms";
 import { useTaskCreatePopupToggle } from "../toggles";
 
 export const TaskCreatePopup = memo(() => {
-  const popupToggle = useTaskCreatePopupToggle();
-  const taskCreateForm = useTaskCreateForm();
+  const [popupToggleIsOn, popupToggle] = useTaskCreatePopupToggle();
+  const taskCreatingForm = useTaskCreatingForm();
 
   useEffect(() => {
-    if (taskCreateForm.submitted) popupToggle.setValueOff();
-  }, [popupToggle, taskCreateForm.submitted]);
+    //if (taskCreatingForm.submitted) popupToggle.setValueOff();
+  }, [popupToggle, taskCreatingForm.submitted]);
 
   return (
-    <Popup opened={popupToggle.value} onClose={popupToggle.setValueOff}>
+    <Popup opened={popupToggleIsOn} onClose={popupToggle.setValueOff}>
       <Area paddingVertical={1.6} width="800px" maxWidth="100%">
         <Area marginHorizontal={4}>
-          <Title size={4}>Create task</Title>
+          <Heading $level={4}>Create task</Heading>
         </Area>
 
         <Area marginHorizontal={4}>
           <Area marginTop={3.2} marginBottom={4}>
-            <TaskCreateForm />
+            <TaskCreatingForm />
           </Area>
         </Area>
 
@@ -35,10 +35,10 @@ export const TaskCreatePopup = memo(() => {
             </Button>
 
             <Button
-              onClick={taskCreateForm.submit}
-              onMouseDown={taskCreateForm.highlightErrors}
-              loading={taskCreateForm.submitting}
-              disabled={taskCreateForm.submitting}
+              onClick={taskCreatingForm.submit}
+              onMouseDown={taskCreatingForm.highlightErrors}
+              loading={taskCreatingForm.submitting}
+              disabled={taskCreatingForm.submitting}
             >
               Create task
             </Button>

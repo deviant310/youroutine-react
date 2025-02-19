@@ -147,7 +147,7 @@ export const SelectInput = memo(function <OptionData>({
               $implicit={implicit}
               onClick={onCleanerClick}
             >
-              <Icon type="close" size="xsmall" />
+              <Icon type="close" size="normal" />
             </ClickableCircleStyled>
           )
         }

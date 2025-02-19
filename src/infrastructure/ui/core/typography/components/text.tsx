@@ -25,17 +25,29 @@ export const TextCSS = css<TransientProps<TextStyledProps>>`
   white-space: ${({ $nowrap }) => $nowrap && "nowrap"};
 
   line-height: ${({ $size }) => {
-    if ($size === "large") return getUnitWithMeasure(2.6);
-    if ($size === "medium") return getUnitWithMeasure(2.4);
-    if ($size === "small") return getUnitWithMeasure(2);
-    if ($size === "xsmall") return getUnitWithMeasure(1.6);
+    if ($size === "tiny") return getUnitWithMeasure(1.2);
+    if ($size === "small") return getUnitWithMeasure(1.6);
+    if ($size === "compact") return getUnitWithMeasure(2);
+    if ($size === "normal") return getUnitWithMeasure(2.4);
+    if ($size === "medium") return getUnitWithMeasure(2.6);
+    if ($size === "large") return getUnitWithMeasure(3);
+    if ($size === "big") return getUnitWithMeasure(3.6);
+    if ($size === "huge") return getUnitWithMeasure(3.6);
+    if ($size === "massive") return getUnitWithMeasure(4);
+    if ($size === "colossal") return getUnitWithMeasure(4.8);
   }};
 
   font-size: ${({ $size }) => {
-    if ($size === "large") return getUnitWithMeasure(1.8);
-    if ($size === "medium") return getUnitWithMeasure(1.6);
-    if ($size === "small") return getUnitWithMeasure(1.4);
-    if ($size === "xsmall") return getUnitWithMeasure(1.2);
+    if ($size === "tiny") return getUnitWithMeasure(1);
+    if ($size === "small") return getUnitWithMeasure(1.2);
+    if ($size === "compact") return getUnitWithMeasure(1.4);
+    if ($size === "normal") return getUnitWithMeasure(1.6);
+    if ($size === "medium") return getUnitWithMeasure(1.8);
+    if ($size === "large") return getUnitWithMeasure(2);
+    if ($size === "big") return getUnitWithMeasure(2.4);
+    if ($size === "huge") return getUnitWithMeasure(2.8);
+    if ($size === "massive") return getUnitWithMeasure(3.6);
+    if ($size === "colossal") return getUnitWithMeasure(4.4);
   }};
 
   font-weight: ${({ $weight }) => {

@@ -2,13 +2,13 @@ import { memo } from "react";
 
 import { useToggle } from "~/react";
 
-import { Area, Button, Flex, Popup, Title } from "~/infrastructure/ui";
+import { Area, Button, Flex, Popup, Heading } from "~/infrastructure/ui";
 
 import { ProjectCreateForm } from "../../forms";
 import { useProjectCreatePopupToggle } from "../toggles";
 
 export const ProjectCreatePopup = memo(() => {
-  const popupToggle = useProjectCreatePopupToggle();
+  const [popupToggleIsOn, popupToggle] = useProjectCreatePopupToggle();
 
   const {
     value: submitting,
@@ -17,10 +17,10 @@ export const ProjectCreatePopup = memo(() => {
   } = useToggle();
 
   return (
-    <Popup opened={popupToggle.value} onClose={popupToggle.setValueOff}>
+    <Popup opened={popupToggleIsOn} onClose={popupToggle.setValueOff}>
       <Area paddingVertical={1.6} width="500px" maxWidth="100%">
         <Area marginHorizontal={4}>
-          <Title size={4}>Create project</Title>
+          <Heading $level={4}>Create project</Heading>
 
           <Area marginTop={3.2} marginBottom={4}>
             <ProjectCreateForm

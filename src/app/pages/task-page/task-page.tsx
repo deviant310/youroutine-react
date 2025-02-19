@@ -10,7 +10,6 @@ import {
   Flex,
   Grid,
   RichTextEditorField,
-  Title,
   Button,
   Paper,
   useTheme,
@@ -60,7 +59,9 @@ export const TaskPage = memo(() => {
         {task && (
           <Grid gap={2}>
             <Flex justifyContent="between" alignItems="center">
-              <Title size={3}>{task.title}</Title>
+              <Text size="huge" weight="semibold">
+                {task.title}
+              </Text>
 
               <Button color="primary-light">Take to work</Button>
             </Flex>

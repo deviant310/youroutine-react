@@ -6,9 +6,10 @@ import {
   Area,
   Button,
   Flex,
+  Grid,
   Table,
   TableColumns,
-  Title,
+  Text,
 } from "~/infrastructure/ui";
 
 import { Header } from "~/concern/chunks";
@@ -20,27 +21,29 @@ import { ProjectCreatePopup, useProjectCreatePopupToggle } from "./popups";
 export const ProjectsPage = memo(() => {
   useDocumentTitle("Projects");
 
-  const popupToggle = useProjectCreatePopupToggle();
+  const [, popupToggle] = useProjectCreatePopupToggle();
   const { projects, retrievingProjects } = useProjectsRetrieving();
 
   return (
     <>
       <Header />
 
-      <Area marginHorizontal="auto" maxWidth="1200px">
-        <Area marginBottom={0.8}>
+      <Area marginHorizontal="auto" maxWidth="1200px" marginBottom={4.4}>
+        <Grid gap={2}>
           <Flex justifyContent="between" alignItems="center">
-            <Title size={3}>Projects</Title>
+            <Text size="huge" weight="semibold">
+              Projects
+            </Text>
 
             <Button color="primary-light" onClick={popupToggle.setValueOn}>
               Create project
             </Button>
           </Flex>
-        </Area>
 
-        {!projects && retrievingProjects && "Loading projects..."}
+          {!projects && retrievingProjects && "Loading projects..."}
 
-        {projects && <Table rowsData={projects} columns={columns} />}
+          {projects && <Table rowsData={projects} columns={columns} />}
+        </Grid>
       </Area>
 
       <ProjectCreatePopup />

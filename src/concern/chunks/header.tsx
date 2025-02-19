@@ -97,7 +97,7 @@ const HeaderContainerStyled = styled.div`
   position: relative;
   z-index: 1;
   line-height: ${getUnitWithMeasure(4)};
-  margin-bottom: ${getUnitWithMeasure(1.2)};
+  margin-bottom: ${getUnitWithMeasure(2)};
 
   &:after {
     content: "\u200b";
