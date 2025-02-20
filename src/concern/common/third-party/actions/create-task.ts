@@ -9,7 +9,7 @@ export async function createTask(attributes: TaskCreateAttributes) {
     title: attributes.title,
     description: attributes.description,
     projectId: attributes.projectId,
-    priority: attributes.priority.$payload,
+    priority: attributes.priority,
   });
 
   const { data } = await performRequest(taskCreateRequest);
@@ -17,7 +17,9 @@ export async function createTask(attributes: TaskCreateAttributes) {
   return data;
 }
 
-export interface TaskCreateAttributes
-  extends Pick<TaskAttributes, "title" | "description" | "priority"> {
+export interface TaskCreateAttributes {
+  title: TaskAttributes["title"];
+  description: TaskAttributes["description"];
+  priority: TaskAttributes["priority"];
   projectId: Project["id"];
 }

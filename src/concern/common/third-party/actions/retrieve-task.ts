@@ -1,11 +1,9 @@
-import { UUID } from "~/typescript";
-
 import { performRequest } from "~/infrastructure/http";
 
 import { buildTaskRetrieveRequest } from "../requests";
 
-export const retrieveTask = async (uuid: UUID) => {
-  const taskRetrieveRequest = buildTaskRetrieveRequest(uuid);
+export const retrieveTask = async (id: string) => {
+  const taskRetrieveRequest = buildTaskRetrieveRequest(id);
 
   const { data } = await performRequest(taskRetrieveRequest);
 

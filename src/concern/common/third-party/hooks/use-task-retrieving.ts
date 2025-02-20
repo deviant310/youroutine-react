@@ -1,16 +1,14 @@
 import { useQueryAction } from "use-query-action";
 
-import { UUID } from "~/typescript";
-
 import { retrieveTask } from "../actions";
 import { taskRetrieveResponseDataToTask } from "../adapters";
 
-export const useTaskRetrieving = (uuid: UUID | undefined) => {
+export const useTaskRetrieving = (id: string | undefined) => {
   const {
     data: task,
     isLoading: retrievingTask,
     error: retrievingTaskError,
-  } = useQueryAction(retrieveTask, [uuid], {
+  } = useQueryAction(retrieveTask, [id], {
     select: taskRetrieveResponseDataToTask,
   });
 

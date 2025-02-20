@@ -1,7 +1,6 @@
 import {
   ChangeEvent,
   ElementRef,
-  FC,
   FocusEvent,
   HTMLAttributes,
   memo,
@@ -36,7 +35,7 @@ import { TransientProps } from "../../helpers";
 
 export const SelectInput = memo(function <OptionData>({
   name,
-  optionComponent: InputOption,
+  renderOption,
   displayStringForOption,
   dropdownToggleInitialValue = false,
   getOptionKey,
@@ -53,7 +52,7 @@ export const SelectInput = memo(function <OptionData>({
   onBlur: onContainerBlur,
   ...props
 }: SelectInputPropsWithHTMLAttributes<OptionData>) {
-  type OptionRenderer = VirtualListItemRenderer<
+  type VirtualListOptionRenderer = VirtualListItemRenderer<
     ColumnElement,
     SelectInputOptionProps<OptionData>
   >;
@@ -116,7 +115,7 @@ export const SelectInput = memo(function <OptionData>({
     onChange?.(null);
   }, [onChange, onInputTextboxChange]);
 
-  const renderOption = useCallback<OptionRenderer>(
+  const renderVirtualListOption = useCallback<VirtualListOptionRenderer>(
     ({ option, key, onClick }, ref) => (
       <Column key={key} ref={ref}>
         <Clickable
@@ -127,12 +126,12 @@ export const SelectInput = memo(function <OptionData>({
           hoverable
         >
           <Area paddingVertical={0.8} paddingHorizontal={1.6}>
-            {InputOption ? <InputOption option={option} /> : `${option}`}
+            {renderOption?.(option) ?? `${option}`}
           </Area>
         </Clickable>
       </Column>
     ),
-    [InputOption, value],
+    [renderOption, value],
   );
 
   return (
@@ -166,7 +165,10 @@ export const SelectInput = memo(function <OptionData>({
         {optionsProps && optionsProps.length > 0 && dropdownToggleOn && (
           <Paper elevation={1}>
             <Area paddingVertical={0.8}>
-              <VirtualList items={optionsProps} renderItem={renderOption} />
+              <VirtualList
+                items={optionsProps}
+                renderItem={renderVirtualListOption}
+              />
             </Area>
           </Paper>
         )}
@@ -235,12 +237,12 @@ const DropdownStyled = styled(animated(Area, "scale"))`
 export interface SelectInputProps<OptionData> {
   name?: string;
   displayStringForOption?(option: OptionData): string;
-  getOptionKey(option: OptionData): string | number;
+  getOptionKey?(option: OptionData): string | number;
   options: OptionData[];
   value: OptionData | null;
   onChange?(option: OptionData | null): void;
   dropdownToggleInitialValue?: boolean;
-  optionComponent?: SelectInputOptionComponent<OptionData>;
+  renderOption?(option: OptionData): ReactNode;
   adornmentStart?: ReactNode;
   implicit?: boolean;
   textboxValue?: string;
@@ -257,9 +259,5 @@ interface ClickableCircleStyledProps extends CircleStyledProps {
 interface SelectInputPropsWithHTMLAttributes<OptionData>
   extends Omit<HTMLAttributes<SelectInputElement>, "onChange">,
     SelectInputProps<OptionData> {}
-
-export type SelectInputOptionComponent<OptionData> = FC<{
-  option: OptionData;
-}>;
 
 export type SelectInputElement = ElementRef<typeof ContainerStyled>;

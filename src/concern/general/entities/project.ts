@@ -1,10 +1,8 @@
 import { UUID } from "~/typescript";
 
-import { Entity } from "~/infrastructure/entity";
+import { Entity } from "~/infrastructure/data";
 
-export class Project<
-  Attributes extends ProjectAttributes = ProjectAttributes,
-> extends Entity<Attributes> {
+export class Project extends Entity<ProjectAttributes> {
   static getInstanceId(project: Project) {
     return project.$payload.id;
   }
@@ -44,6 +42,7 @@ export interface ProjectAttributes {
   description: string;
 }
 
+// TODO move to create action
 export type ProjectCreateAttributes = Pick<
   ProjectAttributes,
   "name" | "description"

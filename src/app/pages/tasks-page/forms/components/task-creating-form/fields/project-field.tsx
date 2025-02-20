@@ -1,11 +1,6 @@
-import { memo, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
-import {
-  Grid,
-  SelectField,
-  SelectInputOptionComponent,
-  Text,
-} from "~/infrastructure/ui";
+import { Grid, SelectField, Text } from "~/infrastructure/ui";
 
 import { useProjectsRetrieving } from "~/concern/common/third-party";
 import { Project } from "~/concern/general/entities";
@@ -39,7 +34,7 @@ export const ProjectField = () => {
       onChange={setValue}
       displayStringForOption={Project.getInstanceName}
       getOptionKey={Project.getInstanceId}
-      optionComponent={ProjectFieldOption}
+      renderOption={renderProjectFieldOption}
       error={displayedError}
       onInputBlur={stain}
       textboxValue={nameEntry}
@@ -50,18 +45,12 @@ export const ProjectField = () => {
   );
 };
 
-const ProjectFieldOption: SelectInputOptionComponent<Project> = memo(
-  ({ option }) => {
-    const { name, description } = option;
+const renderProjectFieldOption = ({ name, description }: Project) => (
+  <Grid>
+    <Text>{name}</Text>
 
-    return (
-      <Grid>
-        <Text>{name}</Text>
-
-        <Text color="light" size="small">
-          {description}
-        </Text>
-      </Grid>
-    );
-  },
+    <Text color="light" size="small">
+      {description}
+    </Text>
+  </Grid>
 );

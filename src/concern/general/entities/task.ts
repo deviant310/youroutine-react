@@ -1,16 +1,14 @@
-import { Entity } from "~/infrastructure/entity";
+import { Entity } from "~/infrastructure/data";
 
-import { TaskPriority, TaskStatus } from "./properties";
+//import { TaskPriority, TaskStatus } from "./properties";
 
-export class Task<
-  Attributes extends TaskAttributes = TaskAttributes,
-> extends Entity<Attributes> {
+export class Task extends Entity<TaskAttributes> {
   static getInstanceId(task: Task) {
-    return task.$payload.id;
+    return task.id;
   }
 
   static getInstanceTitle(task: Task) {
-    return task.$payload.title;
+    return task.title;
   }
 
   get id() {
@@ -57,3 +55,7 @@ export interface TaskAttributes {
   readonly status: TaskStatus | null;
   priority: TaskPriority;
 }
+
+export type TaskStatus = "underway" | "completed" | "rejected";
+
+export type TaskPriority = "low" | "medium" | "high";

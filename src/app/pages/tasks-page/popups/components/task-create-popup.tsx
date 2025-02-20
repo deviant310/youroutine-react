@@ -10,7 +10,7 @@ export const TaskCreatePopup = memo(() => {
   const taskCreatingForm = useTaskCreatingForm();
 
   useEffect(() => {
-    //if (taskCreatingForm.submitted) popupToggle.setValueOff();
+    if (taskCreatingForm.submitted) popupToggle.setValueOff();
   }, [popupToggle, taskCreatingForm.submitted]);
 
   return (

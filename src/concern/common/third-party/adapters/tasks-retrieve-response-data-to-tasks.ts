@@ -1,4 +1,4 @@
-import { Task, TaskPriority, TaskStatus } from "~/concern/general/entities";
+import { Task } from "~/concern/general/entities";
 
 import { TasksRetrieveResponseData } from "../requests";
 
@@ -11,8 +11,8 @@ export function tasksRetrieveResponseDataToTasks(
         id,
         title,
         description,
-        status: status ? new TaskStatus(status) : null,
-        priority: new TaskPriority(priority),
+        status,
+        priority,
       }),
   );
 }

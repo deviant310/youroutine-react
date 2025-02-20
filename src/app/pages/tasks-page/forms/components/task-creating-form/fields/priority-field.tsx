@@ -1,8 +1,8 @@
-import { memo, useMemo } from "react";
+import { useMemo } from "react";
 
-import { SelectField, SelectInputOptionComponent } from "~/infrastructure/ui";
+import { SelectField } from "~/infrastructure/ui";
 
-import { TaskPriority } from "~/concern/general/entities";
+import { taskPriorities } from "~/concern/common/data";
 
 import { useTaskCreateFormField } from "../../../handlers";
 
@@ -19,12 +19,11 @@ export const PriorityField = () => {
     <SelectField
       name={name}
       label="Priority"
-      options={TaskPriority.options}
+      options={taskPriorities.keys()}
       value={value}
       onChange={setValue}
-      getOptionKey={TaskPriority.getInstanceKey}
-      displayStringForOption={TaskPriority.getInstanceLabel}
-      optionComponent={PriorityFieldOption}
+      displayStringForOption={taskPriorities.getValue}
+      renderOption={taskPriorities.getValue}
       error={displayedError}
       onInputBlur={stain}
       textboxPlaceholder="Select priority"
@@ -32,7 +31,3 @@ export const PriorityField = () => {
     />
   );
 };
-
-const PriorityFieldOption: SelectInputOptionComponent<TaskPriority> = memo(
-  ({ option: priority }) => priority.label,
-);

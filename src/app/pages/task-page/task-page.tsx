@@ -1,7 +1,5 @@
 import { memo, useMemo, useState } from "react";
 
-import { UUID } from "~/typescript";
-
 import { useDocumentTitle } from "~/react";
 
 import { usePathParams } from "~/infrastructure/router";
@@ -20,21 +18,17 @@ import {
 } from "~/infrastructure/ui";
 
 import { Header } from "~/concern/chunks";
+import { taskPriorities } from "~/concern/common/data";
 import {
   useProjectsRetrieving,
   useTaskRetrieving,
 } from "~/concern/common/third-party";
-import { Project, TaskPriority } from "~/concern/general/entities";
+import { Project } from "~/concern/general/entities";
 import { taskRoute } from "~/concern/general/routes";
 
 export const TaskPage = memo(() => {
-  // TODO change highlighting of "typeof" keyword for vscode
   const { id } = usePathParams<typeof taskRoute>();
-  // TODO UUID is redundant
-  const { task, retrievingTask, retrievingTaskError } = useTaskRetrieving(
-    id as UUID,
-  );
-
+  const { task, retrievingTask, retrievingTaskError } = useTaskRetrieving(id);
   const { getProjectsFilteredByNameEntry } = useProjectsRetrieving();
   const [nameEntry, setNameEntry] = useState("");
   const { colors } = useTheme();
@@ -80,7 +74,7 @@ export const TaskPage = memo(() => {
 
               <Paper fill={colors.main} elevation={0.4}>
                 <Area padding={2}>
-                  <Paragraph size="small" weight="medium">
+                  <Paragraph size="compact" weight="medium">
                     Details
                   </Paragraph>
 
@@ -93,9 +87,9 @@ export const TaskPage = memo(() => {
                     <Text color="xlight">Priority</Text>
 
                     <SelectInput
-                      options={TaskPriority.options}
-                      getOptionKey={TaskPriority.getInstanceKey}
-                      displayStringForOption={TaskPriority.getInstanceLabel}
+                      options={taskPriorities.keys()}
+                      displayStringForOption={taskPriorities.getValue}
+                      renderOption={taskPriorities.getValue}
                       value={task.priority}
                       textboxPlaceholder="Select priority"
                       textboxSize="auto"

@@ -3,20 +3,22 @@ import { memo } from "react";
 import { RequestUnauthorizedError } from "~/infrastructure/http";
 import { initHomeRoute, Router } from "~/infrastructure/router";
 
-import { useUserRetrieving } from "~/concern/common/third-party";
+import { useCurrentUserRetrieving } from "~/concern/common/third-party";
 import { projectsRoute, taskRoute, tasksRoute } from "~/concern/general/routes";
 
 import { AuthPage, ProjectsPage, TaskPage, TasksPage } from "~/pages";
 
 export const App = memo(() => {
-  const { retrievingUser, retrievingUserError } = useUserRetrieving();
+  const { retrievingCurrentUser, retrievingCurrentUserError } =
+    useCurrentUserRetrieving();
 
-  if (retrievingUser) return "loading...";
+  if (retrievingCurrentUser) return "loading...";
 
-  if (retrievingUserError instanceof RequestUnauthorizedError)
+  if (retrievingCurrentUserError instanceof RequestUnauthorizedError)
     return <AuthPage />;
 
-  if (retrievingUserError instanceof Error) return retrievingUserError.message;
+  if (retrievingCurrentUserError instanceof Error)
+    return retrievingCurrentUserError.message;
 
   // TODO не интуитивно, нужно как-то засунуть это в provider
   initHomeRoute(tasksRoute);

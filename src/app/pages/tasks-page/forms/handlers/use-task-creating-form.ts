@@ -29,7 +29,7 @@ const { useForm, useField } = createFormStore<
     },
   },
   priority: {
-    initialValue: TaskPriority.options[1],
+    initialValue: "medium",
     validate(value) {
       if (!value) throw new ValidationError("Priority required");
 

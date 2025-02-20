@@ -7,7 +7,7 @@ import {
   UserRetrieveResponseData,
 } from "../requests";
 
-export const retrieveUser = async (): Promise<User> => {
+export const retrieveCurrentUser = async (): Promise<User> => {
   const userRetrieveRequest = buildUserRetrieveRequest();
 
   const { data } = await performRequest(userRetrieveRequest);
@@ -15,8 +15,11 @@ export const retrieveUser = async (): Promise<User> => {
   return mapUserRetrieveResponseData(data);
 };
 
-export const mapUserRetrieveResponseData = (data: UserRetrieveResponseData) =>
+export const mapUserRetrieveResponseData = ({
+  userId,
+  userName,
+}: UserRetrieveResponseData) =>
   new User({
-    id: data.userId,
-    name: data.userName,
+    id: userId,
+    name: userName,
   });

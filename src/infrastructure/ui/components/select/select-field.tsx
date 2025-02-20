@@ -20,7 +20,7 @@ export const SelectField = memo(function <OptionData>({
   name,
   label,
   error,
-  optionComponent,
+  renderOption,
   displayStringForOption,
   dropdownToggleInitialValue = false,
   getOptionKey,
@@ -47,7 +47,7 @@ export const SelectField = memo(function <OptionData>({
 
         <SelectInput
           name={name}
-          optionComponent={optionComponent}
+          renderOption={renderOption}
           displayStringForOption={displayStringForOption}
           dropdownToggleInitialValue={dropdownToggleInitialValue}
           getOptionKey={getOptionKey}
