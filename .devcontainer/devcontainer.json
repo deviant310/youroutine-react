@@ -1,6 +1,12 @@
 // See https://containers.dev/implementors/json_reference/ for configuration reference
 {
   "name": "YouRoutine React",
+  "runArgs": [
+    "--name",
+    "youroutine-react",
+    "--network",
+    "youroutine-dotnet_devcontainer_default"
+  ],
   "build": {
     "dockerfile": "Dockerfile"
   },
@@ -10,7 +16,6 @@
       "extensions": [
         "dbaeumer.vscode-eslint",
         "styled-components.vscode-styled-components",
-        "waderyan.gitblame",
         "streetsidesoftware.code-spell-checker"
       ]
     }

@@ -9,7 +9,7 @@ import { projectsRoute, taskRoute, tasksRoute } from "~/concern/general/routes";
 import { AuthPage, ProjectsPage, TaskPage, TasksPage } from "~/pages";
 
 export const App = memo(() => {
-  const { retrievingCurrentUser, retrievingCurrentUserError } =
+  /* const { retrievingCurrentUser, retrievingCurrentUserError } =
     useCurrentUserRetrieving();
 
   if (retrievingCurrentUser) return "loading...";
@@ -18,7 +18,7 @@ export const App = memo(() => {
     return <AuthPage />;
 
   if (retrievingCurrentUserError instanceof Error)
-    return retrievingCurrentUserError.message;
+    return retrievingCurrentUserError.message; */
 
   // TODO не интуитивно, нужно как-то засунуть это в provider
   initHomeRoute(tasksRoute);

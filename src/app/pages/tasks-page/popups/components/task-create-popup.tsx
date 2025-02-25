@@ -15,7 +15,7 @@ export const TaskCreatePopup = memo(() => {
 
   return (
     <Popup opened={popupToggleIsOn} onClose={popupToggle.setValueOff}>
-      <Area paddingVertical={1.6} width="800px" maxWidth="100%">
+      <Area paddingVertical={3.2} width="800px" maxWidth="100%">
         <Area marginHorizontal={4}>
           <Heading $level={4}>Create task</Heading>
         </Area>

@@ -35,11 +35,20 @@
     },
     {
       "command": "npm run dev",
-      "name": "dev",
+      "name": "dev_local",
       "request": "launch",
       "type": "node-terminal",
       "env": {
         "DEV_SERVER_HTTP_OVERRIDES": "1"
+      },
+    },
+    {
+      "command": "npm run dev",
+      "name": "dev_proxy",
+      "request": "launch",
+      "type": "node-terminal",
+      "env": {
+        "DEV_SERVER_API_PROXY": "http://youroutine-server:5299"
       },
     }
   ]

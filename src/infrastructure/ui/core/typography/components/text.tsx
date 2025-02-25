@@ -30,9 +30,9 @@ export const TextCSS = css<TransientProps<TextStyledProps>>`
     if ($size === "compact") return getUnitWithMeasure(2);
     if ($size === "normal") return getUnitWithMeasure(2.4);
     if ($size === "medium") return getUnitWithMeasure(2.6);
-    if ($size === "large") return getUnitWithMeasure(3);
-    if ($size === "big") return getUnitWithMeasure(3.6);
-    if ($size === "huge") return getUnitWithMeasure(3.6);
+    if ($size === "large") return getUnitWithMeasure(2.6);
+    if ($size === "big") return getUnitWithMeasure(2.8);
+    if ($size === "huge") return getUnitWithMeasure(3.2);
     if ($size === "massive") return getUnitWithMeasure(4);
     if ($size === "colossal") return getUnitWithMeasure(4.8);
   }};

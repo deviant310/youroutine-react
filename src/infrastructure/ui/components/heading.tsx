@@ -26,7 +26,7 @@ export const Heading = styled(Text).attrs<HeadingProps>(({ $level }) => ({
 
 Heading.displayName = "Heading";
 
-export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
 export interface HeadingProps {
   $level: HeadingLevel;

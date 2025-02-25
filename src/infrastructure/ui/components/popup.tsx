@@ -78,13 +78,12 @@ const PopupBackgroundStyled = styled.div`
   background-color: ${({ theme }) => theme.colors.default[5].transparent()};
 `;
 
-const GridAreaScaled = styled(animated(Area, "scale"))<
-  TransientProps<GridStyledProps>
->`
+const AreaFaded = animated(Area, "fade");
+const AreaScaled = animated(Area, "scale");
+
+const GridAreaScaled = styled(AreaScaled)<TransientProps<GridStyledProps>>`
   ${GridCSS}
 `;
-
-const AreaFaded = animated(Area, "fade");
 
 const ClickableCircleStyled = styled(Clickable).attrs({
   rippleable: true,
