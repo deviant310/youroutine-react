@@ -5,7 +5,46 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "preview",
+      "name": "dev_local",
+      "request": "launch",
+      "runtimeExecutable": "vite",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node",
+      "console": "integratedTerminal",
+      "env": {
+        "DEV_SERVER_HTTP_OVERRIDES": "1"
+      },
+    },
+    {
+      "name": "dev_proxy",
+      "request": "launch",
+      "runtimeExecutable": "vite",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node",
+      "console": "integratedTerminal",
+      "env": {
+         "DEV_SERVER_API_PROXY": "http://youroutine-server:5299"
+      },
+    },
+     {
+      "name": "build",
+      "request": "launch",
+      "runtimeArgs": [
+        "run",
+        "build"
+      ],
+      "runtimeExecutable": "npm",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    },
+    {
+      "name": "preview_local",
       "request": "launch",
       "runtimeArgs": [
         "run",
@@ -21,35 +60,20 @@
       },
     },
     {
-      "name": "build",
+      "name": "preview_proxy",
       "request": "launch",
       "runtimeArgs": [
         "run",
-        "build"
+        "preview"
       ],
       "runtimeExecutable": "npm",
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "type": "node"
-    },
-    {
-      "command": "npm run dev",
-      "name": "dev_local",
-      "request": "launch",
-      "type": "node-terminal",
-      "env": {
-        "DEV_SERVER_HTTP_OVERRIDES": "1"
-      },
-    },
-    {
-      "command": "npm run dev",
-      "name": "dev_proxy",
-      "request": "launch",
-      "type": "node-terminal",
+      "type": "node",
       "env": {
         "DEV_SERVER_API_PROXY": "http://youroutine-server:5299"
       },
-    }
+    },
   ]
 }

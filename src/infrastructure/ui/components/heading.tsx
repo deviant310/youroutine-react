@@ -19,7 +19,12 @@ export const Heading = styled(Text).attrs<HeadingProps>(({ $level }) => ({
     if ($level === 10) return "tiny";
   },
 }))`
-  margin: ${getUnitWithMeasure(1)} 0;
+  display: block;
+  margin: ${({ $level }) => {
+    if ($level === 4) return `${getUnitWithMeasure(2.2)} 0`;
+
+    return `${getUnitWithMeasure(1)} 0`;
+  }};
   font-weight: 600;
   text-align: ${({ $textAlign }) => $textAlign};
 `;

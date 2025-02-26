@@ -85,8 +85,8 @@ const TableRow: TableRowComponent = memo(
 );
 
 const TableContainerStyled = styled(Paper).attrs({
-  elevation: 0.6,
-  fill: "transparent",
+  $elevation: 0.6,
+  $fill: "transparent",
 })`
   display: grid;
   gap: 2px;

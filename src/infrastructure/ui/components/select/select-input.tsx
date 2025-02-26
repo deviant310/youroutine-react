@@ -163,7 +163,7 @@ export const SelectInput = memo(function <OptionData>({
 
       <DropdownStyled>
         {optionsProps && optionsProps.length > 0 && dropdownToggleOn && (
-          <Paper elevation={1}>
+          <Paper $elevation={1}>
             <Area paddingVertical={0.8}>
               <VirtualList
                 items={optionsProps}

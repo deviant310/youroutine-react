@@ -72,7 +72,7 @@ export const TaskPage = memo(() => {
                 editorMinHeight="200px"
               />
 
-              <Paper fill={colors.main} elevation={0.4}>
+              <Paper $fill={colors.main} $elevation={0.4}>
                 <Area padding={2}>
                   <Paragraph size="compact" weight="medium">
                     Details

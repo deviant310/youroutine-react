@@ -40,7 +40,7 @@
     "ts-allow-imports-plugin": "file:./libs/ts-allow-imports-plugin-0.0.1.tgz",
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.14.0",
-    "vite": "^5.4.10",
+    "vite": "^6.2.0",
     "vite-plugin-checker": "^0.8.0",
     "vite-plugin-svgr": "^4.3.0",
     "vite-tsconfig-paths": "^5.0.1"

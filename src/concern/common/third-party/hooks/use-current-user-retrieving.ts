@@ -8,8 +8,7 @@ export const useCurrentUserRetrieving = () => {
     isLoading: retrievingCurrentUser,
     error: retrievingCurrentUserError,
   } = useQueryAction(retrieveCurrentUser, [], {
-    keepData: "always",
-    refetchOnMount: false,
+    keepFresh: true,
   });
 
   return { currentUser, retrievingCurrentUser, retrievingCurrentUserError };

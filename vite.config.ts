@@ -24,7 +24,6 @@ const { host, port, apiProxy, httpOverridesEnabled } = {
 /**
  * https://vitejs.dev/config/
  */
-console.log(apiProxy);
 export default defineConfig(async ({ command }) => ({
   server: {
     proxy: {

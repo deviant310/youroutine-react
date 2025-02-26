@@ -62,7 +62,7 @@ export const Header = memo(() => {
                 marginTop="-5px"
               >
                 {dropdownIsVisible && (
-                  <Paper elevation={1.2}>
+                  <Paper $elevation={1.2}>
                     <Area paddingVertical={0.8}>
                       <Clickable onClick={hideDropdown} hoverable rippleable>
                         <Area paddingHorizontal={1.6}>

@@ -23,8 +23,6 @@ export const ProjectField = () => {
     [getProjectsFilteredByNameEntry, nameEntry],
   );
 
-  if (!filteredProjects) return null;
-
   return (
     <SelectField
       name={name}

@@ -14,7 +14,8 @@ import {
   Icon,
   GridCSS,
   GridStyledProps,
-  Paper,
+  PaperCSS,
+  PaperProps,
 } from "../core";
 import { TransientProps } from "../helpers";
 
@@ -47,19 +48,17 @@ export const Popup = memo<PopupPropsWithHTMLAttributes>(props => {
         }
       >
         {opened && (
-          <Paper radius={1.6} elevation={1.6}>
-            <Area position="relative">
-              <Area position="absolute" right={1} top={1.2}>
-                {onClose && (
-                  <ClickableCircleStyled $size={3.6} onClick={onClose}>
-                    <Icon type="close" />
-                  </ClickableCircleStyled>
-                )}
-              </Area>
-
-              {children}
+          <PaperArea $radius={1.6} $elevation={1.6} position="relative">
+            <Area position="absolute" right={1} top={1.2}>
+              {onClose && (
+                <ClickableCircleStyled $size={3.6} onClick={onClose}>
+                  <Icon type="close" />
+                </ClickableCircleStyled>
+              )}
             </Area>
-          </Paper>
+
+            {children}
+          </PaperArea>
         )}
       </GridAreaScaled>
     </PopupContainerStyled>,
@@ -83,6 +82,9 @@ const AreaScaled = animated(Area, "scale");
 
 const GridAreaScaled = styled(AreaScaled)<TransientProps<GridStyledProps>>`
   ${GridCSS}
+`;
+const PaperArea = styled(Area)<PaperProps>`
+  ${PaperCSS}
 `;
 
 const ClickableCircleStyled = styled(Clickable).attrs({

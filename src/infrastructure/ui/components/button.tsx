@@ -69,10 +69,14 @@ const ButtonStyled = styled(Clickable).attrs(({ rippleable = true }) => ({
     }};
   }
 
-  --ripple-background-color: ${({ $color, theme }) => {
-    if ($color === "primary") return theme.colors.primary[0].filled();
-    if ($color === "primary-light")
-      return theme.colors.primary[7].transparent();
+  --ripple-background-color: ${({ $color, $variant, theme }) => {
+    if ($variant === "contained") {
+      if ($color === "primary") return theme.colors.primary[0].filled();
+      if ($color === "primary-light")
+        return theme.colors.primary[7].transparent();
+    }
+
+    if ($variant === "link") return theme.colors.primary[7].transparent();
   }};
 `;
 
