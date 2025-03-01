@@ -9,7 +9,7 @@ import {
   animated,
   Area,
   CircleCSS,
-  CircleStyledProps,
+  CircleProps,
   Clickable,
   Icon,
   GridCSS,
@@ -90,7 +90,7 @@ const PaperArea = styled(Area)<PaperProps>`
 const ClickableCircleStyled = styled(Clickable).attrs({
   rippleable: true,
   hoverable: true,
-})<TransientProps<CircleStyledProps>>`
+})<CircleProps>`
   ${CircleCSS};
 
   display: flex;

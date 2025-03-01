@@ -1,32 +1,28 @@
-import { HTMLAttributes, memo } from "react";
+import { HTMLAttributes } from "react";
 
 import { css, styled } from "styled-components";
 
-import { getUnitWithMeasure, TransientProps, UnitIndex } from "../../helpers";
+import { getUnitWithMeasure, UnitIndex } from "../../helpers";
 
-export const Circle = memo<CircleProps>(({ size, ...props }) => (
-  <CircleStyled $size={size} {...props} />
-));
-
-export const CircleCSS = css<TransientProps<CircleStyledProps>>`
+export const CircleCSS = css<CircleProps>`
   width: ${({ $size }) => getUnitWithMeasure($size)};
   height: ${({ $size }) => getUnitWithMeasure($size)};
   border-radius: 50%;
   overflow: hidden;
 `;
 
-const CircleStyled = styled.div<TransientProps<CircleStyledProps>>`
+export const Circle = styled.div<CircleProps>`
   ${CircleCSS}
 `;
 
-Circle.displayName = "Circle";
+//Circle.displayName = "Circle";
 
-export interface CircleStyledProps {
-  size?: UnitIndex;
+export interface CircleProps {
+  $size?: UnitIndex;
 }
 
-export interface CircleProps
+export interface CirclePropsWithHtmlAttributes
   extends HTMLAttributes<CircleElement>,
-    CircleStyledProps {}
+    CircleProps {}
 
 export type CircleElement = HTMLDivElement;

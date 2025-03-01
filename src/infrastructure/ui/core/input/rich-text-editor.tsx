@@ -1,7 +1,7 @@
 import {
-  ElementRef,
   HTMLAttributes,
   memo,
+  Ref,
   useCallback,
   useEffect,
   useRef,
@@ -9,12 +9,12 @@ import {
 
 import { Editor, EditorContent, EditorEvents, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { createGlobalStyle, styled } from "styled-components";
+import { styled } from "styled-components";
 
 import { getUnitWithMeasure, TransientProps } from "../../helpers";
 
 export const RichTextEditor = memo<RichTextEditorPropsWithHTMLAttributes>(
-  ({ value, onChange: onUpdate, invalid, minHeight, ...props }) => {
+  ({ value, onChange: onUpdate, minHeight, ...props }) => {
     const ref = useRef<RichTextEditorElement>(null);
     const { current: content } = useRef(value);
     const editor = useEditor({ extensions, content, onUpdate });
@@ -41,14 +41,12 @@ export const RichTextEditor = memo<RichTextEditorPropsWithHTMLAttributes>(
     }, [onMouseDown]);
 
     return (
-      <ContainerStyled $invalid={invalid} {...props} ref={ref}>
-        <EditorStyle minHeight={minHeight} />
-
-        <EditorContent editor={editor} />
-      </ContainerStyled>
+      <EditorContentStyled editor={editor} $minHeight={minHeight} {...props} />
     );
   },
 );
+
+RichTextEditor.displayName = "RichTextEditor";
 
 export const getRichTextEditorTextFromHTML = (htmlString: string) => {
   const editor = new Editor({
@@ -61,46 +59,33 @@ export const getRichTextEditorTextFromHTML = (htmlString: string) => {
 
 const extensions = [StarterKit];
 
-const ContainerStyled = styled.div.attrs({ role: "textbox" })<
-  TransientProps<RichTextEditorStyledProps>
->`
-  cursor: text;
-  padding: ${getUnitWithMeasure(1.2)} ${getUnitWithMeasure(1.6)};
-  transition: box-shadow 150ms;
-
-  border-left-width: ${getUnitWithMeasure(0.2)};
-  border-left-style: solid;
-  border-left-color: ${({ theme }) => theme.colors.default[6].filled()};
-
-  &:focus-within {
-    border-color: ${({ theme }) => theme.colors.default[4].filled()};
-  }
-`;
-
-const EditorStyle = createGlobalStyle<Pick<RichTextEditorProps, "minHeight">>`
-  .tiptap {
-    min-height: ${({ minHeight }) => minHeight};
+const EditorContentStyled = styled(EditorContent)<RichTextEditorStyledProps>`
+  & .tiptap {
+    min-height: ${({ $minHeight }) => $minHeight};
   }
 
-  .tiptap ul, .tiptap ol {
+  & .tiptap ul,
+  & .tiptap ol {
     padding-left: ${getUnitWithMeasure(2.6)};
   }
 
-  .tiptap ul li p, .tiptap ol li p {
+  & .tiptap ul li p,
+  & .tiptap ol li p {
     margin: 0;
   }
 `;
 
-export interface RichTextEditorStyledProps {
-  invalid?: boolean;
-}
-
-export interface RichTextEditorProps extends RichTextEditorStyledProps {
+export interface RichTextEditorProps {
   name?: string;
   value?: string;
   onChange?(event: RichTextEditorChangeEvent): void;
   minHeight?: string;
+  ref?: Ref<RichTextEditorElement>;
 }
+
+export type RichTextEditorStyledProps = TransientProps<
+  Pick<RichTextEditorProps, "minHeight">
+>;
 
 export type RichTextEditorChangeEvent = EditorEvents["update"];
 
@@ -108,4 +93,4 @@ interface RichTextEditorPropsWithHTMLAttributes
   extends Omit<HTMLAttributes<RichTextEditorElement>, "onChange">,
     RichTextEditorProps {}
 
-export type RichTextEditorElement = ElementRef<typeof ContainerStyled>;
+export type RichTextEditorElement = HTMLDivElement;

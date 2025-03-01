@@ -1,5 +1,3 @@
-import { ElementRef } from "react";
-
 import { styled } from "styled-components";
 
 export const Fieldset = styled.fieldset`
@@ -8,4 +6,4 @@ export const Fieldset = styled.fieldset`
   width: 100%;
 `;
 
-export type FieldsetElement = ElementRef<typeof Fieldset>;
+export type FieldsetElement = HTMLFieldSetElement;

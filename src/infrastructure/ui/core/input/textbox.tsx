@@ -1,101 +1,62 @@
-import {
-  memo,
-  useCallback,
-  useRef,
-  ReactNode,
-  HTMLAttributes,
-  ElementRef,
-  useEffect,
-} from "react";
+import { HTMLAttributes, ReactNode, Ref } from "react";
 
-import { styled } from "styled-components";
+import styled from "styled-components";
 
 import { getUnitWithMeasure, TransientProps } from "../../helpers";
 
-export const Textbox = memo<TextboxPropsWithHTMLAttributes>(
-  ({
-    name,
-    value,
-    onChange,
-    before,
-    after,
-    invalid,
-    disabled,
-    readOnly,
-    implicit,
-    size,
-    placeholder,
-    placeholderMuted = true,
-    ...props
-  }) => {
-    const ref = useRef<TextboxElement>(null);
-    const inputRef = useRef<TextboxInputElement>(null);
+export function Textbox({
+  children,
+  before,
+  after,
+  size,
+  invalid,
+  implicit,
+  clickable,
+  ...props
+}: TextboxPropsWithHTMLAttributes) {
+  return (
+    <TextboxStyled
+      $size={size}
+      $invalid={invalid}
+      $implicit={implicit}
+      $clickable={clickable}
+      {...props}
+    >
+      <RowStyled>
+        {before && (
+          <AdornmentContainerStyled>
+            <AdornmentStyled>{before}</AdornmentStyled>
+          </AdornmentContainerStyled>
+        )}
 
-    const onMouseDown = useCallback((event: MouseEvent) => {
-      if (event.target === ref.current)
-        setTimeout(() => inputRef.current?.focus(), 0);
-    }, []);
+        {children}
 
-    useEffect(() => {
-      const { current: element } = ref;
+        {after && (
+          <AdornmentContainerStyled>
+            <AdornmentStyled>{after}</AdornmentStyled>
+          </AdornmentContainerStyled>
+        )}
+      </RowStyled>
+    </TextboxStyled>
+  );
+}
 
-      element?.addEventListener("mousedown", onMouseDown);
-
-      return () => element?.removeEventListener("mousedown", onMouseDown);
-    }, [onMouseDown]);
-
-    return (
-      <TextboxStyled
-        $invalid={invalid}
-        $implicit={implicit}
-        $size={size}
-        {...props}
-        ref={ref}
-      >
-        <RowStyled>
-          {before && (
-            <AdornmentContainerStyled>
-              <AdornmentStyled>{before}</AdornmentStyled>
-            </AdornmentContainerStyled>
-          )}
-
-          <InputStyled
-            name={name}
-            value={value}
-            onChange={onChange}
-            placeholder={placeholder}
-            disabled={disabled}
-            readOnly={readOnly}
-            $placeholderMuted={placeholderMuted}
-            $size={size}
-            ref={inputRef}
-          />
-
-          {after && (
-            <AdornmentContainerStyled>
-              <AdornmentStyled>{after}</AdornmentStyled>
-            </AdornmentContainerStyled>
-          )}
-        </RowStyled>
-      </TextboxStyled>
-    );
-  },
-);
-
-Textbox.displayName = "Textbox";
-
-const TextboxStyled = styled.div.attrs({ role: "textbox" })<
-  TransientProps<TextboxStyledProps>
->`
-  width: ${({ $size }) => $size === "auto" && "100%"};
+const TextboxStyled = styled.div.attrs({
+  role: "textbox",
+})<TextboxStyledProps>`
   display: inline-block;
-  cursor: text;
+  width: ${({ $size }) => {
+    if (typeof $size === "number") return `${$size}ch`;
+    if ($size === "auto") return "100%";
+  }};
+  cursor: ${({ $clickable }) => ($clickable ? "pointer" : "text")};
   background-color: ${({ theme, $implicit }) =>
     !$implicit && theme.colors.main};
   padding: ${getUnitWithMeasure(0.8)} ${getUnitWithMeasure(1.6)};
   border-radius: ${getUnitWithMeasure(0.8)};
   transition-duration: 150ms;
   transition-property: background-color, box-shadow;
+
   box-shadow: ${({ theme, $invalid, $implicit }) =>
     `0 0 0 2px inset ${
       $implicit
@@ -131,23 +92,6 @@ const RowStyled = styled.div`
   gap: ${getUnitWithMeasure(0.8)};
 `;
 
-const InputStyled = styled.input<TransientProps<TextboxStyledProps>>`
-  width: ${({ $size }) => {
-    if (typeof $size === "number") return `${$size}ch`;
-    if ($size === "auto") return "100%";
-  }};
-  height: ${getUnitWithMeasure(2.4)};
-  padding: 0;
-  border: none;
-  outline: none;
-  cursor: inherit;
-
-  &::placeholder {
-    color: ${({ theme, $placeholderMuted }) =>
-      $placeholderMuted ? theme.colors.default[3].filled() : "inherit"};
-  }
-`;
-
 const AdornmentContainerStyled = styled.div`
   display: flex;
   align-items: center;
@@ -161,25 +105,21 @@ const AdornmentStyled = styled.div`
   position: absolute;
 `;
 
-export interface TextboxStyledProps {
-  invalid?: boolean;
-  size?: TextboxSize;
-  placeholderMuted?: boolean;
-  implicit?: boolean;
-}
-
-export interface TextboxProps extends TextboxStyledProps {
-  name?: string;
-  placeholder?: string;
-  disabled?: boolean;
-  readOnly?: boolean;
+export interface TextboxProps {
   before?: ReactNode;
   after?: ReactNode;
-  value?: string;
+  size?: TextboxSize;
+  invalid?: boolean;
+  implicit?: boolean;
+  clickable?: boolean;
+  ref?: Ref<TextboxElement>;
 }
 
-export type TextboxElement = ElementRef<typeof TextboxStyled>;
-export type TextboxInputElement = ElementRef<typeof InputStyled>;
+export type TextboxStyledProps = TransientProps<
+  Pick<TextboxProps, "size" | "invalid" | "implicit" | "clickable">
+>;
+
+export type TextboxElement = HTMLDivElement;
 
 interface TextboxPropsWithHTMLAttributes
   extends HTMLAttributes<TextboxElement>,

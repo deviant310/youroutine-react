@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 
 import { Grid, SelectField, Text } from "~/infrastructure/ui";
 
@@ -7,7 +7,7 @@ import { Project } from "~/concern/general/entities";
 
 import { useTaskCreateFormField } from "../../../handlers";
 
-export const ProjectField = () => {
+export const ProjectField = memo(() => {
   const [nameEntry, setNameEntry] = useState("");
   const { getProjectsFilteredByNameEntry } = useProjectsRetrieving();
 
@@ -35,13 +35,13 @@ export const ProjectField = () => {
       renderOption={renderProjectFieldOption}
       error={displayedError}
       onInputBlur={stain}
-      textboxValue={nameEntry}
-      onTextboxChange={setNameEntry}
-      textboxPlaceholder="Select project"
-      textboxSize="auto"
+      searchValue={nameEntry}
+      onSearchChange={setNameEntry}
+      placeholder="Select project"
+      size="auto"
     />
   );
-};
+});
 
 const renderProjectFieldOption = ({ name, description }: Project) => (
   <Grid>

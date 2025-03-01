@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 
 import { SelectField } from "~/infrastructure/ui";
 
@@ -6,7 +6,7 @@ import { taskPriorities } from "~/concern/common/data";
 
 import { useTaskCreateFormField } from "../../../handlers";
 
-export const PriorityField = () => {
+export const PriorityField = memo(() => {
   // TODO запретить на уровне eslint устанавливать здесь дефолтные значения
   const { name, value, setValue, error, dirty, stain } =
     useTaskCreateFormField("priority");
@@ -26,8 +26,8 @@ export const PriorityField = () => {
       renderOption={taskPriorities.getValue}
       error={displayedError}
       onInputBlur={stain}
-      textboxPlaceholder="Select priority"
-      textboxSize="auto"
+      placeholder="Select priority"
+      size="auto"
     />
   );
-};
+});

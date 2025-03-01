@@ -1,6 +1,4 @@
-import { FieldsetHTMLAttributes, FocusEvent, memo, useCallback } from "react";
-
-import { styled } from "styled-components";
+import { FieldsetHTMLAttributes, FocusEvent, memo, Ref } from "react";
 
 import {
   animated,
@@ -9,66 +7,65 @@ import {
   FieldProps,
   Fieldset,
   FieldsetElement,
-  FieldTextboxCSS,
   Grid,
-  RichTextEditor,
-  RichTextEditorChangeEvent,
   RichTextEditorElement,
 } from "../core";
 
+import {
+  RichTextEditorInput,
+  RichTextEditorInputProps,
+} from "./rich-text-editor-input";
+
 export const RichTextEditorField =
-  memo<RichTextEditorFieldPropsWithHTMLAttributes>(props => {
-    const {
+  memo<RichTextEditorFieldPropsWithHTMLAttributes>(
+    ({
       name,
       label,
       error,
       value,
-      editorMinHeight,
       onChange,
-      onEditorBlur,
-      ...restProps
-    } = props;
+      minHeight,
+      implicit,
+      clickable,
+      size,
+      before,
+      after,
+      ...props
+    }) => {
+      const invalid = Boolean(error);
 
-    const editorInvalid = Boolean(error);
+      return (
+        <Fieldset {...props}>
+          <FieldErrorSlidable>{error}</FieldErrorSlidable>
 
-    const onEditorChange = useCallback(
-      (event: RichTextEditorChangeEvent) => {
-        onChange?.(event.editor.getHTML());
-      },
-      [onChange],
-    );
+          <Grid gap={0.4}>
+            {label && <FieldLabel>{label}</FieldLabel>}
 
-    return (
-      <Fieldset {...restProps}>
-        <FieldErrorSlidable>{error}</FieldErrorSlidable>
-
-        <Grid gap={0.4}>
-          {label && <FieldLabel>{label}</FieldLabel>}
-
-          <RichTextEditorStyled
-            name={name}
-            value={value}
-            onChange={onEditorChange}
-            invalid={editorInvalid}
-            onBlur={onEditorBlur}
-            minHeight={editorMinHeight}
-          />
-        </Grid>
-      </Fieldset>
-    );
-  });
-
-const RichTextEditorStyled = styled(RichTextEditor)`
-  ${FieldTextboxCSS}
-`;
+            <RichTextEditorInput
+              name={name}
+              value={value}
+              onChange={onChange}
+              minHeight={minHeight}
+              implicit={implicit}
+              invalid={invalid}
+              clickable={clickable}
+              size={size}
+              before={before}
+              after={after}
+            />
+          </Grid>
+        </Fieldset>
+      );
+    },
+  );
 
 const FieldErrorSlidable = animated(FieldError, "slide");
 
-export interface RichTextEditorFieldProps extends FieldProps {
-  value: string;
-  onChange?(value: string): void;
+export interface RichTextEditorFieldProps
+  extends FieldProps,
+    Omit<RichTextEditorInputProps, "ref" | "invalid"> {
   onEditorBlur?(event: FocusEvent<RichTextEditorElement>): void;
-  editorMinHeight?: string;
+  ref?: Ref<FieldsetElement>;
 }
 
 interface RichTextEditorFieldPropsWithHTMLAttributes

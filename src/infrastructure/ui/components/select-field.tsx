@@ -1,4 +1,4 @@
-import { FieldsetHTMLAttributes, FocusEvent, memo } from "react";
+import { FieldsetHTMLAttributes, FocusEvent, memo, Ref } from "react";
 
 import {
   animated,
@@ -8,7 +8,7 @@ import {
   Fieldset,
   Grid,
   FieldsetElement,
-} from "../../core";
+} from "../core";
 
 import {
   SelectInput,
@@ -27,16 +27,16 @@ export const SelectField = memo(function <OptionData>({
   options,
   value,
   onChange,
-  adornmentStart,
+  before,
   implicit,
-  textboxValue,
-  onTextboxChange,
-  textboxSize,
-  textboxPlaceholder,
+  searchValue,
+  onSearchChange,
+  size,
+  placeholder,
   onInputBlur,
   ...props
 }: SelectFieldPropsWithHTMLAttributes<OptionData>) {
-  const textboxInvalid = Boolean(error);
+  const invalid = Boolean(error);
 
   return (
     <Fieldset {...props}>
@@ -54,13 +54,13 @@ export const SelectField = memo(function <OptionData>({
           options={options}
           value={value}
           onChange={onChange}
-          adornmentStart={adornmentStart}
+          before={before}
           implicit={implicit}
-          textboxValue={textboxValue}
-          onTextboxChange={onTextboxChange}
-          textboxSize={textboxSize}
-          textboxPlaceholder={textboxPlaceholder}
-          textboxInvalid={textboxInvalid}
+          searchValue={searchValue}
+          onSearchChange={onSearchChange}
+          size={size}
+          placeholder={placeholder}
+          invalid={invalid}
           onBlur={onInputBlur}
         />
       </Grid>
@@ -72,8 +72,9 @@ const ErrorSlidable = animated(FieldError, "slide");
 
 export interface SelectFieldProps<OptionData>
   extends FieldProps,
-    SelectInputProps<OptionData> {
+    Omit<SelectInputProps<OptionData>, "ref" | "invalid"> {
   onInputBlur?(event: FocusEvent<SelectInputElement>): void;
+  ref?: Ref<FieldsetElement>;
 }
 
 interface SelectFieldPropsWithHTMLAttributes<OptionData>

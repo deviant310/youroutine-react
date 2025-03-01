@@ -69,7 +69,7 @@ export const TaskPage = memo(() => {
                 name="description"
                 label="Description"
                 value={task.description}
-                editorMinHeight="200px"
+                minHeight="200px"
               />
 
               <Paper $fill={colors.main} $elevation={0.4}>
@@ -91,8 +91,8 @@ export const TaskPage = memo(() => {
                       displayStringForOption={taskPriorities.getValue}
                       renderOption={taskPriorities.getValue}
                       value={task.priority}
-                      textboxPlaceholder="Select priority"
-                      textboxSize="auto"
+                      placeholder="Select priority"
+                      size="auto"
                       implicit
                     />
 
@@ -105,10 +105,10 @@ export const TaskPage = memo(() => {
                           value={null}
                           displayStringForOption={Project.getInstanceName}
                           getOptionKey={Project.getInstanceId}
-                          textboxValue={nameEntry}
-                          onTextboxChange={setNameEntry}
-                          textboxPlaceholder="Not set"
-                          textboxSize="auto"
+                          searchValue={nameEntry}
+                          onSearchChange={setNameEntry}
+                          placeholder="Not set"
+                          size="auto"
                           implicit
                         />
                       </>

@@ -7,23 +7,22 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tanstack/query-core": "^5.51.21",
-    "@tanstack/react-query": "^5.51.23",
-    "@tiptap/pm": "^2.9.1",
-    "@tiptap/react": "^2.9.1",
-    "@tiptap/starter-kit": "^2.9.1",
+    "@tanstack/react-query": "^5.66.9",
+    "@tanstack/react-query-devtools": "^5.66.9",
+    "@tiptap/pm": "^2.11.5",
+    "@tiptap/react": "^2.11.5",
+    "@tiptap/starter-kit": "^2.11.5",
     "color": "^4.2.3",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-inputs": "file:libs/react-inputs-1.0.0.tgz",
     "styled-components": "^6.1.12",
-    "use-query-action": "file:libs/use-query-action-1.0.0.tgz",
-    "use-react-input": "file:libs/use-react-input-1.0.0.tgz"
+    "use-query-action": "file:libs/use-query-action-1.0.0.tgz"
   },
   "devDependencies": {
     "@eslint/compat": "^1.1.1",
     "@eslint/js": "^9.9.0",
     "@svgr/plugin-svgo": "^8.1.0",
-    "@tanstack/react-query-devtools": "^5.51.23",
     "@types/color": "^3.0.6",
     "@types/express": "^5.0.0",
     "@types/node": "^22.5.0",
@@ -41,8 +40,8 @@
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.14.0",
     "vite": "^6.2.0",
-    "vite-plugin-checker": "^0.8.0",
+    "vite-plugin-checker": "^0.9.0",
     "vite-plugin-svgr": "^4.3.0",
-    "vite-tsconfig-paths": "^5.0.1"
+    "vite-tsconfig-paths": "^5.1.4"
   }
 }

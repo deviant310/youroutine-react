@@ -1,13 +1,4 @@
-import {
-  ChangeEvent,
-  FieldsetHTMLAttributes,
-  FocusEvent,
-  memo,
-  ReactNode,
-  useCallback,
-} from "react";
-
-import { styled } from "styled-components";
+import { FieldsetHTMLAttributes, FocusEvent, Ref } from "react";
 
 import {
   animated,
@@ -16,77 +7,67 @@ import {
   FieldProps,
   Fieldset,
   FieldsetElement,
-  FieldTextboxCSS,
   Grid,
-  Textbox,
   TextboxElement,
-  TextboxInputElement,
-  TextboxSize,
 } from "../core";
 
-export const TextField = memo<TextFieldPropsWithHTMLAttributes>(props => {
-  const {
-    name,
-    label,
-    error,
-    adornmentStart,
-    adornmentEnd,
-    textboxPlaceholder,
-    textboxSize,
-    value,
-    onChange,
-    onTextboxBlur,
-    ...restProps
-  } = props;
+import { TextInput, TextInputProps } from "./text-input";
 
-  const inputInvalid = Boolean(error);
-
-  const onTextboxChange = useCallback(
-    ({ target }: ChangeEvent<TextboxInputElement>) => {
-      onChange?.(target.value);
-    },
-    [onChange],
-  );
+export function TextField({
+  label,
+  error,
+  name,
+  value,
+  onChange,
+  disabled,
+  readOnly,
+  placeholder,
+  size,
+  placeholderMuted,
+  before,
+  after,
+  implicit,
+  clickable,
+  ...props
+}: TextFieldPropsWithHTMLAttributes) {
+  const invalid = Boolean(error);
 
   return (
-    <Fieldset {...restProps}>
+    <Fieldset {...props}>
       <FieldErrorSlidable>{error}</FieldErrorSlidable>
 
       <Grid gap={0.4}>
         {label && <FieldLabel>{label}</FieldLabel>}
 
-        <TextboxStyled
+        <TextInput
           name={name}
-          before={adornmentStart}
-          after={adornmentEnd}
-          invalid={inputInvalid}
-          onBlur={onTextboxBlur}
-          onChange={onTextboxChange}
-          placeholder={textboxPlaceholder}
           value={value}
-          size={textboxSize}
+          onChange={onChange}
+          disabled={disabled}
+          readOnly={readOnly}
+          placeholder={placeholder}
+          size={size}
+          placeholderMuted={placeholderMuted}
+          before={before}
+          after={after}
+          implicit={implicit}
+          invalid={invalid}
+          clickable={clickable}
         />
       </Grid>
     </Fieldset>
   );
-});
-
-const TextboxStyled = styled(Textbox)`
-  ${FieldTextboxCSS}
-`;
+}
 
 const FieldErrorSlidable = animated(FieldError, "slide");
 
-export interface TextFieldProps extends FieldProps {
-  value: string;
-  onChange?(value: string): void;
-  adornmentStart?: ReactNode;
-  adornmentEnd?: ReactNode;
-  textboxSize?: TextboxSize;
-  textboxPlaceholder?: string;
+export interface TextFieldProps
+  extends FieldProps,
+    Omit<TextInputProps, "ref" | "invalid"> {
   onTextboxBlur?(event: FocusEvent<TextboxElement>): void;
+  ref?: Ref<FieldsetElement>;
 }
 
 interface TextFieldPropsWithHTMLAttributes
-  extends Omit<FieldsetHTMLAttributes<FieldsetElement>, "name" | "onChange">,
+  extends Omit<FieldsetHTMLAttributes<FieldsetElement>, "onChange">,
     TextFieldProps {}
