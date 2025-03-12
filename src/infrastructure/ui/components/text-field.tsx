@@ -1,4 +1,4 @@
-import { FieldsetHTMLAttributes, FocusEvent, Ref } from "react";
+import { FocusEvent } from "react";
 
 import {
   animated,
@@ -6,12 +6,11 @@ import {
   FieldLabel,
   FieldProps,
   Fieldset,
-  FieldsetElement,
+  FieldsetProps,
   Grid,
-  TextboxElement,
 } from "../core";
 
-import { TextInput, TextInputProps } from "./text-input";
+import { TextInput, TextInputElement, TextInputProps } from "./text-input";
 
 export function TextField({
   label,
@@ -28,8 +27,9 @@ export function TextField({
   after,
   implicit,
   clickable,
+  onInputBlur,
   ...props
-}: TextFieldPropsWithHTMLAttributes) {
+}: TextFieldProps) {
   const invalid = Boolean(error);
 
   return (
@@ -53,6 +53,7 @@ export function TextField({
           implicit={implicit}
           invalid={invalid}
           clickable={clickable}
+          onBlur={onInputBlur}
         />
       </Grid>
     </Fieldset>
@@ -63,11 +64,19 @@ const FieldErrorSlidable = animated(FieldError, "slide");
 
 export interface TextFieldProps
   extends FieldProps,
-    Omit<TextInputProps, "ref" | "invalid"> {
-  onTextboxBlur?(event: FocusEvent<TextboxElement>): void;
-  ref?: Ref<FieldsetElement>;
+    Omit<FieldsetProps, "onChange">,
+    Pick<
+      TextInputProps,
+      | "value"
+      | "onChange"
+      | "readOnly"
+      | "placeholder"
+      | "placeholderMuted"
+      | "size"
+      | "before"
+      | "after"
+      | "implicit"
+      | "clickable"
+    > {
+  onInputBlur?(event: FocusEvent<TextInputElement>): void;
 }
-
-interface TextFieldPropsWithHTMLAttributes
-  extends Omit<FieldsetHTMLAttributes<FieldsetElement>, "onChange">,
-    TextFieldProps {}

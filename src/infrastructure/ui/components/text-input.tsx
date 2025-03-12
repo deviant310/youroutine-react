@@ -1,4 +1,10 @@
-import { ChangeEvent, HTMLAttributes, useCallback } from "react";
+import {
+  ChangeEvent,
+  FocusEvent,
+  MouseEvent,
+  useCallback,
+  useRef,
+} from "react";
 
 import styled from "styled-components";
 
@@ -14,26 +20,59 @@ import {
 export function TextInput({
   name,
   value,
-  onChange: onTextInputChange,
+  onChange,
   disabled,
   readOnly,
   placeholder,
   placeholderMuted,
+  onBlur,
+  onMouseDown,
   ...props
-}: TextInputPropsWithHTMLAttributes) {
-  const onChange = useCallback(
+}: TextInputProps) {
+  const inputRef = useRef<InputElement>(null);
+
+  const onInputChange = useCallback(
     ({ target }: ChangeEvent<InputElement>) => {
-      onTextInputChange?.(target.value);
+      onChange?.(target.value);
     },
-    [onTextInputChange],
+    [onChange],
+  );
+
+  const onTextboxMouseDown = useCallback(
+    (event: MouseEvent<TextboxElement>) => {
+      const { target, currentTarget } = event;
+
+      if (target !== currentTarget) return;
+
+      setTimeout(() => inputRef.current?.focus(), 0);
+
+      onMouseDown?.(event);
+    },
+    [onMouseDown],
+  );
+
+  const onTextboxBlur = useCallback(
+    (event: FocusEvent<TextboxElement>) => {
+      const { relatedTarget } = event;
+
+      if (relatedTarget) return;
+
+      onBlur?.(event);
+    },
+    [onBlur],
   );
 
   return (
-    <TextboxStyled {...props}>
+    <TextboxStyled
+      onMouseDown={onTextboxMouseDown}
+      onBlur={onTextboxBlur}
+      {...props}
+    >
       <InputStyled
+        ref={inputRef}
         name={name}
         value={value}
-        onChange={onChange}
+        onChange={onInputChange}
         disabled={disabled}
         readOnly={readOnly}
         placeholder={placeholder}
@@ -45,16 +84,20 @@ export function TextInput({
 
 const InputStyled = styled(Input)``;
 
-const TextboxStyled = styled(Textbox)`
+const TextboxStyled = styled(Textbox).attrs({ tabIndex: -1 })`
   ${InputStyled} {
     width: 100%;
   }
 `;
 
-export interface TextInputProps extends TextboxProps, Omit<InputProps, "ref"> {
+export interface TextInputProps
+  extends Omit<TextboxProps, "onChange">,
+    Pick<
+      InputProps,
+      "name" | "disabled" | "readOnly" | "placeholder" | "placeholderMuted"
+    > {
+  value?: string;
   onChange?(value: string): void;
 }
 
-interface TextInputPropsWithHTMLAttributes
-  extends Omit<HTMLAttributes<TextboxElement>, "onChange">,
-    TextInputProps {}
+export type TextInputElement = TextboxElement;

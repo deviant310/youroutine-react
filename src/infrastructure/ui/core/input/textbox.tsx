@@ -13,7 +13,7 @@ export function Textbox({
   implicit,
   clickable,
   ...props
-}: TextboxPropsWithHTMLAttributes) {
+}: TextboxProps) {
   return (
     <TextboxStyled
       $size={size}
@@ -105,7 +105,7 @@ const AdornmentStyled = styled.div`
   position: absolute;
 `;
 
-export interface TextboxProps {
+export interface TextboxProps extends HTMLAttributes<TextboxElement> {
   before?: ReactNode;
   after?: ReactNode;
   size?: TextboxSize;
@@ -120,9 +120,5 @@ export type TextboxStyledProps = TransientProps<
 >;
 
 export type TextboxElement = HTMLDivElement;
-
-interface TextboxPropsWithHTMLAttributes
-  extends HTMLAttributes<TextboxElement>,
-    TextboxProps {}
 
 export type TextboxSize = number | "auto";

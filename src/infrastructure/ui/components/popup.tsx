@@ -16,6 +16,7 @@ import {
   GridStyledProps,
   PaperCSS,
   PaperProps,
+  Grid,
 } from "../core";
 import { TransientProps } from "../helpers";
 
@@ -32,7 +33,7 @@ export const Popup = memo<PopupPropsWithHTMLAttributes>(props => {
         {opened && <PopupBackgroundStyled />}
       </AreaFaded>
 
-      <GridAreaScaled
+      <GridArea
         $justifyContent="center"
         $alignItems="center"
         position="fixed"
@@ -47,20 +48,22 @@ export const Popup = memo<PopupPropsWithHTMLAttributes>(props => {
           target === currentTarget && onClose?.()
         }
       >
-        {opened && (
-          <PaperArea $radius={1.6} $elevation={1.6} position="relative">
-            <Area position="absolute" right={1} top={1.2}>
-              {onClose && (
-                <ClickableCircleStyled $size={3.6} onClick={onClose}>
-                  <Icon type="close" />
-                </ClickableCircleStyled>
-              )}
-            </Area>
+        <GridScaled>
+          {opened && (
+            <PaperArea $radius={1.6} $elevation={1.6} position="relative">
+              <Area position="absolute" right={1} top={1.2}>
+                {onClose && (
+                  <ClickableCircleStyled $size={3.6} onClick={onClose}>
+                    <Icon type="close" />
+                  </ClickableCircleStyled>
+                )}
+              </Area>
 
-            {children}
-          </PaperArea>
-        )}
-      </GridAreaScaled>
+              {children}
+            </PaperArea>
+          )}
+        </GridScaled>
+      </GridArea>
     </PopupContainerStyled>,
     getRootElement(),
   );
@@ -78,14 +81,18 @@ const PopupBackgroundStyled = styled.div`
 `;
 
 const AreaFaded = animated(Area, "fade");
-const AreaScaled = animated(Area, "scale");
+const GridScaled = animated(Grid, "scale");
+GridScaled.displayName = "GridScaled";
 
-const GridAreaScaled = styled(AreaScaled)<TransientProps<GridStyledProps>>`
+const GridArea = styled(Area)<TransientProps<GridStyledProps>>`
   ${GridCSS}
 `;
+GridArea.displayName = "GridArea";
+
 const PaperArea = styled(Area)<PaperProps>`
   ${PaperCSS}
 `;
+PaperArea.displayName = "PaperArea";
 
 const ClickableCircleStyled = styled(Clickable).attrs({
   rippleable: true,

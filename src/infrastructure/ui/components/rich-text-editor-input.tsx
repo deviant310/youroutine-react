@@ -1,4 +1,4 @@
-import { HTMLAttributes, useCallback } from "react";
+import { useCallback } from "react";
 
 import styled from "styled-components";
 
@@ -16,7 +16,7 @@ export function RichTextEditorInput({
   onChange: onRichTextEditorInputChange,
   minHeight,
   ...props
-}: RichTextEditorInputPropsWithHTMLAttributes) {
+}: RichTextEditorInputProps) {
   const onChange = useCallback(
     ({ editor }: RichTextEditorChangeEvent) => {
       onRichTextEditorInputChange?.(editor.getHTML());
@@ -45,13 +45,10 @@ const TextboxStyled = styled(Textbox)`
 `;
 
 export interface RichTextEditorInputProps
-  extends TextboxProps,
-    Omit<RichTextEditorProps, "onChange"> {
+  extends Omit<TextboxProps, "onChange">,
+    Pick<RichTextEditorProps, "name" | "minHeight"> {
+  value?: string;
   onChange?(value: string): void;
 }
-
-interface RichTextEditorInputPropsWithHTMLAttributes
-  extends Omit<HTMLAttributes<RichTextEditorInputElement>, "onChange">,
-    RichTextEditorInputProps {}
 
 export type RichTextEditorInputElement = HTMLDivElement;

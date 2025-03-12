@@ -3,9 +3,11 @@ import {
   FocusEvent,
   HTMLAttributes,
   memo,
+  MouseEvent,
   ReactNode,
   Ref,
   useCallback,
+  useRef,
   useState,
 } from "react";
 
@@ -32,6 +34,7 @@ import {
   InputProps,
   InputElement,
   CircleProps,
+  TextboxElement,
 } from "../core";
 
 export const SelectInput = memo(function <OptionData>({
@@ -46,25 +49,24 @@ export const SelectInput = memo(function <OptionData>({
   before,
   searchValue: inputValue,
   onSearchChange,
-  onBlur: onSelectInputBlur,
+  onBlur,
   disabled,
-  placeholder: selectInputPlaceholder,
+  placeholder,
   size,
   implicit,
   invalid,
   ...props
-}: SelectInputPropsWithHTMLAttributes<OptionData>) {
+}: SelectInputProps<OptionData>) {
   type VirtualListOptionRenderer = VirtualListItemRenderer<
     ColumnElement,
     SelectInputOptionProps<OptionData>
   >;
 
+  const inputRef = useRef<InputElement>(null);
+
   const [dropdownToggleOn, setDropdownToggleValue] = useState(
     dropdownToggleInitialValue,
   );
-
-  const showDropdown = useCallback(() => setDropdownToggleValue(true), []);
-  const hideDropdown = useCallback(() => setDropdownToggleValue(false), []);
 
   const onOptionSelect = useCallback(
     (option: OptionData | null) => {
@@ -72,9 +74,9 @@ export const SelectInput = memo(function <OptionData>({
 
       onSearchChange?.("");
 
-      hideDropdown();
+      setDropdownToggleValue(false);
     },
-    [hideDropdown, onChange, onSearchChange],
+    [onChange, onSearchChange],
   );
 
   const { stringForSelectedOption, optionsProps } = useSelectInput({
@@ -85,24 +87,38 @@ export const SelectInput = memo(function <OptionData>({
     onOptionSelect,
   });
 
-  const placeholder = stringForSelectedOption || selectInputPlaceholder;
-  const placeholderMuted = !stringForSelectedOption;
-  const readOnly = !onSearchChange;
+  const inputPlaceholder = stringForSelectedOption || placeholder;
+  const inputPlaceholderMuted = !stringForSelectedOption;
 
-  const onBlur = useCallback(
-    (event: FocusEvent<SelectInputElement>) => {
+  const onContainerBlur = useCallback(
+    (event: FocusEvent<ContainerElement>) => {
       const { currentTarget, relatedTarget } = event;
 
       if (currentTarget.contains(relatedTarget)) return;
 
       onSearchChange?.("");
 
-      hideDropdown();
+      setDropdownToggleValue(false);
 
-      onSelectInputBlur?.(event);
+      onBlur?.(event);
     },
-    [hideDropdown, onSearchChange, onSelectInputBlur],
+    [onBlur, onSearchChange],
   );
+
+  const onTextboxMouseDown = useCallback(
+    (event: MouseEvent<TextboxElement>) => {
+      const { target, currentTarget } = event;
+
+      if (target !== currentTarget) return;
+
+      setTimeout(() => inputRef.current?.focus(), 0);
+    },
+    [],
+  );
+
+  const onTextboxFocus = useCallback(() => {
+    setDropdownToggleValue(true);
+  }, []);
 
   const onInputChange = useCallback(
     ({ target }: ChangeEvent<InputElement>) => {
@@ -137,7 +153,7 @@ export const SelectInput = memo(function <OptionData>({
   );
 
   return (
-    <ContainerStyled onBlur={onBlur} {...props}>
+    <ContainerStyled onBlur={onContainerBlur} {...props}>
       <TextboxStyled
         before={before}
         after={
@@ -151,20 +167,22 @@ export const SelectInput = memo(function <OptionData>({
             </ClickableCircleStyled>
           )
         }
-        onFocus={showDropdown}
+        onFocus={onTextboxFocus}
+        onMouseDown={onTextboxMouseDown}
         size={size}
         invalid={invalid}
         implicit={implicit}
-        clickable={readOnly}
+        clickable={!onSearchChange}
       >
         <InputStyled
+          ref={inputRef}
           name={name}
           value={inputValue}
           onChange={onInputChange}
           disabled={disabled}
-          readOnly={readOnly}
-          placeholder={placeholder}
-          placeholderMuted={placeholderMuted}
+          readOnly={!onSearchChange}
+          placeholder={inputPlaceholder}
+          placeholderMuted={inputPlaceholderMuted}
         />
       </TextboxStyled>
 
@@ -204,12 +222,11 @@ const ClickableCircleStyled = styled(Clickable).attrs({
   }
 `;
 
-const ContainerStyled = styled.div.attrs({
-  role: "group",
-  tabIndex: -1,
-})`
+const ContainerStyled = styled.div.attrs({ role: "group", tabIndex: -1 })`
   position: relative;
 `;
+
+type ContainerElement = HTMLDivElement;
 
 const InputStyled = styled(Input)``;
 
@@ -247,8 +264,9 @@ const DropdownStyled = styled(animated(Area, "scale"))`
 `;
 
 export interface SelectInputProps<OptionData>
-  extends Omit<TextboxProps, "ref" | "after" | "clickable">,
-    Omit<InputProps, "ref" | "value" | "readOnly" | "placeholderMuted"> {
+  extends Omit<HTMLAttributes<SelectInputElement>, "onChange">,
+    Pick<TextboxProps, "before" | "size" | "implicit" | "invalid">,
+    Pick<InputProps, "name" | "disabled" | "placeholder"> {
   displayStringForOption?(option: OptionData): string;
   getOptionKey?(option: OptionData): string | number;
   options: OptionData[];
@@ -264,9 +282,5 @@ export interface SelectInputProps<OptionData>
 interface ClickableCircleProps extends CircleProps {
   $implicit?: boolean;
 }
-
-interface SelectInputPropsWithHTMLAttributes<OptionData>
-  extends Omit<HTMLAttributes<SelectInputElement>, "onChange">,
-    SelectInputProps<OptionData> {}
 
 export type SelectInputElement = HTMLDivElement;

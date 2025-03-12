@@ -11,4 +11,9 @@ export const projects = [
     name: "Home",
     description: "Home routine, daily tasks",
   },
+  {
+    id: randomUUID(),
+    name: "React inputs",
+    description: "Headless inputs for react projects",
+  },
 ];

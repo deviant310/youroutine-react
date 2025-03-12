@@ -19,7 +19,7 @@ export const TitleField = memo(() => {
       onChange={setValue}
       value={value}
       error={displayedError}
-      onTextboxBlur={stain}
+      onInputBlur={stain}
       placeholder="Super feature"
       size="auto"
     />
