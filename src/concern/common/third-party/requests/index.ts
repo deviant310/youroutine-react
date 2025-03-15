@@ -3,3 +3,4 @@ export * from "./projects-retrieve-request";
 export * from "./tasks-retrieve-request";
 export * from "./task-retrieve-request";
 export * from "./task-create-request";
+export * from "./task-patch-request";

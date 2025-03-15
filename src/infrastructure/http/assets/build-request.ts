@@ -38,5 +38,5 @@ export interface RequestConfigWithoutData extends RequestConfigBase {
 
 export interface RequestConfigWithData extends RequestConfigBase {
   data?: Record<string, any>;
-  method: "POST" | "PUT" | "DELETE";
+  method: "POST" | "PUT" | "PATCH" | "DELETE";
 }

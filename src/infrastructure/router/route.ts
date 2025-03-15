@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { split } from "~/typescript";
+import { Split, split } from "~/typescript";
 
-export class Route<RouteTemplate extends string> {
+export class Route<
+  RouteParameters extends {
+    [K in RouteParam<RouteParsed<Split<RouteTemplate, "/">>>]: string;
+  },
+  RouteTemplate extends string = string,
+> {
   constructor(private routeTemplate: RouteTemplate) {}
 
   private get parsed() {
@@ -37,9 +42,7 @@ export class Route<RouteTemplate extends string> {
   }
 
   build(
-    ...params: RouteParam<typeof this.parsed> extends never
-      ? []
-      : [RouteParams<RouteParam<typeof this.parsed>>]
+    ...params: keyof RouteParameters extends never ? [] : [RouteParameters]
   ) {
     const [routeParams] = params;
 
@@ -52,7 +55,7 @@ export class Route<RouteTemplate extends string> {
               `Missing param "${value}" for route "${this.routeTemplate}"`,
             );
 
-          return routeParams[value];
+          return routeParams[value as keyof RouteParameters];
         }
 
         return value;
@@ -64,8 +67,8 @@ export class Route<RouteTemplate extends string> {
 }
 
 export interface RouteAbstract {
-  (...params: Array<any>): string;
-  parsed: Array<RouteParsedPart>;
+  pattern: RegExp;
+  build(...args: Array<any>): string;
 }
 
 export interface RouteParsedPart<
@@ -76,7 +79,7 @@ export interface RouteParsedPart<
   value: Value;
 }
 
-export type RoutePartType = "param" | "path";
+export type RoutePartType = string;
 
 type RouteParsed<A extends string[]> = {
   [K in keyof A]: A[K] extends `:${infer P}`
@@ -94,9 +97,3 @@ type RouteParam<T> =
           : never;
       }[number]
     : never;
-
-type RouteParams<Param> = Param extends string
-  ? {
-      [K in Param]: string | number | boolean;
-    }
-  : never;

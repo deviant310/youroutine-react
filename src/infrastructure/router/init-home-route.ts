@@ -1,6 +1,6 @@
 import { Route } from "./route";
 
-export function initHomeRoute<RouteTemplate extends string>(
+/* export function initHomeRoute<RouteTemplate extends string>(
   route: Route<RouteTemplate>,
   ...params: Parameters<Route<RouteTemplate>["build"]>
 ) {
@@ -9,4 +9,4 @@ export function initHomeRoute<RouteTemplate extends string>(
 
     history.replaceState(params[0] ?? null, "", pathname);
   }
-}
+} */

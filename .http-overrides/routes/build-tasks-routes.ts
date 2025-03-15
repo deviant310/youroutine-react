@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { randomUUID, UUID } from "node:crypto";
 
 import { Express } from "express";
 
@@ -50,5 +50,32 @@ export function buildTasksRoutes(express: Express) {
 
     response.statusCode = 200;
     response.json(task);
+  });
+
+  express.patch<{ id: UUID }>("/api/tasks/:id", (request, response) => {
+    const task = tasks.find(({ id }) => id === request.params.id);
+
+    if (!task) {
+      response.statusCode = 400;
+      response.statusMessage = "Task not found";
+      response.end();
+
+      return;
+    }
+
+    const updatedAttributes: Partial<(typeof tasks)[number]> = {};
+
+    if ("title" in request.body) updatedAttributes.title = request.body.title;
+
+    if ("description" in request.body)
+      updatedAttributes.description = request.body.description;
+
+    if ("priority" in request.body)
+      updatedAttributes.priority = request.body.priority;
+
+    Object.assign(task, updatedAttributes);
+
+    response.statusCode = 200;
+    response.json(updatedAttributes);
   });
 }

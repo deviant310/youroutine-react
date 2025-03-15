@@ -1,3 +1,5 @@
+import { UUID } from "~/typescript";
+
 import { Entity } from "~/infrastructure/data";
 
 //import { TaskPriority, TaskStatus } from "./properties";
@@ -49,7 +51,7 @@ export class Task extends Entity<TaskAttributes> {
 }
 
 export interface TaskAttributes {
-  readonly id: string;
+  readonly id: UUID;
   title: string;
   description: string;
   readonly status: TaskStatus | null;

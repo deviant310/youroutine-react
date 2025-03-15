@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   createElement,
   memo,
@@ -10,80 +9,86 @@ import {
 } from "react";
 
 import { RouterProvider, RouterContextValue } from "./context";
-import { Route } from "./route";
+import { RouteAbstract } from "./route";
 
-export const Router = memo<RouterProps>(({ routes }) => {
-  const routesMap = useMemo(() => new Map(routes), [routes]);
+export const Router = memo(
+  <RoutesEntries extends RouteEntry[]>({
+    routes,
+  }: RouterProps<RoutesEntries>) => {
+    const routesMap = useMemo(() => new Map(routes), [routes]);
 
-  const [, updateState] = useState<object>();
-  const forceUpdate = useCallback(() => updateState({}), []);
+    const [, updateState] = useState<object>();
+    const forceUpdate = useCallback(() => updateState({}), []);
 
-  const { pathname, search, hash } = window.location;
+    const { pathname, search, hash } = window.location;
 
-  const getRouteFromPath = useCallback<RouterContextValue["getRouteFromPath"]>(
-    (path: string) => {
-      for (const [route] of routesMap)
-        if (route.pattern.test(path)) return route;
-    },
-    [routesMap],
-  );
+    const getRouteFromPath = useCallback<
+      RouterContextValue["getRouteFromPath"]
+    >(
+      (path: string) => {
+        for (const [route] of routesMap)
+          if (route.pattern.test(path)) return route;
+      },
+      [routesMap],
+    );
 
-  const route = useMemo(
-    () => getRouteFromPath(pathname),
-    [getRouteFromPath, pathname],
-  );
+    const route = useMemo(
+      () => getRouteFromPath(pathname),
+      [getRouteFromPath, pathname],
+    );
 
-  const pathParams = useMemo(
-    () => (route && pathname.match(route.pattern)?.groups) || {},
-    [pathname, route],
-  );
+    const pathParams = useMemo(
+      () => (route && pathname.match(route.pattern)?.groups) || {},
+      [pathname, route],
+    );
 
-  const component = useMemo(
-    () => (route && routesMap.get(route)) || NotFound,
-    [route, routesMap],
-  );
+    const component = useMemo(
+      () => (route && routesMap.get(route)) || NotFound,
+      [route, routesMap],
+    );
 
-  const navigate = useCallback<RouterContextValue["navigate"]>(
-    to => {
-      history.pushState(null, "", to);
+    const navigate = useCallback<RouterContextValue["navigate"]>(
+      to => {
+        history.pushState(null, "", to);
 
-      forceUpdate();
-    },
-    [forceUpdate],
-  );
+        forceUpdate();
+      },
+      [forceUpdate],
+    );
 
-  const anchor = hash ? parseRawAnchor(hash) : null;
+    const anchor = hash ? parseRawAnchor(hash) : null;
 
-  const setAnchor = useCallback<RouterContextValue["setAnchor"]>(
-    anchor => {
-      if (anchor === null) {
-        history.pushState(null, "", pathname + search);
+    const setAnchor = useCallback<RouterContextValue["setAnchor"]>(
+      anchor => {
+        if (anchor === null) {
+          history.pushState(null, "", pathname + search);
 
-        return forceUpdate();
-      }
+          return forceUpdate();
+        }
 
-      window.location.hash = `#${parseRawAnchor(anchor)}`;
-    },
-    [forceUpdate, pathname, search],
-  );
+        window.location.hash = `#${parseRawAnchor(anchor)}`;
+      },
+      [forceUpdate, pathname, search],
+    );
 
-  const value = useMemo(
-    () => ({ getRouteFromPath, navigate, pathParams, anchor, setAnchor }),
-    [anchor, getRouteFromPath, navigate, pathParams, setAnchor],
-  );
+    const value = useMemo(
+      () => ({ getRouteFromPath, navigate, pathParams, anchor, setAnchor }),
+      [anchor, getRouteFromPath, navigate, pathParams, setAnchor],
+    );
 
-  useEffect(() => {
-    window.addEventListener("popstate", forceUpdate);
-    window.addEventListener("hashchange", forceUpdate);
+    useEffect(() => {
+      window.addEventListener("popstate", forceUpdate);
+      window.addEventListener("hashchange", forceUpdate);
 
-    return () => {
-      window.removeEventListener("popstate", forceUpdate);
-      window.removeEventListener("hashchange", forceUpdate);
-    };
-  }, [forceUpdate]);
+      return () => {
+        window.removeEventListener("popstate", forceUpdate);
+        window.removeEventListener("hashchange", forceUpdate);
+      };
+    }, [forceUpdate]);
 
-  return createElement(RouterProvider, { value }, createElement(component));
-});
+    return createElement(RouterProvider, { value }, createElement(component));
+  },
+);
 
 const parseRawAnchor = (rawAnchor: string) => {
   const anchorParts = rawAnchor.split("#");
@@ -93,6 +98,8 @@ const parseRawAnchor = (rawAnchor: string) => {
 
 const NotFound: FC = () => "Not found";
 
-interface RouterProps {
-  routes: Array<readonly [Route<any>, FC]>;
+type RouteEntry = readonly [RouteAbstract, FC];
+
+interface RouterProps<RoutesEntries extends RouteEntry[]> {
+  routes: RoutesEntries;
 }

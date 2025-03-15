@@ -2,7 +2,7 @@ import { css } from "styled-components";
 
 import { TransientProps } from "../../../helpers";
 
-export const GlyphCSS = css<TransientProps<GlyphStyledProps>>`
+export const GlyphCSS = css<GlyphStyledProps>`
   color: ${({ theme, $color }) => {
     if ($color === "default") return theme.colors.default[1].filled();
     if ($color === "light") return theme.colors.default[2].filled();
@@ -13,9 +13,11 @@ export const GlyphCSS = css<TransientProps<GlyphStyledProps>>`
   }};
 `;
 
-export interface GlyphStyledProps {
+export interface GlyphProps {
   color?: GlyphColor;
 }
+
+type GlyphStyledProps = TransientProps<GlyphProps>;
 
 export type GlyphColor =
   | "default"

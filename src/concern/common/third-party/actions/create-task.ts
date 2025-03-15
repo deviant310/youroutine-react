@@ -17,9 +17,7 @@ export async function createTask(attributes: TaskCreateAttributes) {
   return data;
 }
 
-export interface TaskCreateAttributes {
-  title: TaskAttributes["title"];
-  description: TaskAttributes["description"];
-  priority: TaskAttributes["priority"];
+export interface TaskCreateAttributes
+  extends Pick<TaskAttributes, "title" | "description" | "priority"> {
   projectId: Project["id"];
 }

@@ -1,14 +1,14 @@
 import { memo } from "react";
 
 import { RequestUnauthorizedError } from "~/infrastructure/http";
-import { initHomeRoute, Router } from "~/infrastructure/router";
+import { Router } from "~/infrastructure/router";
 
 import { useCurrentUserRetrieving } from "~/concern/common/third-party";
 import { projectsRoute, taskRoute, tasksRoute } from "~/concern/general/routes";
 
 import { AuthPage, ProjectsPage, TaskPage, TasksPage } from "~/pages";
 
-export const App = memo(() => {
+export const App = memo(() => (
   /* const { retrievingCurrentUser, retrievingCurrentUserError } =
     useCurrentUserRetrieving();
 
@@ -21,10 +21,10 @@ export const App = memo(() => {
     return retrievingCurrentUserError.message; */
 
   // TODO не интуитивно, нужно как-то засунуть это в provider
-  initHomeRoute(tasksRoute);
+  //initHomeRoute(tasksRoute);
 
-  return <Router routes={routes} />;
-});
+  <Router routes={routes} />
+));
 
 const routes = [
   [tasksRoute, TasksPage] as const,

@@ -1,18 +1,27 @@
-import { Ref, InputHTMLAttributes } from "react";
+import { Ref, InputHTMLAttributes, memo } from "react";
 
 import { styled } from "styled-components";
 
-import { getUnitWithMeasure, TransientProps } from "../../helpers";
+import { TransientProps } from "../../helpers";
 
-export function Input({ placeholderMuted = true, ...props }: InputProps) {
-  return <InputStyled $placeholderMuted={placeholderMuted} {...props} />;
-}
+export const Input = memo<InputProps>(
+  ({ autoSize, placeholderMuted = true, ...props }) => (
+    <InputStyled
+      $autoSize={autoSize}
+      $placeholderMuted={placeholderMuted}
+      {...props}
+    />
+  ),
+);
 
 export const InputStyled = styled.input<InputStyledProps>`
-  height: ${getUnitWithMeasure(2.4)};
+  line-height: inherit;
+  font-weight: inherit;
   padding: 0;
   border: none;
   outline: none;
+
+  field-sizing: ${({ $autoSize }) => $autoSize && "content"};
 
   &::placeholder {
     color: ${({ theme, $placeholderMuted }) =>
@@ -21,10 +30,13 @@ export const InputStyled = styled.input<InputStyledProps>`
 `;
 
 export interface InputProps extends InputHTMLAttributes<InputElement> {
+  autoSize?: boolean;
   placeholderMuted?: boolean;
   ref?: Ref<InputElement>;
 }
 
-type InputStyledProps = TransientProps<Pick<InputProps, "placeholderMuted">>;
+type InputStyledProps = TransientProps<
+  Pick<InputProps, "autoSize" | "placeholderMuted">
+>;
 
 export type InputElement = HTMLInputElement;

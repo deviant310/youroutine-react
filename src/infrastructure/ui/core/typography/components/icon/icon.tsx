@@ -3,7 +3,7 @@ import { memo } from "react";
 import styled, { css } from "styled-components";
 
 import { getUnitWithMeasure, TransientProps } from "../../../../helpers";
-import { GlyphCSS, GlyphSize, GlyphStyledProps } from "../../helpers";
+import { GlyphCSS, GlyphProps, GlyphSize } from "../../helpers";
 
 import * as Icons from "./icons";
 
@@ -19,7 +19,7 @@ export const Icon = memo<IconProps>(
     })[type],
 );
 
-const IconBaseCSS = css<TransientProps<IconStyledProps>>`
+const IconBaseCSS = css<IconStyledProps>`
   ${GlyphCSS};
 
   display: flex;
@@ -38,7 +38,7 @@ const IconBaseCSS = css<TransientProps<IconStyledProps>>`
   }};
 `;
 
-const IconMonotoneCSS = css<TransientProps<IconStyledProps>>`
+const IconMonotoneCSS = css<IconStyledProps>`
   ${IconBaseCSS};
 
   & path {
@@ -54,36 +54,35 @@ const IconMonotoneCSS = css<TransientProps<IconStyledProps>>`
   }
 `; */
 
-const ChevronIcon = styled(Icons.Chevron)<TransientProps<IconStyledProps>>`
+const ChevronIcon = styled(Icons.Chevron)<IconStyledProps>`
   ${IconMonotoneCSS}
 `;
 
-const CloseIcon = styled(Icons.Close)<TransientProps<IconStyledProps>>`
+const CloseIcon = styled(Icons.Close)<IconStyledProps>`
   ${IconMonotoneCSS}
 `;
 
-const ErrorIcon = styled(Icons.Error)<TransientProps<IconStyledProps>>`
+const ErrorIcon = styled(Icons.Error)<IconStyledProps>`
   ${IconMonotoneCSS}
 `;
 
-const SettingsIcon = styled(Icons.Settings)<TransientProps<IconStyledProps>>`
+const SettingsIcon = styled(Icons.Settings)<IconStyledProps>`
   ${IconMonotoneCSS}
 `;
 
-const SignOutIcon = styled(Icons.SignOut)<TransientProps<IconStyledProps>>`
+const SignOutIcon = styled(Icons.SignOut)<IconStyledProps>`
   ${IconMonotoneCSS}
 `;
 
-const WarningIcon = styled(Icons.Warning)<TransientProps<IconStyledProps>>`
+const WarningIcon = styled(Icons.Warning)<IconStyledProps>`
   ${IconMonotoneCSS}
 `;
 
-interface IconStyledProps extends GlyphStyledProps {
+interface IconProps extends GlyphProps {
+  type: IconType;
   size?: GlyphSize;
 }
 
-interface IconProps extends IconStyledProps {
-  type: IconType;
-}
+type IconStyledProps = TransientProps<GlyphProps & Pick<IconProps, "size">>;
 
 export type IconType = Uncapitalize<keyof typeof Icons>;

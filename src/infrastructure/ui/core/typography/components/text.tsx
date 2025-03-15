@@ -1,11 +1,11 @@
-import { ElementRef, HTMLAttributes, memo } from "react";
+import { HTMLAttributes, memo } from "react";
 
 import { css, styled } from "styled-components";
 
 import { getUnitWithMeasure, TransientProps } from "../../../helpers";
-import { GlyphCSS, GlyphSize, GlyphStyledProps } from "../helpers";
+import { GlyphCSS, GlyphSize, GlyphProps } from "../helpers";
 
-export const Text = memo<TextPropsWithHTMLAttributes>(
+export const Text = memo<TextProps>(
   ({ color, size, weight, nowrap, ...props }) => (
     <TextStyled
       $color={color}
@@ -19,7 +19,7 @@ export const Text = memo<TextPropsWithHTMLAttributes>(
 
 Text.displayName = "Text";
 
-export const TextCSS = css<TransientProps<TextStyledProps>>`
+export const TextCSS = css<TextStyledProps>`
   ${GlyphCSS};
 
   white-space: ${({ $nowrap }) => $nowrap && "nowrap"};
@@ -57,24 +57,26 @@ export const TextCSS = css<TransientProps<TextStyledProps>>`
   }};
 `;
 
-const TextStyled = styled.span<TransientProps<TextStyledProps>>`
+const TextStyled = styled.span<TextStyledProps>`
   ${TextCSS}
 `;
 
-export interface TextStyledProps extends GlyphStyledProps {
+export interface TextProps
+  extends Omit<HTMLAttributes<TextElement>, "color">,
+    GlyphProps {
   size?: GlyphSize;
   weight?: TextWeight;
   nowrap?: boolean;
 }
 
-export interface TextProps extends TextStyledProps {
-  children: string;
-}
+type TextStyledProps = TransientProps<
+  GlyphProps & Pick<TextProps, "size" | "weight" | "nowrap">
+>;
 
 export interface TextPropsWithHTMLAttributes
-  extends Omit<HTMLAttributes<TextElement>, "children" | "color">,
+  extends Omit<HTMLAttributes<TextElement>, "color">,
     TextProps {}
 
 export type TextWeight = "regular" | "medium" | "semibold";
 
-export type TextElement = ElementRef<typeof TextStyled>;
+export type TextElement = HTMLSpanElement;

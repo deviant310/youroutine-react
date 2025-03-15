@@ -1,10 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useCallback,
-  forwardRef,
-  NamedExoticComponent,
-} from "react";
+import { useState, useEffect, useCallback, NamedExoticComponent } from "react";
 
 import { css, RuleSet, styled } from "styled-components";
 
@@ -23,7 +17,7 @@ export function animated<Component extends NamedExoticComponent<any>>(
     ${({ $visible }) => ($visible ? animationIn : animationOut)}
   `;
 
-  const Animated = forwardRef(({ children, ...props }, ref) => {
+  const Animated = (({ children, ref, ...props }) => {
     const [node, setNode] = useState(children);
 
     const onTransitionEnd = useCallback(

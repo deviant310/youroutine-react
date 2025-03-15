@@ -3,12 +3,7 @@ import { memo } from "react";
 import { styled } from "styled-components";
 
 import { Link, LinkProps } from "~/infrastructure/router";
-import {
-  TextCSS,
-  TextProps,
-  TextStyledProps,
-  TransientProps,
-} from "~/infrastructure/ui";
+import { TextCSS, TextProps, TransientProps } from "~/infrastructure/ui";
 
 export const TextLink = memo<TextLinkProps>(
   ({ color, size, weight, ...props }) => (
@@ -16,8 +11,10 @@ export const TextLink = memo<TextLinkProps>(
   ),
 );
 
-const TextLinkStyled = styled(Link)<TransientProps<TextStyledProps>>`
+const TextLinkStyled = styled(Link)<TextLinkStyledProps>`
   ${TextCSS}
 `;
 
 export interface TextLinkProps extends Omit<LinkProps, "children">, TextProps {}
+
+type TextLinkStyledProps = TransientProps<TextProps>;

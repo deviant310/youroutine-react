@@ -1,11 +1,11 @@
-import { ElementRef, HTMLAttributes, memo } from "react";
+import { HTMLAttributes, memo } from "react";
 
 import { styled } from "styled-components";
 
-import { TextAlign, TextCSS, TextStyledProps } from "../core";
+import { TextAlign, TextCSS, TextProps } from "../core";
 import { TransientProps } from "../helpers";
 
-export const Paragraph = memo<ParagraphPropsWithHTMLAttributes>(
+export const Paragraph = memo<ParagraphProps>(
   ({ textAlign, color, size, weight, nowrap, children, ...props }) => (
     <ParagraphStyled
       $textAlign={textAlign}
@@ -20,7 +20,7 @@ export const Paragraph = memo<ParagraphPropsWithHTMLAttributes>(
   ),
 );
 
-const ParagraphStyled = styled.p<TransientProps<ParagraphStyledProps>>`
+const ParagraphStyled = styled.p<ParagraphStyledProps>`
   ${TextCSS};
   text-align: ${({ $textAlign }) =>
     $textAlign &&
@@ -31,16 +31,14 @@ const ParagraphStyled = styled.p<TransientProps<ParagraphStyledProps>>`
     }[$textAlign]};
 `;
 
-export interface ParagraphStyledProps extends TextStyledProps {
+export interface ParagraphProps
+  extends Omit<HTMLAttributes<ParagraphElement>, "color">,
+    Pick<TextProps, "size" | "weight" | "nowrap" | "color"> {
   textAlign?: TextAlign;
 }
 
-export interface ParagraphProps extends ParagraphStyledProps {
-  children: string;
-}
+type ParagraphStyledProps = TransientProps<
+  TextProps & Pick<ParagraphProps, "textAlign">
+>;
 
-export interface ParagraphPropsWithHTMLAttributes
-  extends Omit<HTMLAttributes<ParagraphElement>, "children" | "color">,
-    ParagraphProps {}
-
-export type ParagraphElement = ElementRef<typeof ParagraphStyled>;
+export type ParagraphElement = HTMLParagraphElement;
