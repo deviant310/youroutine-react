@@ -14,16 +14,14 @@ export const useTaskPatching = () => {
     isLoading: patchingTask,
     error: patchingTaskError,
   } = useQueryAction(patchTaskAction, {
-    onMutate() {
+    onPerform() {
       const startedAt = Date.now();
       lastStartedAt.current = startedAt;
       return startedAt;
     },
     onSuccess(patchedData, [id], startedAt) {
-      if (lastStartedAt.current === startedAt) {
-        console.log(patchedData);
+      if (lastStartedAt.current === startedAt)
         setData(data => ({ ...data, ...patchedData }), id);
-      }
     },
   });
 
