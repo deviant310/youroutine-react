@@ -12,7 +12,7 @@ import { TasksTable } from "./tasks-table";
 export const TasksPage = memo(() => {
   useDocumentTitle("Tasks");
 
-  const [, popupToggle] = useTaskCreatePopupToggle();
+  const { turnOn } = useTaskCreatePopupToggle();
 
   return (
     <>
@@ -25,7 +25,7 @@ export const TasksPage = memo(() => {
               Tasks
             </Text>
 
-            <Button color="primary-light" onClick={popupToggle.setValueOn}>
+            <Button color="primary-light" onClick={turnOn}>
               Create task
             </Button>
           </Flex>

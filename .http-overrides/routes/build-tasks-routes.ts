@@ -52,7 +52,7 @@ export function buildTasksRoutes(express: Express) {
     response.json(task);
   });
 
-  express.patch<{ id: UUID }>("/api/tasks/:id", (request, response) => {
+  express.patch<{ id: UUID }>("/api/tasks/:id", async (request, response) => {
     const task = tasks.find(({ id }) => id === request.params.id);
 
     if (!task) {

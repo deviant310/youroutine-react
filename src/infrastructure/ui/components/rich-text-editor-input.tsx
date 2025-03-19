@@ -17,7 +17,7 @@ export function RichTextEditorInput({
   minHeight,
   ...props
 }: RichTextEditorInputProps) {
-  const onChange = useCallback(
+  const onEditorChange = useCallback(
     ({ editor }: RichTextEditorChangeEvent) => {
       onRichTextEditorInputChange?.(editor.getHTML());
     },
@@ -29,7 +29,7 @@ export function RichTextEditorInput({
       <RichTextEditorStyled
         name={name}
         value={value}
-        onChange={onChange}
+        onChange={onEditorChange}
         minHeight={minHeight}
       />
     </TextboxStyled>

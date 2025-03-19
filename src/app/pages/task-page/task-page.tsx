@@ -2,21 +2,20 @@ import { memo } from "react";
 
 import { useDocumentTitle } from "~/react";
 
-import { usePathParams } from "~/infrastructure/router";
 import { Area } from "~/infrastructure/ui";
 
 import { Header } from "~/concern/chunks";
 import { useTaskRetrieving } from "~/concern/common/third-party";
-import { taskRoute } from "~/concern/general/routes";
 
+import { TaskProvider, usePathParams } from "./context";
 import { TaskConsumer } from "./task-consumer";
-import { TaskProvider } from "./task-context";
 
 export const TaskPage = memo(() => {
-  const { id } = usePathParams<typeof taskRoute>();
-  const { task, retrievingTask, retrievingTaskError } = useTaskRetrieving(id);
+  const { taskId } = usePathParams();
+  const { task, retrievingTask, retrievingTaskError } =
+    useTaskRetrieving(taskId);
 
-  useDocumentTitle(`Task ${id}`);
+  useDocumentTitle(`Task ${taskId}`);
 
   return (
     <>

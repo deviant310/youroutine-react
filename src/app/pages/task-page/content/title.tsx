@@ -1,26 +1,25 @@
 import { ChangeEvent, memo, useCallback, useState } from "react";
 
-import { usePathParams } from "~/infrastructure/router";
 import { Input, InputElement, Text } from "~/infrastructure/ui";
 
 import { useTaskPatching } from "~/concern/common/third-party";
-import { taskRoute } from "~/concern/general/routes";
 
-import { useTask } from "../task-context";
+import { usePathParams, useTask } from "../context";
 
 export const Title = memo(() => {
-  // TODO возможно стоит как-то докрутить типы роутера, чтобы внутри task-page можно было импортировать только taskRoute
-  const { id } = usePathParams<typeof taskRoute>();
+  const { taskId } = usePathParams();
   const { title: initialTitle } = useTask();
   const [title, setTitle] = useState(initialTitle);
   const { patchTask } = useTaskPatching();
 
   const onInputChange = useCallback(
     ({ target }: ChangeEvent<InputElement>) => {
-      setTitle(target.value);
-      patchTask(id, { title: target.value });
+      const { value: nextTitle } = target;
+
+      setTitle(nextTitle);
+      patchTask(taskId, { title: nextTitle });
     },
-    [id, patchTask],
+    [patchTask, taskId],
   );
 
   return (

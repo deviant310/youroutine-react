@@ -1,2 +1,2 @@
-export * from "./primitive-store";
+export * from "./toggle-store";
 export * from "./form-store";

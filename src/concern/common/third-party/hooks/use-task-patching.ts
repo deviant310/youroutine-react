@@ -1,8 +1,12 @@
+import { useRef } from "react";
+
 import { useQueryAction } from "use-query-action";
 
 import { patchTask as patchTaskAction, retrieveTask } from "../actions";
 
 export const useTaskPatching = () => {
+  const lastStartedAt = useRef<number>(null);
+
   const { setData } = useQueryAction(retrieveTask);
 
   const {
@@ -10,8 +14,16 @@ export const useTaskPatching = () => {
     isLoading: patchingTask,
     error: patchingTaskError,
   } = useQueryAction(patchTaskAction, {
-    onSuccess(patchedData, id) {
-      setData(data => ({ ...data, ...patchedData }), id);
+    onMutate() {
+      const startedAt = Date.now();
+      lastStartedAt.current = startedAt;
+      return startedAt;
+    },
+    onSuccess(patchedData, [id], startedAt) {
+      if (lastStartedAt.current === startedAt) {
+        console.log(patchedData);
+        setData(data => ({ ...data, ...patchedData }), id);
+      }
     },
   });
 

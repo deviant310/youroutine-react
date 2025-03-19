@@ -8,7 +8,6 @@ import {
   Grid,
   Paper,
   Paragraph,
-  RichTextEditor,
   SelectInput,
   Text,
   useTheme,
@@ -18,11 +17,11 @@ import { taskPriorities } from "~/concern/common/data";
 import { useProjectsRetrieving } from "~/concern/common/third-party";
 import { Project } from "~/concern/general/entities";
 
-import { Title } from "./chunks";
-import { useTask } from "./task-context";
+import { Description, Title } from "./content";
+import { useTask } from "./context";
 
 export const TaskConsumer = memo(() => {
-  const { description, priority } = useTask();
+  const { priority } = useTask();
   const { getProjectsFilteredByNameEntry } = useProjectsRetrieving();
   const [nameEntry, setNameEntry] = useState("");
   const { colors } = useTheme();
@@ -44,8 +43,8 @@ export const TaskConsumer = memo(() => {
         Info text
       </Alert>
 
-      <Grid templateColumns="2fr 1fr" gap={4.4} alignItems="top">
-        <RichTextEditor value={description} minHeight="200px" />
+      <Grid templateColumns="5fr 3fr" gap={4.4} alignItems="top">
+        <Description />
 
         {/* TODO color passing shouldn't be here */}
         <Paper $fill={colors.main} $elevation={0.4}>

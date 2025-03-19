@@ -1,3 +1,3 @@
-import { createPrimitiveStore } from "~/infrastructure/stores";
+import { createToggle } from "~/infrastructure/stores";
 
-export const useTaskCreatePopupToggle = createPrimitiveStore<boolean>(false);
+export const useTaskCreatePopupToggle = createToggle();

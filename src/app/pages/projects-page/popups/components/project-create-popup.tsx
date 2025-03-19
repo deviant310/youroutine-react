@@ -8,7 +8,7 @@ import { ProjectCreateForm } from "../../forms";
 import { useProjectCreatePopupToggle } from "../toggles";
 
 export const ProjectCreatePopup = memo(() => {
-  const [popupToggleIsOn, popupToggle] = useProjectCreatePopupToggle();
+  const { isOn, turnOff } = useProjectCreatePopupToggle();
 
   const {
     value: submitting,
@@ -17,7 +17,7 @@ export const ProjectCreatePopup = memo(() => {
   } = useToggle();
 
   return (
-    <Popup opened={popupToggleIsOn} onClose={popupToggle.setValueOff}>
+    <Popup opened={isOn} onClose={turnOff}>
       <Area paddingVertical={1.6} width="500px" maxWidth="100%">
         <Area marginHorizontal={4}>
           <Heading $level={4}>Create project</Heading>
@@ -34,7 +34,7 @@ export const ProjectCreatePopup = memo(() => {
 
         <Area marginHorizontal={4} marginTop={1.2}>
           <Flex gap={0.8} justifyContent="end">
-            <Button variant="link" onClick={popupToggle.setValueOff}>
+            <Button variant="link" onClick={turnOff}>
               Cancel
             </Button>
 

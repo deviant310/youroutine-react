@@ -41,6 +41,12 @@
           "**/app/boot/**": [
             "~/pages"
           ],
+          "**/app/pages/*/context.ts": [
+            "~/infrastructure/router/route-hooks",
+          ],
+          "**/app/pages/*/**": [
+            "../context"
+          ],
           "**/app/pages/*/popups/views/**": [
             "../toggles",
             "../../forms",
@@ -66,7 +72,7 @@
           "**/concern/common/ui/**": [
             "styled-components"
           ],
-          "**/concern/common/third-party/use/**": [
+          "**/concern/common/third-party/hooks/**": [
             "../actions",
             "../requests",
             "../base-url",

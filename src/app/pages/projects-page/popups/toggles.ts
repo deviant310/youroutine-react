@@ -1,3 +1,3 @@
-import { createPrimitiveStore } from "~/infrastructure/stores";
+import { createToggle } from "~/infrastructure/stores";
 
-export const useProjectCreatePopupToggle = createPrimitiveStore(false);
+export const useProjectCreatePopupToggle = createToggle();

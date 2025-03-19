@@ -1,12 +1,12 @@
 import { memo } from "react";
 
-import { RequestUnauthorizedError } from "~/infrastructure/http";
+//import { RequestUnauthorizedError } from "~/infrastructure/http";
 import { Router } from "~/infrastructure/router";
 
-import { useCurrentUserRetrieving } from "~/concern/common/third-party";
+//import { useCurrentUserRetrieving } from "~/concern/common/third-party";
 import { projectsRoute, taskRoute, tasksRoute } from "~/concern/general/routes";
 
-import { AuthPage, ProjectsPage, TaskPage, TasksPage } from "~/pages";
+import { ProjectsPage, TaskPage, TasksPage } from "~/pages";
 
 export const App = memo(() => (
   /* const { retrievingCurrentUser, retrievingCurrentUserError } =

@@ -6,15 +6,15 @@ import { TaskCreatingForm, useTaskCreatingForm } from "../../forms";
 import { useTaskCreatePopupToggle } from "../toggles";
 
 export const TaskCreatePopup = memo(() => {
-  const [popupToggleIsOn, popupToggle] = useTaskCreatePopupToggle();
+  const { isOn, turnOff } = useTaskCreatePopupToggle();
   const taskCreatingForm = useTaskCreatingForm();
 
   useEffect(() => {
-    if (taskCreatingForm.submitted) popupToggle.setValueOff();
-  }, [popupToggle, taskCreatingForm.submitted]);
+    if (taskCreatingForm.submitted) turnOff();
+  }, [taskCreatingForm.submitted, turnOff]);
 
   return (
-    <Popup opened={popupToggleIsOn} onClose={popupToggle.setValueOff}>
+    <Popup opened={isOn} onClose={turnOff}>
       <Area width="800px" maxWidth="100%">
         <Area marginHorizontal={4} marginVertical={3.2}>
           <Heading $level={4}>Create task</Heading>
@@ -28,7 +28,7 @@ export const TaskCreatePopup = memo(() => {
 
         <Area marginHorizontal={4} marginVertical={1.6}>
           <Flex gap={0.8} justifyContent="end">
-            <Button variant="link" onClick={popupToggle.setValueOff}>
+            <Button variant="link" onClick={turnOff}>
               Cancel
             </Button>
 
