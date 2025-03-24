@@ -28,7 +28,7 @@ export const TaskPage = memo(() => {
         {retrievingTaskError instanceof Error && retrievingTaskError.message}
 
         {task && (
-          <TaskProvider task={task}>
+          <TaskProvider value={task}>
             <TaskConsumer />
           </TaskProvider>
         )}

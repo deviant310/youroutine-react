@@ -1,2 +1,2 @@
 export * from "./register-providers";
-export * from "./create-context";
+export * from "./context-factory";
