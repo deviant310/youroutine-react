@@ -41,8 +41,8 @@ export const Header = memo(() => {
               <FinomLogo />
 
               <Flex gap={1.2}>
-                <HeaderNavLink text="Tasks" to={tasksRoute.build()} />
-                <HeaderNavLink text="Projects" to={projectsRoute.build()} />
+                <HeaderNavLink text="Tasks" to={tasksRoute()} />
+                <HeaderNavLink text="Projects" to={projectsRoute()} />
               </Flex>
             </Flex>
 

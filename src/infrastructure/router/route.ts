@@ -1,58 +1,54 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Split, split } from "~/typescript";
 
-export class Route<
+export function Route<
   RouteParameters extends {
     [K in RouteParam<RouteParsed<Split<RouteTemplate, "/">>>]: string;
   },
   RouteTemplate extends string = string,
-> {
-  constructor(private routeTemplate: RouteTemplate) {}
+>(routeTemplate: RouteTemplate) {
+  type Builder = { pattern: RegExp } & (keyof RouteParameters extends never
+    ? () => string
+    : (parameters: RouteParameters) => string);
 
-  private get parsed() {
-    const templateParts = split(this.routeTemplate, "/");
+  const templateParts = split(routeTemplate, "/");
 
-    return templateParts.map(part => {
-      const routeParamParsedPart: RouteParsedPart = {
-        type: "param",
-        value: part.slice(part.lastIndexOf(":") + 1),
-      };
+  const parsed = templateParts.map(part => {
+    const routeParamParsedPart: RouteParsedPart = {
+      type: "param",
+      value: part.slice(part.lastIndexOf(":") + 1),
+    };
 
-      const routePathParsedPart: RouteParsedPart = {
-        type: "path",
-        value: part,
-      };
+    const routePathParsedPart: RouteParsedPart = {
+      type: "path",
+      value: part,
+    };
 
-      return part.startsWith(":") ? routeParamParsedPart : routePathParsedPart;
-    }) as RouteParsed<typeof templateParts>;
-  }
+    return part.startsWith(":") ? routeParamParsedPart : routePathParsedPart;
+  }) as RouteParsed<typeof templateParts>;
 
-  get pattern() {
-    return new RegExp(
-      this.parsed
-        .filter(({ value }) => value)
-        .map(({ type, value }) => {
-          if (type === "param")
-            return new RegExp(`/(?<${value}>[A-Za-z0-9\\-]+)/?`).source;
+  const pattern = new RegExp(
+    parsed
+      .filter(({ value }) => value)
+      .map(({ type, value }) => {
+        if (type === "param")
+          return new RegExp(`/(?<${value}>[A-Za-z0-9\\-]+)/?`).source;
 
-          return new RegExp(`/?${value}/?`).source;
-        })
-        .join("") + "$",
-    );
-  }
+        return new RegExp(`/?${value}/?`).source;
+      })
+      .join("") + "$",
+  );
 
-  build(
-    ...params: keyof RouteParameters extends never ? [] : [RouteParameters]
-  ) {
+  const builder: Builder = (...params: any[]) => {
     const [routeParams] = params;
 
-    const path = this.parsed
+    const path = parsed
       .filter(({ value }) => value)
       .map(({ type, value }) => {
         if (type === "param") {
           if (!routeParams)
             throw new Error(
-              `Missing param "${value}" for route "${this.routeTemplate}"`,
+              `Missing param "${value}" for route "${routeTemplate}"`,
             );
 
           return routeParams[value as keyof RouteParameters];
@@ -63,12 +59,16 @@ export class Route<
       .join("/");
 
     return `/${path}`;
-  }
+  };
+
+  builder.pattern = pattern;
+
+  return builder;
 }
 
-export interface RouteAbstract {
+export interface RouteBuilder {
   pattern: RegExp;
-  build(...args: Array<any>): string;
+  (...args: Array<any>): string;
 }
 
 export interface RouteParsedPart<

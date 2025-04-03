@@ -23,7 +23,7 @@ export const App = memo(() => (
   // TODO не интуитивно, нужно как-то засунуть это в provider
   //initHomeRoute(tasksRoute);
 
-  <Router routes={routes} />
+  <Router routes={routes} homeRoute={tasksRoute()} />
 ));
 
 const routes = [

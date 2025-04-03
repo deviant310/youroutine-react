@@ -47,9 +47,8 @@
           "**/app/pages/*/**": [
             "../context"
           ],
-          "**/app/pages/*/popups/views/**": [
-            "../toggles",
-            "../../forms",
+          "**/app/pages/*/popups/*": [
+            "../forms",
           ],
           "**/app/pages/*/forms/views/**": [
             "../handlers",

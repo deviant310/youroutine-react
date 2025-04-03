@@ -17,7 +17,7 @@ export const ProjectCreatePopup = memo(() => {
   } = useToggle();
 
   return (
-    <Popup opened={isOn} onClose={turnOff}>
+    <Popup opened={isOn} close={turnOff}>
       <Area paddingVertical={1.6} width="500px" maxWidth="100%">
         <Area marginHorizontal={4}>
           <Heading $level={4}>Create project</Heading>

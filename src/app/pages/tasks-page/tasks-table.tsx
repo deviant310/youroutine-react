@@ -20,7 +20,7 @@ export const TasksTable = memo(() => {
 
   const onRowClick = useCallback(
     (task: Task) => {
-      navigate(taskRoute.build({ taskId: task.id }));
+      navigate(taskRoute({ taskId: task.id }));
     },
     [navigate],
   );

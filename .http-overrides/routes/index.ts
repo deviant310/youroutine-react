@@ -1,3 +1,3 @@
-export * from "./build-user-routes";
-export * from "./build-tasks-routes";
-export * from "./build-projects-routes";
+export * from "./user-routes";
+export * from "./tasks-routes";
+export * from "./projects-routes";

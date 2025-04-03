@@ -20,8 +20,8 @@ import {
 } from "../core";
 import { TransientProps } from "../helpers";
 
-export const Popup = memo<PopupPropsWithHTMLAttributes>(props => {
-  const { children, opened, onClose } = props;
+export const Popup = memo<PopupProps>(props => {
+  const { children, opened, close } = props;
 
   useEffect(() => {
     document.body.style.overflowY = opened ? "hidden" : "";
@@ -29,7 +29,7 @@ export const Popup = memo<PopupPropsWithHTMLAttributes>(props => {
 
   return createPortal(
     <PopupContainerStyled>
-      <AreaFaded position="fixed">
+      <AreaFaded position="fixed" top={0} left={0}>
         {opened && <PopupBackgroundStyled />}
       </AreaFaded>
 
@@ -45,18 +45,16 @@ export const Popup = memo<PopupPropsWithHTMLAttributes>(props => {
         paddingVertical={2.4}
         disabled={!opened}
         onMouseDown={({ target, currentTarget }) =>
-          target === currentTarget && onClose?.()
+          target === currentTarget && close()
         }
       >
         <GridScaled>
           {opened && (
             <PaperArea $radius={1.6} $elevation={1.6} position="relative">
-              <Area position="absolute" right={1} top={1.2}>
-                {onClose && (
-                  <ClickableCircleStyled $size={3.6} onClick={onClose}>
-                    <Icon type="close" />
-                  </ClickableCircleStyled>
-                )}
+              <Area position="absolute" top={1.2} right={1}>
+                <ClickableCircleStyled $size={3.6} onClick={close}>
+                  <Icon type="close" />
+                </ClickableCircleStyled>
               </Area>
 
               {children}
@@ -108,14 +106,11 @@ const ClickableCircleStyled = styled(Clickable).attrs({
   background-color: ${({ theme }) => theme.colors.default[8].transparent()};
 `;
 
-export interface PopupStyledProps {
+export interface PopupProps extends HTMLAttributes<PopupElement> {
   opened: boolean;
+  close(): void;
 }
 
-export interface PopupPropsWithHTMLAttributes
-  extends HTMLAttributes<PopupElement>,
-    PopupStyledProps {
-  onClose?(): void;
-}
+export type PopupStyledProps = Pick<PopupProps, "opened">;
 
 export type PopupElement = ElementRef<typeof PopupContainerStyled>;

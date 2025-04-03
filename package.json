@@ -16,7 +16,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-inputs": "file:libs/react-inputs-1.0.0.tgz",
-    "styled-components": "^6.1.15",
+    "styled-components": "^6.1.16",
     "use-query-action": "file:libs/use-query-action-1.0.0.tgz"
   },
   "devDependencies": {

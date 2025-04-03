@@ -8,12 +8,12 @@ export const useFormStoreInstance = <
   Values,
   ValidValues extends Values & PartialMatch<Values, ValidValues>,
 >(
-  store: FormStore<Values, ValidValues>,
+  formStore: FormStore<Values, ValidValues>,
 ) => {
   useSyncExternalStore(
-    listener => store.onChange(listener),
-    () => store.getState(),
+    notify => formStore.onChange(notify),
+    () => formStore.getState(),
   );
 
-  return store;
+  return formStore;
 };

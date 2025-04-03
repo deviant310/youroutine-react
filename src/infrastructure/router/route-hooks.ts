@@ -1,12 +1,8 @@
 import { useRouter } from "./context";
-import { Route } from "./route";
+import { RouteBuilder } from "./route";
 
-export const usePathParams = <R>() => {
-  type RouteParameters =
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    R extends Route<infer Parameters, infer _Template> ? Parameters : never;
-
+export const usePathParams = <Builder extends RouteBuilder>() => {
   const { pathParams } = useRouter();
 
-  return (pathParams ?? {}) as RouteParameters;
+  return (pathParams ?? {}) as Parameters<Builder>[0];
 };

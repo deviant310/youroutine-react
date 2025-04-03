@@ -2,7 +2,7 @@ import { UUID } from "~/typescript";
 
 import { Route } from "~/infrastructure/router";
 
-export const tasksRoute = new Route("/tasks");
-export const taskRoute = new Route<{ taskId: UUID }>("/tasks/:taskId");
+export const tasksRoute = Route("/tasks");
+export const taskRoute = Route<{ taskId: UUID }>("/tasks/:taskId");
 
-export const projectsRoute = new Route("/projects");
+export const projectsRoute = Route("/projects");

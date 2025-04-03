@@ -9,12 +9,15 @@ import {
 } from "react";
 
 import { RouterProvider, RouterContextValue } from "./context";
-import { RouteAbstract } from "./route";
+import { RouteBuilder } from "./route";
 
 export const Router = memo(
-  <RoutesEntries extends RouteEntry[]>({
-    routes,
-  }: RouterProps<RoutesEntries>) => {
+  <RoutesEntries extends RouteEntry[]>(props: RouterProps<RoutesEntries>) => {
+    const { routes, homeRoute } = props;
+
+    if (window.location.pathname === "/" && homeRoute !== "/")
+      history.replaceState(null, "", homeRoute);
+
     const routesMap = useMemo(() => new Map(routes), [routes]);
 
     const [, updateState] = useState<object>();
@@ -98,8 +101,9 @@ const parseRawAnchor = (rawAnchor: string) => {
 
 const NotFound: FC = () => "Not found";
 
-type RouteEntry = readonly [RouteAbstract, FC];
+type RouteEntry = readonly [RouteBuilder, FC];
 
 interface RouterProps<RoutesEntries extends RouteEntry[]> {
   routes: RoutesEntries;
+  homeRoute: string;
 }

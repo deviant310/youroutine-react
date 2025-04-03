@@ -9,27 +9,33 @@ export const useFormStoreInstanceField = <
   ValidValues extends Values & PartialMatch<Values, ValidValues>,
   Name extends keyof Values,
 >(
-  store: FormStore<Values, ValidValues>,
+  formStore: FormStore<Values, ValidValues>,
   name: Name,
 ) => {
   const { value, error, dirty } = useSyncExternalStore(
-    listener => store.onChange(listener),
-    () => store.getFieldState(name),
+    listener => formStore.onChange(listener),
+    () => formStore.getFieldState(name),
   );
 
   const setValue = useCallback(
-    (value: Values[Name]) => store.setFieldValue(name, value),
-    [name, store],
+    (value: Values[Name]) => formStore.setFieldValue(name, value),
+    [formStore, name],
   );
 
   const setError = useCallback(
-    (error: string) => store.setFieldError(name, error),
-    [name, store],
+    (error: string) => formStore.setFieldError(name, error),
+    [formStore, name],
   );
 
-  const reset = useCallback(() => store.resetField(name), [name, store]);
+  const reset = useCallback(
+    () => formStore.resetField(name),
+    [formStore, name],
+  );
 
-  const stain = useCallback(() => store.stainField(name), [name, store]);
+  const stain = useCallback(
+    () => formStore.stainField(name),
+    [formStore, name],
+  );
 
   return {
     name,

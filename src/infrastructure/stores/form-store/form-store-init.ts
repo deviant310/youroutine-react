@@ -118,7 +118,7 @@ export abstract class FormStoreInit<
 
 export type FormFieldsConfig<Values, ValidValues extends Values = Values> = {
   [Key in keyof Values]-?: {
-    [K in Key as `initialValue`]: Values[K];
+    initialValue: Values[Key];
   } & (Values[Key] extends ValidValues[Key]
     ? Pick<FormFieldConfig<Values[Key]>, "validate">
     : Required<

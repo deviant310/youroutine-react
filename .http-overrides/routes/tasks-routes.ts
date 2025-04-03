@@ -4,7 +4,7 @@ import { Express } from "express";
 
 import { projects, tasks } from "../data";
 
-export function buildTasksRoutes(express: Express) {
+export function tasksRoutes(express: Express) {
   express.get("/api/tasks", (_, response) => {
     response.statusCode = 200;
     response.json(tasks);

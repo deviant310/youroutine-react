@@ -1,6 +1,6 @@
 import { memo } from "react";
 
-import { Alert, Flex } from "~/infrastructure/ui";
+import { Alert, Flex, Popup } from "~/infrastructure/ui";
 
 import { useTaskCreatingForm } from "../../handlers";
 
@@ -12,7 +12,8 @@ import {
 } from "./fields";
 
 export const TaskCreatingForm = memo(() => {
-  const { submittingError } = useTaskCreatingForm();
+  const { submittingError, submittingErrorEnabled, disableSubmittingError } =
+    useTaskCreatingForm();
 
   return (
     <>
@@ -26,9 +27,11 @@ export const TaskCreatingForm = memo(() => {
         <PriorityField />
       </Flex>
 
-      {submittingError instanceof Error && (
-        <Alert type="error">{submittingError.message}</Alert>
-      )}
+      <Popup opened={submittingErrorEnabled} close={disableSubmittingError}>
+        {submittingError instanceof Error && (
+          <Alert type="error">{submittingError.message}</Alert>
+        )}
+      </Popup>
     </>
   );
 });

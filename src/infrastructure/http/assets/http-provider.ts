@@ -1,9 +1,7 @@
-import { createElement, memo } from "react";
+import { createElement, memo, PropsWithChildren } from "react";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
-import { PropsWithRequiredChildren } from "~/react";
 
 import { NotFoundError, RequestUnauthorizedError } from "../helpers";
 
@@ -21,7 +19,7 @@ export const queryClient = new QueryClient({
   },
 });
 
-export const HttpProvider = memo<PropsWithRequiredChildren>(props => {
+export const HttpProvider = memo<Required<PropsWithChildren>>(props => {
   const { children } = props;
 
   return createElement(

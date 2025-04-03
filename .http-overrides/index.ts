@@ -1,15 +1,11 @@
 import { Express } from "express";
 
-import {
-  buildProjectsRoutes,
-  buildTasksRoutes,
-  buildUserRoutes,
-} from "./routes";
+import { projectsRoutes, tasksRoutes, userRoutes } from "./routes";
 // TODO remove this redundant initialization, move to plugin
 export default function (express: Express) {
-  buildUserRoutes(express);
+  userRoutes(express);
 
-  buildTasksRoutes(express);
+  tasksRoutes(express);
 
-  buildProjectsRoutes(express);
+  projectsRoutes(express);
 }

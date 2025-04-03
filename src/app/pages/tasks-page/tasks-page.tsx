@@ -2,17 +2,18 @@ import { memo } from "react";
 
 import { useDocumentTitle } from "~/react";
 
+import { useToggle } from "~/infrastructure/stores";
 import { Area, Button, Flex, Grid, Text } from "~/infrastructure/ui";
 
 import { Header } from "~/concern/chunks";
 
-import { TaskCreatePopup, useTaskCreatePopupToggle } from "./popups";
+import { TaskCreatePopup } from "./popups";
 import { TasksTable } from "./tasks-table";
 
 export const TasksPage = memo(() => {
   useDocumentTitle("Tasks");
 
-  const { turnOn } = useTaskCreatePopupToggle();
+  const { turnOn } = useToggle("task-create-popup");
 
   return (
     <>

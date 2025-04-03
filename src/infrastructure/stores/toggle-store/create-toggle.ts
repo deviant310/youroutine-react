@@ -4,5 +4,7 @@ import { useToggleInstance } from "./use-toggle-instance";
 export const createToggle = (value?: boolean) => {
   const toggle = new Toggle(value);
 
-  return () => useToggleInstance(toggle);
+  const useToggle = () => useToggleInstance(toggle);
+
+  return { useToggle };
 };

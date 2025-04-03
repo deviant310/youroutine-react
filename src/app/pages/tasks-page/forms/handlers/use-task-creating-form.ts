@@ -1,6 +1,10 @@
 import { useCallback, useEffect } from "react";
 
-import { createFormStore, ValidationError } from "~/infrastructure/stores";
+import {
+  createFormStore,
+  createToggle,
+  ValidationError,
+} from "~/infrastructure/stores";
 
 import { useTaskCreating } from "~/concern/common/third-party";
 import { Project, TaskPriority } from "~/concern/general/entities";
@@ -38,15 +42,22 @@ const { useForm, useField } = createFormStore<
   },
 });
 
+export const { useToggle: useErrorToggle } = createToggle();
+
 export const useTaskCreatingForm = () => {
   const form = useForm();
+  const {
+    isOn: submittingErrorEnabled,
+    turnOn: enableSubmittingError,
+    turnOff: disableSubmittingError,
+  } = useErrorToggle();
 
   const {
     createTask,
     creatingTask: submitting,
     creatingTaskError: submittingError,
     taskCreated: submitted,
-  } = useTaskCreating();
+  } = useTaskCreating({ onError: enableSubmittingError });
 
   const submit = useCallback(() => {
     if (submitting) return;
@@ -77,6 +88,8 @@ export const useTaskCreatingForm = () => {
     submit,
     submitting,
     submittingError,
+    submittingErrorEnabled,
+    disableSubmittingError,
     submitted,
     highlightErrors,
   };

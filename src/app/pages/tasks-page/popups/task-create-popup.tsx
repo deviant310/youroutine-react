@@ -1,12 +1,12 @@
 import { memo, useEffect } from "react";
 
+import { useToggle } from "~/infrastructure/stores";
 import { Area, Button, Flex, Popup, Heading } from "~/infrastructure/ui";
 
-import { TaskCreatingForm, useTaskCreatingForm } from "../../forms";
-import { useTaskCreatePopupToggle } from "../toggles";
+import { TaskCreatingForm, useTaskCreatingForm } from "../forms";
 
 export const TaskCreatePopup = memo(() => {
-  const { isOn, turnOff } = useTaskCreatePopupToggle();
+  const { isOn, turnOff } = useToggle("task-create-popup");
   const taskCreatingForm = useTaskCreatingForm();
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export const TaskCreatePopup = memo(() => {
   }, [taskCreatingForm.submitted, turnOff]);
 
   return (
-    <Popup opened={isOn} onClose={turnOff}>
+    <Popup opened={isOn} close={turnOff}>
       <Area width="800px" maxWidth="100%">
         <Area marginHorizontal={4} marginVertical={3.2}>
           <Heading $level={4}>Create task</Heading>

@@ -5,7 +5,8 @@ import {
   retrieveTasks as retrieveTasksAction,
 } from "../actions";
 
-export const useTaskCreating = () => {
+export const useTaskCreating = (options: UseTaskCreatingOptions = {}) => {
+  const { onError } = options;
   const { invalidate: invalidateTasks } = useQueryAction(retrieveTasksAction);
 
   const {
@@ -14,6 +15,7 @@ export const useTaskCreating = () => {
     error: creatingTaskError,
     isSuccess: taskCreated,
   } = useQueryAction(createTaskAction, {
+    onError,
     onSuccess() {
       invalidateTasks();
     },
@@ -21,3 +23,7 @@ export const useTaskCreating = () => {
 
   return { createTask, creatingTask, creatingTaskError, taskCreated };
 };
+
+interface UseTaskCreatingOptions {
+  onError?(error: Error): void;
+}

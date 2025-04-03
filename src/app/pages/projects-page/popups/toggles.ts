@@ -1,3 +1,3 @@
 import { createToggle } from "~/infrastructure/stores";
 
-export const useProjectCreatePopupToggle = createToggle();
+export const { useToggle: useProjectCreatePopupToggle } = createToggle();
