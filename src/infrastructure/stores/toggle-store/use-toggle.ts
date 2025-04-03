@@ -18,10 +18,7 @@ export const TogglesProvider: FC<PropsWithChildren> = ({ children }) =>
 export const useToggle = (toggleKey: string, value?: boolean) => {
   const togglesMap = useContext(togglesContext);
 
-  if (!togglesMap.get(toggleKey)) {
-    togglesMap.set(toggleKey, new Toggle(value));
-    console.log(togglesMap);
-  }
+  if (!togglesMap.get(toggleKey)) togglesMap.set(toggleKey, new Toggle(value));
 
   const toggle = togglesMap.get(toggleKey) as Toggle;
 
