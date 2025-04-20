@@ -30,19 +30,6 @@
          "DEV_SERVER_API_PROXY": "http://youroutine-server:5299"
       },
     },
-     {
-      "name": "build",
-      "request": "launch",
-      "runtimeArgs": [
-        "run",
-        "build"
-      ],
-      "runtimeExecutable": "npm",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "type": "node"
-    },
     {
       "name": "preview_local",
       "request": "launch",

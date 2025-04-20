@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 
 //import { RequestUnauthorizedError } from "~/infrastructure/http";
 import { Router } from "~/infrastructure/router";
@@ -20,9 +20,6 @@ export const App = memo(() => (
   if (retrievingCurrentUserError instanceof Error)
     return retrievingCurrentUserError.message; */
 
-  // TODO не интуитивно, нужно как-то засунуть это в provider
-  //initHomeRoute(tasksRoute);
-
   <Router routes={routes} homeRoute={tasksRoute()} />
 ));
 
@@ -31,3 +28,18 @@ const routes = [
   [taskRoute, TaskPage] as const,
   [projectsRoute, ProjectsPage] as const,
 ];
+
+export default function App1() {
+  const state = useState<string>();
+
+  useEffect(() => {
+    setTimeout(() => state[1]("Anton"), 0);
+  }, [state]);
+
+  return (
+    <div className="App">
+      <h1>Hello {state[0]}</h1>
+      <h2>Start editing to see some magic happen!</h2>
+    </div>
+  );
+}

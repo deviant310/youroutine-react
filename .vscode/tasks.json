@@ -1,0 +1,19 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build",
+			"type": "shell",
+			"command": "vite",
+			"icon": {
+				"id": "tools",
+				"color": "terminal.ansiBlue"
+			},
+			"args": [
+				"build",
+			],
+			"problemMatcher": [],
+			"detail": "Bild project",
+		},
+	]
+}

@@ -1,23 +1,32 @@
-import { ElementRef, HTMLAttributes, memo } from "react";
+import { HTMLAttributes, memo } from "react";
 
 import { styled } from "styled-components";
 
-import { Grid, Icon } from "../core";
-import { getUnitWithMeasure, TransientProps } from "../helpers";
+import { Area, Grid, Icon, Text } from "../core";
+import { getUnitWithMeasure, TransientProps } from "../utils";
 
-export const Alert = memo<AlertPropsWithHTMLAttributes>(
-  ({ type, bordered, compact, children }) => (
+export const Alert = memo<AlertProps>(
+  ({ type, bordered, compact, title, message }) => (
     <AlertStyled $type={type} $bordered={bordered} $compact={compact}>
       <Grid templateColumns="auto 1fr" gap={1.6}>
         {type === "error" && <Icon type="error" color="error" />}
         {type === "warning" && <Icon type="warning" color="warning" />}
-        {children}
+
+        <div>
+          {title && (
+            <Area marginBottom={0.6}>
+              <Text weight="semibold">{title}</Text>
+            </Area>
+          )}
+
+          <Text size="compact">{message}</Text>
+        </div>
       </Grid>
     </AlertStyled>
   ),
 );
 
-const AlertStyled = styled.div<TransientProps<AlertStyledProps>>`
+const AlertStyled = styled.div<AlertStyledProps>`
   padding: ${({ $compact }) =>
     $compact
       ? `${getUnitWithMeasure(0.8)} ${getUnitWithMeasure(1.2)}`
@@ -45,20 +54,19 @@ const AlertStyled = styled.div<TransientProps<AlertStyledProps>>`
   }};
 `;
 
-export interface AlertStyledProps {
+export interface AlertProps
+  extends Omit<HTMLAttributes<AlertElement>, "children"> {
   type: AlertType;
+  message: string;
+  title?: string;
   compact?: boolean;
   bordered?: boolean;
 }
 
-export interface AlertProps extends AlertStyledProps {
-  children: string;
-}
+export type AlertStyledProps = TransientProps<
+  Pick<AlertProps, "type" | "compact" | "bordered">
+>;
 
 export type AlertType = "error" | "warning";
 
-export type AlertElement = ElementRef<typeof AlertStyled>;
-
-interface AlertPropsWithHTMLAttributes
-  extends Omit<HTMLAttributes<AlertElement>, "children">,
-    AlertProps {}
+export type AlertElement = HTMLDivElement;

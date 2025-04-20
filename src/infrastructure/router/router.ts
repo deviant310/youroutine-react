@@ -13,7 +13,7 @@ import { RouteBuilder } from "./route";
 
 export const Router = memo(
   <RoutesEntries extends RouteEntry[]>(props: RouterProps<RoutesEntries>) => {
-    const { routes, homeRoute } = props;
+    const { routes, homeRoute = "/" } = props;
 
     if (window.location.pathname === "/" && homeRoute !== "/")
       history.replaceState(null, "", homeRoute);
@@ -105,5 +105,5 @@ type RouteEntry = readonly [RouteBuilder, FC];
 
 interface RouterProps<RoutesEntries extends RouteEntry[]> {
   routes: RoutesEntries;
-  homeRoute: string;
+  homeRoute?: string;
 }

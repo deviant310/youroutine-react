@@ -3,7 +3,7 @@ import { FC, FunctionComponent, memo, ReactElement, useCallback } from "react";
 import { styled } from "styled-components";
 
 import { Paper } from "../core";
-import { getUnitWithMeasure } from "../helpers";
+import { getUnitWithMeasure } from "../utils";
 
 export const Table: TableComponent = memo(props => {
   type RowData = (typeof rowsData)[number];
@@ -85,8 +85,8 @@ const TableRow: TableRowComponent = memo(
 );
 
 const TableContainerStyled = styled(Paper).attrs({
-  $elevation: 0.6,
-  $fill: "transparent",
+  elevation: 0.6,
+  fill: "transparent",
 })`
   display: grid;
   gap: 2px;

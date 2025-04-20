@@ -5,4 +5,5 @@ export class RequestError extends Error {
 }
 
 export class NotFoundError extends RequestError {}
+export class MethodNotAllowedError extends RequestError {}
 export class RequestUnauthorizedError extends RequestError {}

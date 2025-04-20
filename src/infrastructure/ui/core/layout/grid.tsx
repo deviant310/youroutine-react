@@ -1,13 +1,15 @@
-import { ElementRef, HTMLAttributes, memo } from "react";
+import { HTMLAttributes, memo } from "react";
 
+import { DataType } from "csstype";
 import { css, styled } from "styled-components";
 
-import { UnitIndex, getUnitWithMeasure, TransientProps } from "../../helpers";
+import { getUnitWithMeasure, TransientProps, UnitIndex } from "../../utils";
 
 export const Grid = memo<GridProps>(
   ({
     justifyContent,
     templateColumns,
+    columns,
     autoFlow,
     alignItems,
     alignSelf,
@@ -19,6 +21,7 @@ export const Grid = memo<GridProps>(
     <GridStyled
       $justifyContent={justifyContent}
       $templateColumns={templateColumns}
+      $columns={columns}
       $autoFlow={autoFlow}
       $alignItems={alignItems}
       $alignSelf={alignSelf}
@@ -32,61 +35,61 @@ export const Grid = memo<GridProps>(
 
 Grid.displayName = "Grid";
 
-export const GridCSS = css<TransientProps<GridStyledProps>>`
+export const GridCSS = css<GridStyledProps>`
   display: grid;
   grid-auto-flow: ${({ $autoFlow }) => $autoFlow};
-  align-items: ${({ $alignItems }) =>
-    $alignItems &&
-    {
-      center: "center",
-      baseline: "baseline",
-      top: "start",
-      bottom: "end",
-    }[$alignItems]};
-
-  align-self: ${({ $alignSelf }) =>
-    $alignSelf &&
-    {
-      center: "center",
-      baseline: "baseline",
-      top: "start",
-      bottom: "end",
-    }[$alignSelf]};
-
-  justify-content: ${({ $justifyContent }) =>
-    $justifyContent &&
-    {
-      center: "center",
-      around: "space-around",
-      between: "space-between",
-      left: "start",
-      right: "end",
-    }[$justifyContent]};
-
+  align-items: ${({ $alignItems }) => $alignItems};
+  align-self: ${({ $alignSelf }) => $alignSelf};
+  justify-content: ${({ $justifyContent }) => $justifyContent};
   gap: ${({ $gap }) => getUnitWithMeasure($gap)};
   column-gap: ${({ $columnGap }) => getUnitWithMeasure($columnGap)};
   row-gap: ${({ $rowGap }) => getUnitWithMeasure($rowGap)};
 
-  grid-template-columns: ${({ $templateColumns }) => $templateColumns};
+  grid-template-columns: ${({ $templateColumns, $columns }) => {
+    if ($templateColumns) return $templateColumns;
+    if ($columns) return `repeat(${Math.round($columns)}, 1fr)`;
+  }};
 `;
 
-const GridStyled = styled.div<TransientProps<GridStyledProps>>`
+const GridStyled = styled.div<GridStyledProps>`
   ${GridCSS}
 `;
 
-export type GridStyledProps = {
-  justifyContent?: "center" | "left" | "right" | "around" | "between";
-  alignItems?: "center" | "top" | "bottom" | "baseline";
-  alignSelf?: "center" | "top" | "bottom" | "baseline";
+export type GridStyledProps = TransientProps<
+  Pick<
+    GridProps,
+    | "justifyContent"
+    | "alignItems"
+    | "alignSelf"
+    | "autoFlow"
+    | "templateColumns"
+    | "gap"
+    | "rowGap"
+    | "columnGap"
+    | "columns"
+  >
+>;
+
+export interface GridProps extends HTMLAttributes<GridElement> {
+  justifyContent?:
+    | DataType.ContentDistribution
+    | DataType.ContentPosition
+    | "left"
+    | "normal"
+    | "right";
+  alignItems?: DataType.SelfPosition | "baseline" | "normal" | "stretch";
+  alignSelf?:
+    | DataType.SelfPosition
+    | "auto"
+    | "baseline"
+    | "normal"
+    | "stretch";
   autoFlow?: "row" | "column";
   templateColumns?: string;
   gap?: UnitIndex;
   rowGap?: UnitIndex;
   columnGap?: UnitIndex;
-};
+  columns?: number;
+}
 
-export interface GridProps
-  extends HTMLAttributes<GridElement>,
-    GridStyledProps {}
-
-export type GridElement = ElementRef<typeof GridStyled>;
+export type GridElement = HTMLDivElement;

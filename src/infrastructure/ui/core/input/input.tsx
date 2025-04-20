@@ -2,7 +2,7 @@ import { Ref, InputHTMLAttributes, memo } from "react";
 
 import { styled } from "styled-components";
 
-import { TransientProps } from "../../helpers";
+import { TransientProps } from "../../utils";
 
 export const Input = memo<InputProps>(
   ({ autoSize, placeholderMuted = true, ...props }) => (

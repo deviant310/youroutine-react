@@ -2,7 +2,7 @@ import { ElementRef } from "react";
 
 import { styled } from "styled-components";
 
-import { getUnitWithMeasure } from "../../../helpers";
+import { getUnitWithMeasure } from "../../../utils";
 
 export const FieldLabel = styled.label`
   font-size: ${getUnitWithMeasure(1.4)};

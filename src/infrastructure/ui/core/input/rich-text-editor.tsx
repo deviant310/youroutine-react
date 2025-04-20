@@ -11,7 +11,7 @@ import { Editor, EditorContent, EditorEvents, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { styled } from "styled-components";
 
-import { getUnitWithMeasure, TransientProps } from "../../helpers";
+import { getUnitWithMeasure, TransientProps } from "../../utils";
 
 export const RichTextEditor = memo<RichTextEditorPropsWithHTMLAttributes>(
   ({ value, onChange: onUpdate, minHeight, ...props }) => {

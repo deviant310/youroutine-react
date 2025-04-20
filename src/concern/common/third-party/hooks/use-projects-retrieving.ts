@@ -10,15 +10,14 @@ export const useProjectsRetrieving = () => {
     isLoading: retrievingProjects,
     error: retrievingProjectsError,
   } = useQueryAction(retrieveProjectsAction, [], {
-    placeholderData: [],
     keepFresh: true,
   });
 
   const getProjectsFilteredByNameEntry = useCallback(
     (nameEntry: string) =>
-      projects.filter(project =>
+      projects?.filter(project =>
         project.name.toLowerCase().includes(nameEntry.toLowerCase()),
-      ),
+      ) ?? [],
     [projects],
   );
 

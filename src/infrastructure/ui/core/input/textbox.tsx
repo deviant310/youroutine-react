@@ -2,25 +2,27 @@ import { HTMLAttributes, ReactNode, Ref } from "react";
 
 import styled from "styled-components";
 
-import { getUnitWithMeasure, TransientProps } from "../../helpers";
+import { getUnitWithMeasure, TransientProps } from "../../utils";
 
-export function Textbox({
-  children,
-  before,
-  after,
-  size,
-  invalid,
-  implicit,
-  clickable,
-  ...props
-}: TextboxProps) {
+export function Textbox(props: TextboxProps) {
+  const {
+    children,
+    before,
+    after,
+    size,
+    invalid,
+    implicit,
+    clickable,
+    ...restProps
+  } = props;
+
   return (
     <TextboxStyled
       $size={size}
       $invalid={invalid}
       $implicit={implicit}
       $clickable={clickable}
-      {...props}
+      {...restProps}
     >
       <RowStyled>
         {before && (
@@ -93,16 +95,17 @@ const RowStyled = styled.div`
 `;
 
 const AdornmentContainerStyled = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
   flex: 1 0 ${getUnitWithMeasure(2.4)};
   height: ${getUnitWithMeasure(2.4)};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const AdornmentStyled = styled.div`
   position: absolute;
+  display: flex;
 `;
 
 export interface TextboxProps extends HTMLAttributes<TextboxElement> {

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, NamedExoticComponent } from "react";
 
 import { css, RuleSet, styled } from "styled-components";
 
-import { TransientProps } from "../../helpers";
+import { TransientProps } from "../../utils";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function animated<Component extends NamedExoticComponent<any>>(

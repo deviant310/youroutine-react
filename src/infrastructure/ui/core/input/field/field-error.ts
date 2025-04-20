@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 
-import { getUnitWithMeasure } from "../../../helpers";
+import { getUnitWithMeasure } from "../../../utils";
 
 export const FieldError = styled.div`
   padding-top: ${getUnitWithMeasure(0.6)};

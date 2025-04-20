@@ -1,2 +1,2 @@
 export * from "./use-toggle";
-export * from "./use-title";
+export * from "./use-document-title";

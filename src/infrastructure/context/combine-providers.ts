@@ -5,6 +5,7 @@ import {
   memo,
   FC,
   ComponentProps,
+  ReactNode,
 } from "react";
 
 /**
@@ -14,13 +15,16 @@ import {
  * to each provider.
  *
  * Each provider must be a React component that accepts children as a prop.
+ * Provider shouldn't accept any other props except children.
  * The children prop must be required.
  */
 export function combineProviders<
   Providers extends {
     [K in keyof Providers]: Providers[K] extends FC<any>
-      ? ComponentProps<Providers[K]> extends Required<PropsWithChildren>
-        ? Providers[K]
+      ? ComponentProps<Providers[K]> extends { children: ReactNode }
+        ? { children: ReactNode } extends ComponentProps<Providers[K]>
+          ? Providers[K]
+          : never
         : never
       : never;
   },

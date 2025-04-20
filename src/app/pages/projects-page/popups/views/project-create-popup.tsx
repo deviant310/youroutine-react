@@ -20,7 +20,7 @@ export const ProjectCreatePopup = memo(() => {
     <Popup opened={isOn} close={turnOff}>
       <Area paddingVertical={1.6} width="500px" maxWidth="100%">
         <Area marginHorizontal={4}>
-          <Heading $level={4}>Create project</Heading>
+          <Heading level={4}>Create project</Heading>
 
           <Area marginTop={3.2} marginBottom={4}>
             <ProjectCreateForm

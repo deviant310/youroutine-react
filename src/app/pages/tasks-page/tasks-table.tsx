@@ -2,6 +2,7 @@ import { memo, useCallback } from "react";
 
 import { useNavigator } from "~/infrastructure/router";
 import {
+  Alert,
   Area,
   getRichTextEditorTextFromHTML,
   Table,
@@ -16,7 +17,7 @@ import { taskRoute } from "~/concern/general/routes";
 
 export const TasksTable = memo(() => {
   const navigate = useNavigator();
-  const { tasks, retrievingTasks } = useTasksRetrieving();
+  const { tasks, retrievingTasks, retrievingTasksError } = useTasksRetrieving();
 
   const onRowClick = useCallback(
     (task: Task) => {
@@ -28,6 +29,15 @@ export const TasksTable = memo(() => {
   return (
     <>
       {!tasks && retrievingTasks && "Loading tasks..."}
+
+      {retrievingTasksError instanceof Error && (
+        <Alert
+          type="error"
+          title="Error retrieving tasks"
+          message={retrievingTasksError.message}
+          bordered
+        />
+      )}
 
       {tasks && (
         <Table rowsData={tasks} columns={columns} onRowClick={onRowClick} />

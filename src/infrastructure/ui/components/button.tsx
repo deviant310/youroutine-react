@@ -1,11 +1,18 @@
-import { memo, HTMLAttributes, ElementRef } from "react";
+import { memo } from "react";
 
 import { styled } from "styled-components";
 
-import { Clickable, ClickableProps, Flex, Hidden, Loader } from "../core";
-import { getUnitWithMeasure, TransientProps } from "../helpers";
+import {
+  Clickable,
+  ClickableElement,
+  ClickableProps,
+  Flex,
+  Hidden,
+  Loader,
+} from "../core";
+import { getUnitWithMeasure, TransientProps } from "../utils";
 
-export const Button = memo<ButtonPropsWithHTMLAttributes>(
+export const Button = memo<ButtonProps>(
   ({
     color = "primary",
     variant = "contained",
@@ -26,7 +33,7 @@ export const Button = memo<ButtonPropsWithHTMLAttributes>(
 const ButtonStyled = styled(Clickable).attrs(({ rippleable = true }) => ({
   role: "button",
   rippleable,
-}))<TransientProps<ButtonStyledProps>>`
+}))<ButtonStyledProps>`
   font-weight: 500;
   padding: ${getUnitWithMeasure(0.8)} ${getUnitWithMeasure(2.4)};
   border-radius: ${getUnitWithMeasure(1.2)};
@@ -87,20 +94,15 @@ const AbsoluteLoader = styled(Loader)`
 type ButtonVariant = "contained" | "link";
 type ButtonColor = "primary" | "primary-light";
 
-export interface ButtonStyledProps {
+export interface ButtonProps extends Omit<ClickableProps, "rippleable"> {
+  loading?: boolean;
+  children: string;
   color?: ButtonColor;
   variant?: ButtonVariant;
 }
 
-export interface ButtonProps
-  extends Omit<ClickableProps, "hoverable">,
-    ButtonStyledProps {
-  loading?: boolean;
-  children: string;
-}
+export type ButtonStyledProps = TransientProps<
+  Pick<ButtonProps, "color" | "variant">
+>;
 
-export type ButtonElement = ElementRef<typeof ButtonStyled>;
-
-interface ButtonPropsWithHTMLAttributes
-  extends Omit<HTMLAttributes<ButtonElement>, "children" | "color">,
-    ButtonProps {}
+export type ButtonElement = ClickableElement;

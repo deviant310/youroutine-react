@@ -4,7 +4,7 @@ import { RichTextEditor, RichTextEditorChangeEvent } from "~/infrastructure/ui";
 
 import { useTaskPatching } from "~/concern/common/third-party";
 
-import { usePathParams, useTask } from "../context";
+import { usePathParams, useTask } from "../providers";
 
 export const Description = memo(() => {
   const { taskId } = usePathParams();

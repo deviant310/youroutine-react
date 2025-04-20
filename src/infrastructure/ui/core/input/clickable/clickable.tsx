@@ -1,12 +1,12 @@
-import { HTMLAttributes, memo, ElementRef } from "react";
+import { HTMLAttributes, memo } from "react";
 
 import { styled } from "styled-components";
 
-import { TransientProps } from "../../../helpers";
+import { TransientProps } from "../../../utils";
 
 import { useRipple } from "./use-ripple";
 // TODO type=primary|secondary...
-export const Clickable = memo<ClickablePropsWithHTMLAttributes>(
+export const Clickable = memo<ClickableProps>(
   ({ children, disabled, rippleable, hoverable, ...props }) => {
     const { ref, ripples } = useRipple<ClickableElement>();
 
@@ -24,7 +24,7 @@ export const Clickable = memo<ClickablePropsWithHTMLAttributes>(
   },
 );
 // TODO сделать hover через :after (так цвет ховера будет зависеть от основного)
-const ClickableStyled = styled.div<TransientProps<ClickableStyledProps>>`
+const ClickableStyled = styled.div<ClickableStyledProps>`
   user-select: none;
   pointer-events: ${({ $disabled }) => $disabled && "none"};
   position: relative;
@@ -58,17 +58,14 @@ const ClickableContentStyled = styled.div`
   pointer-events: none;
 `;
 
-export interface ClickableStyledProps {
+export interface ClickableProps extends HTMLAttributes<ClickableElement> {
   disabled?: boolean;
   hoverable?: boolean;
-}
-
-export interface ClickableProps extends ClickableStyledProps {
   rippleable?: boolean;
 }
 
-interface ClickablePropsWithHTMLAttributes
-  extends HTMLAttributes<ClickableElement>,
-    ClickableProps {}
+export type ClickableStyledProps = TransientProps<
+  Pick<ClickableProps, "disabled" | "hoverable">
+>;
 
-export type ClickableElement = ElementRef<typeof ClickableStyled>;
+export type ClickableElement = HTMLDivElement;

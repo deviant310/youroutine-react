@@ -1,11 +1,23 @@
-import { ElementRef } from "react";
+import { HTMLAttributes, memo } from "react";
 
 import { css, styled } from "styled-components";
 
-import { getUnitWithMeasure, UnitIndex } from "../../helpers";
+import { getUnitWithMeasure, TransientProps, UnitIndex } from "../../utils";
+
+export const Paper = memo<PaperProps>(
+  ({ fill, elevation, radius, bordered, ...props }) => (
+    <PaperStyled
+      $fill={fill}
+      $elevation={elevation}
+      $radius={radius}
+      $bordered={bordered}
+      {...props}
+    />
+  ),
+);
 
 // TODO theme[any] must be forbidden
-export const PaperCSS = css<PaperProps>`
+export const PaperCSS = css<PaperStyledProps>`
   background-color: ${({ theme, $fill = theme.colors.main }) => $fill};
 
   box-shadow: ${({ $elevation, theme }) => {
@@ -19,15 +31,19 @@ export const PaperCSS = css<PaperProps>`
     $bordered && `0.2rem solid ${theme.colors.default[7].transparent()}`};
 `;
 
-export const Paper = styled.div<PaperProps>`
+export const PaperStyled = styled.div<PaperStyledProps>`
   ${PaperCSS}
 `;
 
-export interface PaperProps {
-  $fill?: string | null;
-  $elevation?: UnitIndex;
-  $radius?: UnitIndex;
-  $bordered?: boolean;
+export interface PaperProps extends HTMLAttributes<PaperElement> {
+  fill?: string | null;
+  elevation?: UnitIndex;
+  radius?: UnitIndex;
+  bordered?: boolean;
 }
 
-export type PaperElement = ElementRef<typeof Paper>;
+export type PaperStyledProps = TransientProps<
+  Pick<PaperProps, "fill" | "elevation" | "radius" | "bordered">
+>;
+
+export type PaperElement = HTMLDivElement;

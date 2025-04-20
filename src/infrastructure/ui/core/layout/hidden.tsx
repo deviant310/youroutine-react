@@ -1,23 +1,21 @@
-import { ElementRef, HTMLAttributes, memo } from "react";
+import { HTMLAttributes, memo } from "react";
 
 import { styled } from "styled-components";
 
-import { TransientProps } from "../../helpers";
+import { TransientProps } from "../../utils";
 
-export const Hidden = memo<HiddenPropsWithHTMLAttributes>(
-  ({ on, ...props }) => <HiddenStyled $on={on} {...props} />,
-);
+export const Hidden = memo<HiddenProps>(({ on, ...props }) => (
+  <HiddenStyled $on={on} {...props} />
+));
 
-const HiddenStyled = styled.div<TransientProps<HiddenStyledProps>>`
+const HiddenStyled = styled.div<HiddenStyledProps>`
   visibility: ${({ $on }) => $on && "hidden"};
 `;
 
-export interface HiddenStyledProps {
+export interface HiddenProps extends HTMLAttributes<HiddenElement> {
   on: boolean | undefined;
 }
 
-export type HiddenElement = ElementRef<typeof HiddenStyled>;
+export type HiddenStyledProps = TransientProps<Pick<HiddenProps, "on">>;
 
-interface HiddenPropsWithHTMLAttributes
-  extends HTMLAttributes<HiddenElement>,
-    HiddenStyledProps {}
+export type HiddenElement = HTMLDivElement;

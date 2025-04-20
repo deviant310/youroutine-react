@@ -1,42 +1,26 @@
-import { HTMLAttributes, NamedExoticComponent, ReactNode, memo } from "react";
+import { HTMLAttributes, memo } from "react";
 
 import { styled } from "styled-components";
 
-import { TransientProps } from "../../helpers";
+import { TransientProps } from "../../utils";
 
-const StyledCenter = styled.div<TransientProps<CenterForwardedProps>>`
+export const Center = memo<CenterProps>(({ align, ...props }) => (
+  <StyledCenter $align={align} {...props} />
+));
+
+const StyledCenter = styled.div<CenterStyledProps>`
   display: grid;
-  justify-content: ${({ $vertical }) => !$vertical && "center"};
-  align-items: ${({ $horizontal }) => !$horizontal && "center"};
+  justify-content: ${({ $align }) => $align === "horizontal" && "center"};
+  align-items: ${({ $align }) => $align === "vertical" && "center"};
   height: -webkit-fill-available;
 `;
 
-export const Center: CenterComponent = memo<CenterProps>(props => {
-  const { horizontal, vertical, ...restProps } = props;
-
-  return (
-    <StyledCenter
-      $horizontal={horizontal}
-      $vertical={vertical}
-      {...restProps}
-    />
-  );
-});
-
 Center.displayName = "Center";
 
-export interface CenterComponent extends Omit<NamedExoticComponent, number> {
-  (
-    props: CenterBaseProps & Pick<CenterForwardedProps, "horizontal">,
-  ): ReactNode;
-  (props: CenterBaseProps & Pick<CenterForwardedProps, "vertical">): ReactNode;
+export interface CenterProps extends HTMLAttributes<CenterElement> {
+  align: "horizontal" | "vertical";
 }
 
-export type CenterBaseProps = HTMLAttributes<HTMLDivElement>;
+export type CenterStyledProps = TransientProps<Pick<CenterProps, "align">>;
 
-export type CenterForwardedProps = {
-  horizontal?: boolean;
-  vertical?: boolean;
-};
-
-export type CenterProps = CenterBaseProps & CenterForwardedProps;
+export type CenterElement = HTMLDivElement;

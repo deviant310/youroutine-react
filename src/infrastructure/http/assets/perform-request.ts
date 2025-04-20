@@ -1,4 +1,5 @@
 import {
+  MethodNotAllowedError,
   NotFoundError,
   RequestError,
   RequestPayload,
@@ -24,7 +25,7 @@ export async function performRequest<Data>(
   }
 
   if (response.status === 400) throw new NotFoundError(response);
-
+  if (response.status === 405) throw new MethodNotAllowedError(response);
   if (response.status === 401) throw new RequestUnauthorizedError(response);
 
   throw new RequestError(response);

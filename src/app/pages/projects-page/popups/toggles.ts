@@ -1,3 +1,9 @@
-import { createToggle } from "~/infrastructure/stores";
+import { createTogglesContext } from "~/infrastructure/state/toggle";
 
-export const { useToggle: useProjectCreatePopupToggle } = createToggle();
+const { TogglesProvider: PopupsTogglesProvider, useToggle: usePopupToggle } =
+  createTogglesContext();
+
+export { PopupsTogglesProvider };
+
+export const useProjectCreatePopupToggle = () =>
+  usePopupToggle("project-create");

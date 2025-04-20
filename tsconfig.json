@@ -7,7 +7,7 @@
       "esnext"
     ],
     "allowJs": false,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "strict": true,
@@ -35,6 +35,7 @@
             "~/concern/*",
             "~/concern/*/*",
             "~/infrastructure/*",
+            "~/infrastructure/state/*",
             "~/react",
             "~/typescript"
           ],
@@ -45,14 +46,16 @@
             "~/infrastructure/router/route-hooks",
           ],
           "**/app/pages/*/**": [
-            "../context"
+            "../providers"
           ],
-          "**/app/pages/*/popups/*": [
-            "../forms",
+           "**/app/pages/*/popups/views/*": [
+            "../toggles",
+            "../../forms"
           ],
-          "**/app/pages/*/forms/views/**": [
-            "../handlers",
+          "**/app/pages/*/forms/views/*/*": [
             "../../handlers",
+          ],
+          "**/app/pages/*/forms/views/*/fields/*": [
             "../../../handlers",
           ],
           "**/concern/**": [
@@ -101,31 +104,36 @@
           "**/infrastructure/http/assets/**": [
             "../helpers"
           ],
-          "**/infrastructure/stores/form-store/**": [
-            "../form-store"
+          "**/infrastructure/state/form/**": [
+            "../form"
           ],
           "**/infrastructure/ui/**": [
             "color",
             "styled-components",
             "styled-normalize",
-            "use-react-input/*"
+            "csstype",
+            "react-inputs/*"
           ],
           "**/infrastructure/ui/components/*": [
             "../core",
             "../../core",
-            "../hooks",
-            "../helpers",
-            "../../helpers",
+            "../css",
+            "../utils",
           ],
           "**/infrastructure/ui/core/*/*": [
-            "../../helpers",
-            "../../hooks"
+            "../../css",
+            "../../utils",
           ],
-          "**/infrastructure/ui/core/typography/*/*": [
+          "**/infrastructure/ui/core/*/*/*": [
             "../../../helpers",
           ],
           "**/infrastructure/ui/core/typography/components/*": [
             "../helpers",
+            "../../../helpers",
+          ],
+          "**/infrastructure/ui/core/typography/components/*/*": [
+            "../../helpers",
+            "../../../../helpers",
           ],
           "**/infrastructure/ui/core/input/**": [
             "@tiptap/react",

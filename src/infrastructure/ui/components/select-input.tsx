@@ -33,9 +33,10 @@ import {
   TextboxProps,
   InputProps,
   InputElement,
-  CircleProps,
   TextboxElement,
+  CircleStyledProps,
 } from "../core";
+import { TransientProps } from "../utils";
 
 export const SelectInput = memo(function <OptionData>({
   name,
@@ -159,7 +160,7 @@ export const SelectInput = memo(function <OptionData>({
         after={
           value && (
             <ClickableCircleStyled
-              $size={2.4}
+              $diameter={2.4}
               $implicit={implicit}
               onClick={onCleanerClick}
             >
@@ -188,7 +189,7 @@ export const SelectInput = memo(function <OptionData>({
 
       <DropdownStyled>
         {optionsProps && optionsProps.length > 0 && dropdownToggleOn && (
-          <Paper $elevation={1}>
+          <Paper elevation={1}>
             <Area paddingVertical={0.8}>
               <VirtualList
                 items={optionsProps}
@@ -205,7 +206,7 @@ export const SelectInput = memo(function <OptionData>({
 const ClickableCircleStyled = styled(Clickable).attrs({
   rippleable: true,
   hoverable: true,
-})<ClickableCircleProps>`
+})<ClickableCircleStyledProps>`
   ${CircleCSS};
 
   display: flex;
@@ -279,8 +280,9 @@ export interface SelectInputProps<OptionData>
   ref?: Ref<SelectInputElement>;
 }
 
-interface ClickableCircleProps extends CircleProps {
-  $implicit?: boolean;
-}
+type ClickableCircleStyledProps = CircleStyledProps &
+  TransientProps<{
+    implicit?: boolean;
+  }>;
 
 export type SelectInputElement = HTMLDivElement;

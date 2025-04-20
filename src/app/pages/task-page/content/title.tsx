@@ -4,7 +4,7 @@ import { Input, InputElement, Text } from "~/infrastructure/ui";
 
 import { useTaskPatching } from "~/concern/common/third-party";
 
-import { usePathParams, useTask } from "../context";
+import { usePathParams, useTask } from "../providers";
 
 export const Title = memo(() => {
   const { taskId } = usePathParams();

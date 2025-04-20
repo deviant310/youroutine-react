@@ -1,12 +1,12 @@
-import { ElementRef, HTMLAttributes, memo } from "react";
+import { HTMLAttributes, memo } from "react";
 
 import { keyframes, styled } from "styled-components";
 
-import { getUnitWithMeasure, TransientProps, UnitIndex } from "../../helpers";
+import { getUnitWithMeasure, TransientProps, UnitIndex } from "../../utils";
 
-export const Loader = memo<LoaderPropsWithHTMLAttributes>(
-  ({ size, ...props }) => <LoaderStyled $size={size} {...props} />,
-);
+export const Loader = memo<LoaderProps>(({ size, ...props }) => (
+  <LoaderStyled $size={size} {...props} />
+));
 
 const rotatingAnimation = keyframes`
   from {
@@ -53,7 +53,7 @@ const squeezingAnimation = keyframes`
   }
 `;
 
-const LoaderStyled = styled.div<TransientProps<LoaderProps>>`
+const LoaderStyled = styled.div<LoaderStyledProps>`
   display: inline-block;
   width: ${({ $size }) => getUnitWithMeasure($size)};
   height: ${({ $size }) => getUnitWithMeasure($size)};
@@ -65,12 +65,10 @@ const LoaderStyled = styled.div<TransientProps<LoaderProps>>`
     ${rotatingAnimation} 1.4s linear infinite;
 `;
 
-export interface LoaderProps {
+export interface LoaderProps extends HTMLAttributes<LoaderElement> {
   size: UnitIndex;
 }
 
-export type LoaderElement = ElementRef<typeof LoaderStyled>;
+export type LoaderStyledProps = TransientProps<Pick<LoaderProps, "size">>;
 
-interface LoaderPropsWithHTMLAttributes
-  extends HTMLAttributes<LoaderElement>,
-    LoaderProps {}
+export type LoaderElement = HTMLDivElement;

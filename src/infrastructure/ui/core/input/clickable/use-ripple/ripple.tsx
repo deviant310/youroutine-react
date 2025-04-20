@@ -9,7 +9,7 @@ import {
 
 import { keyframes, styled } from "styled-components";
 
-import { TransientProps } from "../../../../helpers";
+import { TransientProps } from "../../../../utils";
 
 export const Ripple = memo<RippleProps>(
   ({ offsetLeft, offsetTop, size, onRippleLeave, ...props }) => {

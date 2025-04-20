@@ -1,9 +1,15 @@
+import { memo } from "react";
+
 import { styled } from "styled-components";
 
-import { Text, TextAlign } from "../core";
-import { getUnitWithMeasure } from "../helpers";
+import { Text, TextAlign, TextElement, TextProps } from "../core";
+import { getUnitWithMeasure, TransientProps } from "../utils";
 
-export const Heading = styled(Text).attrs<HeadingProps>(({ $level }) => ({
+export const Heading = memo<HeadingProps>(({ level, textAlign, ...props }) => (
+  <HeadingStyled $level={level} $textAlign={textAlign} {...props} />
+));
+
+const HeadingStyled = styled(Text).attrs<HeadingStyledProps>(({ $level }) => ({
   role: "heading",
   "aria-level": $level,
   get size() {
@@ -33,7 +39,13 @@ Heading.displayName = "Heading";
 
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
-export interface HeadingProps {
-  $level: HeadingLevel;
-  $textAlign?: TextAlign;
+export interface HeadingProps extends TextProps {
+  level: HeadingLevel;
+  textAlign?: TextAlign;
 }
+
+export type HeadingElement = TextElement;
+
+export type HeadingStyledProps = TransientProps<
+  Pick<HeadingProps, "level" | "textAlign">
+>;

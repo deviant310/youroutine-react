@@ -2,13 +2,14 @@ import { memo } from "react";
 
 import { useDocumentTitle } from "~/react";
 
+import { combineProviders } from "~/infrastructure/context";
 import { Area } from "~/infrastructure/ui";
 
 import { Header } from "~/concern/chunks";
 import { useTaskRetrieving } from "~/concern/common/third-party";
 
-import { TaskProvider, usePathParams } from "./context";
-import { TaskConsumer } from "./task-consumer";
+import { TaskProvider, usePathParams } from "./providers";
+import { TaskPageConsumer } from "./task-page-consumer";
 
 export const TaskPage = memo(() => {
   const { taskId } = usePathParams();
@@ -18,7 +19,7 @@ export const TaskPage = memo(() => {
   useDocumentTitle(`Task ${taskId}`);
 
   return (
-    <>
+    <PageProvider>
       <Header />
 
       <Area marginHorizontal="auto" maxWidth="1200px">
@@ -29,10 +30,14 @@ export const TaskPage = memo(() => {
 
         {task && (
           <TaskProvider value={task}>
-            <TaskConsumer />
+            <TaskPageConsumer />
           </TaskProvider>
         )}
       </Area>
-    </>
+    </PageProvider>
   );
 });
+
+TaskPage.displayName = "TaskPage";
+
+const PageProvider = combineProviders();

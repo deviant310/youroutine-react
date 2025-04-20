@@ -36,7 +36,11 @@ export const Header = memo(() => {
     <HeaderContainerStyled>
       <HeaderBarStyled>
         <Area marginHorizontal="auto" maxWidth="1200px">
-          <Grid autoFlow="column" justifyContent="between" alignItems="center">
+          <Grid
+            autoFlow="column"
+            justifyContent="space-between"
+            alignItems="center"
+          >
             <Flex alignItems="center" gap={3.2}>
               <FinomLogo />
 
@@ -62,7 +66,7 @@ export const Header = memo(() => {
                 marginTop="-5px"
               >
                 {dropdownIsVisible && (
-                  <Paper $elevation={1.2}>
+                  <Paper elevation={1.2}>
                     <Area paddingVertical={0.8}>
                       <Clickable onClick={hideDropdown} hoverable rippleable>
                         <Area paddingHorizontal={1.6}>

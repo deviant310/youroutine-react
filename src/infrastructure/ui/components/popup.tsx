@@ -9,16 +9,15 @@ import {
   animated,
   Area,
   CircleCSS,
-  CircleProps,
   Clickable,
   Icon,
   GridCSS,
   GridStyledProps,
   PaperCSS,
-  PaperProps,
   Grid,
+  PaperStyledProps,
+  CircleStyledProps,
 } from "../core";
-import { TransientProps } from "../helpers";
 
 export const Popup = memo<PopupProps>(props => {
   const { children, opened, close } = props;
@@ -52,7 +51,7 @@ export const Popup = memo<PopupProps>(props => {
           {opened && (
             <PaperArea $radius={1.6} $elevation={1.6} position="relative">
               <Area position="absolute" top={1.2} right={1}>
-                <ClickableCircleStyled $size={3.6} onClick={close}>
+                <ClickableCircleStyled $diameter={3.6} onClick={close}>
                   <Icon type="close" />
                 </ClickableCircleStyled>
               </Area>
@@ -79,15 +78,16 @@ const PopupBackgroundStyled = styled.div`
 `;
 
 const AreaFaded = animated(Area, "fade");
+
 const GridScaled = animated(Grid, "scale");
 GridScaled.displayName = "GridScaled";
 
-const GridArea = styled(Area)<TransientProps<GridStyledProps>>`
+const GridArea = styled(Area)<GridStyledProps>`
   ${GridCSS}
 `;
 GridArea.displayName = "GridArea";
 
-const PaperArea = styled(Area)<PaperProps>`
+const PaperArea = styled(Area)<PaperStyledProps>`
   ${PaperCSS}
 `;
 PaperArea.displayName = "PaperArea";
@@ -95,7 +95,7 @@ PaperArea.displayName = "PaperArea";
 const ClickableCircleStyled = styled(Clickable).attrs({
   rippleable: true,
   hoverable: true,
-})<CircleProps>`
+})<CircleStyledProps>`
   ${CircleCSS};
 
   display: flex;

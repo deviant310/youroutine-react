@@ -2,27 +2,25 @@ import { HTMLAttributes } from "react";
 
 import { css, styled } from "styled-components";
 
-import { getUnitWithMeasure, UnitIndex } from "../../helpers";
+import { getUnitWithMeasure, TransientProps } from "../../utils";
 
-export const CircleCSS = css<CircleProps>`
-  width: ${({ $size }) => getUnitWithMeasure($size)};
-  height: ${({ $size }) => getUnitWithMeasure($size)};
+export const CircleCSS = css<CircleStyledProps>`
+  width: ${({ $diameter }) => getUnitWithMeasure($diameter)};
+  height: ${({ $diameter }) => getUnitWithMeasure($diameter)};
   border-radius: 50%;
   overflow: hidden;
 `;
 
-export const Circle = styled.div<CircleProps>`
+export const Circle = styled.div<CircleStyledProps>`
   ${CircleCSS}
 `;
 
-//Circle.displayName = "Circle";
+Circle.displayName = "Circle";
 
-export interface CircleProps {
-  $size?: UnitIndex;
+export interface CircleProps extends HTMLAttributes<CircleElement> {
+  diameter: number;
 }
 
-export interface CirclePropsWithHtmlAttributes
-  extends HTMLAttributes<CircleElement>,
-    CircleProps {}
+export type CircleStyledProps = TransientProps<Pick<CircleProps, "diameter">>;
 
 export type CircleElement = HTMLDivElement;
