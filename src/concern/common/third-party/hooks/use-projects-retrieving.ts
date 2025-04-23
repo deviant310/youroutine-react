@@ -1,29 +1,28 @@
-import { useCallback } from "react";
+import { useMemo } from "react";
 
 import { useQueryAction } from "use-query-action";
 
 import { retrieveProjects as retrieveProjectsAction } from "../actions";
 
-export const useProjectsRetrieving = () => {
+export const useProjectsRetrieving = (searchValue?: string) => {
   const {
-    data: projects,
+    data,
     isLoading: retrievingProjects,
     error: retrievingProjectsError,
   } = useQueryAction(retrieveProjectsAction, [], {
     keepFresh: true,
   });
 
-  const getProjectsFilteredByNameEntry = useCallback(
-    (nameEntry: string) =>
-      projects?.filter(project =>
-        project.name.toLowerCase().includes(nameEntry.toLowerCase()),
-      ) ?? [],
-    [projects],
-  );
+  const projects = useMemo(() => {
+    if (typeof searchValue === "undefined") return [];
+
+    return data?.filter(project =>
+      project.name.toLowerCase().includes(searchValue.toLowerCase()),
+    );
+  }, [data, searchValue]);
 
   return {
     projects,
-    getProjectsFilteredByNameEntry,
     retrievingProjects,
     retrievingProjectsError,
   };

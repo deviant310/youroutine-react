@@ -4,10 +4,10 @@ import { Input, InputElement, Text } from "~/infrastructure/ui";
 
 import { useTaskPatching } from "~/concern/common/third-party";
 
-import { usePathParams, useTask } from "../providers";
+import { usePagePathParams, useTask } from "../providers";
 
 export const Title = memo(() => {
-  const { taskId } = usePathParams();
+  const { taskId } = usePagePathParams();
   const { title: initialTitle } = useTask();
   const [title, setTitle] = useState(initialTitle);
   const { patchTask } = useTaskPatching();

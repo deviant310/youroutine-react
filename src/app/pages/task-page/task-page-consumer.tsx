@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from "react";
+import { memo, useState } from "react";
 
 import {
   Alert,
@@ -22,14 +22,11 @@ import { useTask } from "./providers";
 
 export const TaskPageConsumer = memo(() => {
   const { priority } = useTask();
-  const { getProjectsFilteredByNameEntry } = useProjectsRetrieving();
   const [nameEntry, setNameEntry] = useState("");
-  const { colors } = useTheme();
+  const { projects, retrievingProjects, retrievingProjectsError } =
+    useProjectsRetrieving(nameEntry);
 
-  const filteredProjects = useMemo(
-    () => getProjectsFilteredByNameEntry(nameEntry),
-    [getProjectsFilteredByNameEntry, nameEntry],
-  );
+  const { colors } = useTheme();
 
   return (
     <Grid gap={2}>
@@ -69,23 +66,21 @@ export const TaskPageConsumer = memo(() => {
                 implicit
               />
 
-              {filteredProjects && (
-                <>
-                  <Text color="xlight">Project</Text>
+              <Text color="xlight">Project</Text>
 
-                  <SelectInput
-                    options={filteredProjects}
-                    value={null}
-                    displayStringForOption={Project.getInstanceName}
-                    getOptionKey={Project.getInstanceId}
-                    searchValue={nameEntry}
-                    onSearchChange={setNameEntry}
-                    placeholder="Not set"
-                    size="auto"
-                    implicit
-                  />
-                </>
-              )}
+              <SelectInput
+                options={projects}
+                loadingOptions={retrievingProjects}
+                loadingOptionsError={retrievingProjectsError}
+                value={null}
+                displayStringForOption={Project.getInstanceName}
+                getOptionKey={Project.getInstanceId}
+                searchValue={nameEntry}
+                onSearchChange={setNameEntry}
+                placeholder="Not set"
+                size="auto"
+                implicit
+              />
             </Grid>
           </Area>
         </Paper>

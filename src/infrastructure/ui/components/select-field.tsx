@@ -16,30 +16,35 @@ import {
   SelectInputProps,
 } from "./select-input";
 
-export const SelectField = memo(function <OptionData>({
-  name,
-  label,
-  error,
-  renderOption,
-  displayStringForOption,
-  dropdownToggleInitialValue = false,
-  getOptionKey,
-  options,
-  value,
-  onChange,
-  before,
-  implicit,
-  searchValue,
-  onSearchChange,
-  size,
-  placeholder,
-  onInputBlur,
-  ...props
-}: SelectFieldProps<OptionData>) {
+export const SelectField = memo(function <OptionData>(
+  props: SelectFieldProps<OptionData>,
+) {
+  const {
+    name,
+    label,
+    error,
+    renderOption,
+    displayStringForOption,
+    dropdownToggleInitialValue = false,
+    getOptionKey,
+    options,
+    value,
+    onChange,
+    before,
+    implicit,
+    searchValue,
+    onSearchChange,
+    size,
+    placeholder,
+    onInputBlur,
+    loadingOptions,
+    loadingOptionsError,
+    ...restProps
+  } = props;
   const invalid = Boolean(error);
 
   return (
-    <Fieldset {...props}>
+    <Fieldset {...restProps}>
       <ErrorSlidable>{error}</ErrorSlidable>
 
       <Grid gap={0.4}>
@@ -62,6 +67,8 @@ export const SelectField = memo(function <OptionData>({
           placeholder={placeholder}
           invalid={invalid}
           onBlur={onInputBlur}
+          loadingOptions={loadingOptions}
+          loadingOptionsError={loadingOptionsError}
         />
       </Grid>
     </Fieldset>
@@ -88,6 +95,8 @@ export interface SelectFieldProps<OptionData>
       | "onSearchChange"
       | "size"
       | "placeholder"
+      | "loadingOptions"
+      | "loadingOptionsError"
     > {
   onInputBlur?(event: FocusEvent<SelectInputElement>): void;
 }

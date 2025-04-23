@@ -2,7 +2,12 @@ import { memo } from "react";
 
 import styled, { css } from "styled-components";
 
-import { ColoredCSS, ColoredProps, SizedCSS, SizedProps } from "../../../css";
+import {
+  ColoredCSS,
+  ColoredProps,
+  getUnitWithMeasureBySize,
+  SizedProps,
+} from "../../../css";
 import { TransientProps } from "../../../utils";
 
 import * as Icons from "./icons";
@@ -22,7 +27,7 @@ export const Icon = memo<IconProps>(
 const IconBaseCSS = css<IconStyledProps>`
   color: ${ColoredCSS};
   display: flex;
-  height: ${SizedCSS};
+  height: ${({ $size }) => getUnitWithMeasureBySize($size)};
 `;
 
 const IconMonotoneCSS = css<IconStyledProps>`

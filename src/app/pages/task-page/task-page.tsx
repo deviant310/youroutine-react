@@ -8,11 +8,11 @@ import { Area } from "~/infrastructure/ui";
 import { Header } from "~/concern/chunks";
 import { useTaskRetrieving } from "~/concern/common/third-party";
 
-import { TaskProvider, usePathParams } from "./providers";
+import { TaskProvider, usePagePathParams } from "./providers";
 import { TaskPageConsumer } from "./task-page-consumer";
 
 export const TaskPage = memo(() => {
-  const { taskId } = usePathParams();
+  const { taskId } = usePagePathParams();
   const { task, retrievingTask, retrievingTaskError } =
     useTaskRetrieving(taskId);
 

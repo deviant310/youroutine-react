@@ -1,10 +1,10 @@
-import { HTMLAttributes, ReactNode, Ref } from "react";
+import { HTMLAttributes, memo, ReactNode, Ref } from "react";
 
 import styled from "styled-components";
 
 import { getUnitWithMeasure, TransientProps } from "../../utils";
 
-export function Textbox(props: TextboxProps) {
+export const Textbox = memo<TextboxProps>(props => {
   const {
     children,
     before,
@@ -41,7 +41,7 @@ export function Textbox(props: TextboxProps) {
       </RowStyled>
     </TextboxStyled>
   );
-}
+});
 
 const TextboxStyled = styled.div.attrs({
   role: "textbox",

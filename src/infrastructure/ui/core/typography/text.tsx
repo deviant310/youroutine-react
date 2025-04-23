@@ -2,7 +2,12 @@ import { HTMLAttributes, memo } from "react";
 
 import { css, styled } from "styled-components";
 
-import { ColoredCSS, ColoredProps, SizedCSS, SizedProps } from "../../css";
+import {
+  ColoredCSS,
+  ColoredProps,
+  getUnitWithMeasureBySize,
+  SizedProps,
+} from "../../css";
 import { getUnitWithMeasure, TransientProps } from "../../utils";
 
 export const Text = memo<TextProps>(
@@ -21,7 +26,7 @@ Text.displayName = "Text";
 
 export const TextCSS = css<TextStyledProps>`
   color: ${ColoredCSS};
-  font-size: ${SizedCSS};
+  font-size: ${({ $size }) => getUnitWithMeasureBySize($size)};
   white-space: ${({ $nowrap }) => $nowrap && "nowrap"};
 
   line-height: ${({ $size }) => {

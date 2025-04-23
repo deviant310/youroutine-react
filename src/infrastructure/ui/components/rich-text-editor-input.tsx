@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { memo, useCallback } from "react";
 
 import styled from "styled-components";
 
@@ -9,14 +9,17 @@ import {
   Textbox,
   TextboxProps,
 } from "../core";
+import { getUnitWithMeasure } from "../utils";
 
-export function RichTextEditorInput({
-  name,
-  value,
-  onChange: onRichTextEditorInputChange,
-  minHeight,
-  ...props
-}: RichTextEditorInputProps) {
+export const RichTextEditorInput = memo<RichTextEditorInputProps>(props => {
+  const {
+    name,
+    value,
+    onChange: onRichTextEditorInputChange,
+    minHeight,
+    ...restProps
+  } = props;
+
   const onEditorChange = useCallback(
     ({ editor }: RichTextEditorChangeEvent) => {
       onRichTextEditorInputChange?.(editor.getHTML());
@@ -25,7 +28,7 @@ export function RichTextEditorInput({
   );
 
   return (
-    <TextboxStyled {...props}>
+    <TextboxStyled {...restProps}>
       <RichTextEditorStyled
         name={name}
         value={value}
@@ -34,11 +37,13 @@ export function RichTextEditorInput({
       />
     </TextboxStyled>
   );
-}
+});
 
 const RichTextEditorStyled = styled(RichTextEditor)``;
 
 const TextboxStyled = styled(Textbox)`
+  padding: ${getUnitWithMeasure(1.2)} ${getUnitWithMeasure(1.6)};
+
   ${RichTextEditorStyled} {
     width: 100%;
   }

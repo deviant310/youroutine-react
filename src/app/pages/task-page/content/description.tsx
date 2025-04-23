@@ -4,10 +4,10 @@ import { RichTextEditor, RichTextEditorChangeEvent } from "~/infrastructure/ui";
 
 import { useTaskPatching } from "~/concern/common/third-party";
 
-import { usePathParams, useTask } from "../providers";
+import { usePagePathParams, useTask } from "../providers";
 
 export const Description = memo(() => {
-  const { taskId } = usePathParams();
+  const { taskId } = usePagePathParams();
   const { description: initialDescription } = useTask();
   const [description, setDescription] = useState(initialDescription);
   const { patchTask } = useTaskPatching();

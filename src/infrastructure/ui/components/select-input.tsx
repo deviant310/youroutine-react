@@ -7,6 +7,7 @@ import {
   ReactNode,
   Ref,
   useCallback,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -35,33 +36,40 @@ import {
   InputElement,
   TextboxElement,
   CircleStyledProps,
+  Loader,
 } from "../core";
 import { TransientProps } from "../utils";
 
-export const SelectInput = memo(function <OptionData>({
-  name,
-  renderOption,
-  displayStringForOption,
-  dropdownToggleInitialValue = false,
-  getOptionKey,
-  options,
-  value,
-  onChange,
-  before,
-  searchValue: inputValue,
-  onSearchChange,
-  onBlur,
-  disabled,
-  placeholder,
-  size,
-  implicit,
-  invalid,
-  ...props
-}: SelectInputProps<OptionData>) {
+export const SelectInput = memo(function <OptionData>(
+  props: SelectInputProps<OptionData>,
+) {
   type VirtualListOptionRenderer = VirtualListItemRenderer<
     ColumnElement,
     SelectInputOptionProps<OptionData>
   >;
+
+  const {
+    name,
+    renderOption,
+    displayStringForOption,
+    dropdownToggleInitialValue = false,
+    getOptionKey,
+    options,
+    loadingOptions,
+    loadingOptionsError,
+    value,
+    onChange,
+    before,
+    searchValue: inputValue,
+    onSearchChange,
+    onBlur,
+    disabled,
+    placeholder,
+    size,
+    implicit,
+    invalid,
+    ...restProps
+  } = props;
 
   const inputRef = useRef<InputElement>(null);
 
@@ -83,7 +91,7 @@ export const SelectInput = memo(function <OptionData>({
   const { stringForSelectedOption, optionsProps } = useSelectInput({
     displayStringForOption,
     getOptionKey,
-    options,
+    options: options ?? [],
     selectedOption: value,
     onOptionSelect,
   });
@@ -153,21 +161,27 @@ export const SelectInput = memo(function <OptionData>({
     [renderOption, value],
   );
 
+  const after = useMemo(() => {
+    if (loadingOptions) return <Loader size={1.6} />;
+    else if (loadingOptionsError) return <Icon type="error" color="error" />;
+    else if (value) {
+      return (
+        <ClickableCircleStyled
+          $diameter={2.4}
+          $implicit={implicit}
+          onClick={onCleanerClick}
+        >
+          <Icon type="close" size="normal" />
+        </ClickableCircleStyled>
+      );
+    }
+  }, [implicit, loadingOptions, loadingOptionsError, onCleanerClick, value]);
+
   return (
-    <ContainerStyled onBlur={onContainerBlur} {...props}>
+    <ContainerStyled onBlur={onContainerBlur} {...restProps}>
       <TextboxStyled
         before={before}
-        after={
-          value && (
-            <ClickableCircleStyled
-              $diameter={2.4}
-              $implicit={implicit}
-              onClick={onCleanerClick}
-            >
-              <Icon type="close" size="normal" />
-            </ClickableCircleStyled>
-          )
-        }
+        after={after}
         onFocus={onTextboxFocus}
         onMouseDown={onTextboxMouseDown}
         size={size}
@@ -270,7 +284,9 @@ export interface SelectInputProps<OptionData>
     Pick<InputProps, "name" | "disabled" | "placeholder"> {
   displayStringForOption?(option: OptionData): string;
   getOptionKey?(option: OptionData): string | number;
-  options: OptionData[];
+  options?: OptionData[];
+  loadingOptions?: boolean;
+  loadingOptionsError?: Error | null;
   value: OptionData | null;
   onChange?(option: OptionData | null): void;
   dropdownToggleInitialValue?: boolean;
