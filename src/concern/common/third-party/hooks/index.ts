@@ -4,3 +4,4 @@ export * from "./use-task-retrieving";
 export * from "./use-task-creating";
 export * from "./use-task-patching";
 export * from "./use-projects-retrieving";
+export * from "./use-assignees-retrieving";

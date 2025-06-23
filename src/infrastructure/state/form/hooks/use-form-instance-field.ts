@@ -12,7 +12,9 @@ export const useFormInstanceField = <
   form: Form<Values, ValidValues, Conditionals>,
   name: Name,
 ) => {
-  type Result = Name extends Conditionals ? typeof data | null : typeof data;
+  type Result = Name extends Conditionals
+    ? typeof data | undefined
+    : typeof data;
 
   const field = useSyncExternalStore(
     dispatch => form.onChange(dispatch),
@@ -31,7 +33,7 @@ export const useFormInstanceField = <
 
   const reset = useCallback(() => form.resetField(name), [form, name]);
 
-  if (!field) return null as Result;
+  if (!field) return field as Result;
 
   const data = { ...field, name, setValue, setError, reset };
 

@@ -5,6 +5,7 @@ import { Alert, Grid } from "~/infrastructure/ui";
 import { useTaskCreateForm } from "../../handlers";
 
 import {
+  AssigneeField,
   DescriptionField,
   PriorityField,
   ProjectField,
@@ -19,6 +20,8 @@ export const TaskCreateForm = memo(() => {
       <TitleField />
 
       <DescriptionField />
+
+      <AssigneeField />
 
       <Grid alignItems="start" columns={2} gap={2}>
         <ProjectField />

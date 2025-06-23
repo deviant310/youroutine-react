@@ -4,14 +4,14 @@ import {
   createFormContext,
   FormValidationError,
 } from "~/infrastructure/state/form";
+import { getRichTextEditorTextFromHTML } from "~/infrastructure/ui";
 
 import { useTaskCreating } from "~/concern/common/third-party";
-import { Project, TaskPriority } from "~/concern/general/entities";
+import { Project, TaskPriority, User } from "~/concern/general/entities";
 
 const { FormProvider, useFormState, useFormFieldState } = createFormContext<
   TaskCreateFormValues,
-  TaskCreateFormValidValues,
-  "project"
+  TaskCreateFormValidValues
 >();
 
 export const TaskCreateFormProvider = memo<{ children: ReactNode }>(
@@ -20,35 +20,42 @@ export const TaskCreateFormProvider = memo<{ children: ReactNode }>(
       fieldsConfig={{
         title: {
           defaultValue: "",
-          validate(value) {
-            if (!value) throw new FormValidationError("Title required");
+          validate(title) {
+            if (!title) throw new FormValidationError("Title required");
 
-            return value;
+            return title;
           },
         },
         description: {
           defaultValue: "",
+          validate(description, { assignee }) {
+            debugger;
+            if (assignee && !getRichTextEditorTextFromHTML(description))
+              throw new FormValidationError("Description required");
+
+            return description;
+          },
         },
         project: {
           defaultValue: null,
-          validate(value) {
-            if (!value) throw new FormValidationError("Project required");
+          validate(project) {
+            if (!project) throw new FormValidationError("Project required");
 
-            return value;
-          },
-          enabled() {
-            return true;
+            return project;
           },
           //onInit() {},
           //dependsOn: [],
         },
         priority: {
           defaultValue: "medium",
-          validate(value) {
-            if (!value) throw new FormValidationError("Priority required");
+          validate(priority) {
+            if (!priority) throw new FormValidationError("Priority required");
 
-            return value;
+            return priority;
           },
+        },
+        assignee: {
+          defaultValue: null,
         },
       }}
     >
@@ -65,7 +72,7 @@ export const useTaskCreateForm = () => {
     taskCreated: submitted,
   } = useTaskCreating();
 
-  const { validValues } = useFormState();
+  const { validValues, fields } = useFormState();
 
   const submit = useCallback(() => {
     if (!validValues) return;
@@ -90,6 +97,7 @@ export const useTaskCreateForm = () => {
   }, []);
 
   return {
+    fields,
     submit,
     submitting,
     submittingError,
@@ -105,6 +113,7 @@ interface TaskCreateFormValues {
   description: string;
   project: Project | null;
   priority: TaskPriority | null;
+  assignee: User | null;
 }
 
 interface TaskCreateFormValidValues extends TaskCreateFormValues {

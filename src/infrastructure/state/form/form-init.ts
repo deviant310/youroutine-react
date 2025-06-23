@@ -9,9 +9,9 @@ export abstract class FormInit<
 > {
   protected changeEvent = new Event();
 
-  private fields: FormFields<Values, ValidValues>;
   protected formState: FormState<Values, ValidValues>;
-  protected fieldsState: FormFieldsState<Values, ValidValues>;
+  protected fields: FormFields<Values, ValidValues>;
+  protected enabledFields: Partial<FormFields<Values, ValidValues>>;
 
   constructor(
     protected fieldsConfig: FormFieldsConfig<Values, ValidValues, Conditionals>,
@@ -23,55 +23,41 @@ export abstract class FormInit<
           (typeof fieldsConfig)[keyof Values],
         ];
 
-        const [validValue, error] = this.validateFieldValue(name, value);
-
-        fields[name] = { value, validValue, error };
+        fields[name] = { value, isValid: true };
 
         return fields;
       },
       {} as typeof this.fields,
     );
 
-    this.fieldsState = this.setFieldsState();
+    this.validateFields();
+    this.enabledFields = this.setEnabledFields();
     this.formState = this.setFormState();
-
-    this.setFieldsState = this.setFieldsState.bind(this);
-    this.setFormState = this.setFormState.bind(this);
-
-    this.changeEvent.addListener(this.setFieldsState);
-    this.changeEvent.addListener(this.setFormState);
   }
 
-  protected updateFieldState(
-    name: keyof Values,
-    fieldState: Partial<FormFieldState<Values[keyof Values]>>,
-  ) {
-    const { value, error } = fieldState as FormFieldState<Values[keyof Values]>;
+  protected updateFieldValue(name: keyof Values, value: Values[keyof Values]) {
+    const field = { ...this.fields[name] };
 
-    const nextField = { ...this.fields[name] };
+    if (field.value === value) return;
 
-    const fieldHasUpdates = Object.entries(fieldState).some(
-      ([key, value]) => nextField[key as keyof typeof fieldState] !== value,
-    );
+    field.value = value;
 
-    if (!fieldHasUpdates) return;
+    this.fields[name] = field;
 
-    if ("value" in fieldState) nextField.value = value;
-    if ("error" in fieldState) nextField.error = error;
-    //if ("dirty" in fieldState) nextFieldState.dirty = dirty;
-
-    this.fields[name] = nextField;
+    this.validateFields();
+    this.setEnabledFields();
+    this.setFormState();
   }
 
-  private setFieldsState() {
-    return (this.fieldsState = Object.entries(this.fields).reduce(
-      (fieldsState, entry, index, entries) => {
+  private setEnabledFields() {
+    return (this.enabledFields = Object.entries(this.fields).reduce(
+      (enabledFields, entry, index, entries) => {
         type Entry = [keyof Values, (typeof this.fields)[keyof Values]];
 
-        const [name, { value, validValue, error }] = entry as Entry;
+        const [name, field] = entry as Entry;
         const { enabled } = this.fieldsConfig[name];
 
-        const values = (entries as Array<Entry>).reduce(
+        const values = entries.reduce(
           (values, [name, { value }]) => ({
             ...values,
             ...{ [name]: value },
@@ -81,16 +67,11 @@ export abstract class FormInit<
 
         const fieldEnabled = enabled?.(values) ?? true;
 
-        if (fieldEnabled)
-          fieldsState[name] = {
-            value,
-            validValue,
-            error,
-          };
+        if (fieldEnabled) enabledFields[name] = field;
 
-        return fieldsState;
+        return enabledFields;
       },
-      {} as typeof this.fieldsState,
+      {} as typeof this.enabledFields,
     ));
   }
 
@@ -103,28 +84,35 @@ export abstract class FormInit<
       : null;
 
     return (this.formState = {
-      fields: this.fieldsState,
+      fields: this.enabledFields,
       validValues,
     });
   }
 
-  protected validateFieldValue(
-    name: keyof Values,
-    value: Values[keyof Values],
-  ) {
-    const { validate } = this.fieldsConfig[name];
+  protected validateFields() {
+    const values = Object.entries(this.fields).reduce(
+      (values, [name, { value }]) => ({ ...values, ...{ [name]: value } }),
+      {} as Values,
+    );
 
-    let validValue: ValidValues[keyof Values] | undefined;
-    let errorMessage: FormErrorMessage;
+    Object.entries(values).forEach(
+      ([name, value]: [keyof Values, Values[keyof Values]]) => {
+        const { validate } = this.fieldsConfig[name];
 
-    try {
-      validValue = typeof validate === "function" ? validate(value) : value;
-    } catch (error) {
-      if (error instanceof FormValidationError) errorMessage = error.message;
-      else throw error;
-    }
+        let validValue: ValidValues[keyof Values] | undefined;
+        let isValid = true;
 
-    return <const>[validValue, errorMessage];
+        try {
+          validValue =
+            typeof validate === "function" ? validate(value, values) : value;
+        } catch (thrownError) {
+          if (thrownError instanceof FormValidationError) isValid = false;
+          else throw thrownError;
+        }
+
+        this.fields[name] = { value, validValue, isValid };
+      },
+    );
   }
 
   onChange(callback: () => void) {
@@ -132,12 +120,12 @@ export abstract class FormInit<
   }
 
   get isValid() {
-    for (const name in this.fieldsState) {
-      if (!this.fieldsState[name]) continue;
+    for (const name in this.enabledFields) {
+      if (!this.enabledFields[name]) continue;
 
-      const { error } = this.fieldsState[name];
+      const { isValid } = this.enabledFields[name];
 
-      if (error) return false;
+      if (!isValid) return false;
     }
 
     return true;
@@ -153,10 +141,10 @@ export type FormFieldsConfig<
     [Key in Name as "defaultValue"]: Values[Key];
   } & (Values[Name] extends ValidValues[Name]
     ? {
-        validate?(value: Values[Name]): Values[Name];
+        validate?(value: Values[Name], values: Values): Values[Name];
       }
     : {
-        validate(value: Values[Name]): ValidValues[Name];
+        validate(value: Values[Name], values: Values): ValidValues[Name];
       }) &
     (Name extends ConditionalFields
       ? {
@@ -176,32 +164,14 @@ type FormFields<
 
 export interface FormField<Value = unknown, ValidValue extends Value = Value> {
   value: Value;
-  validValue: ValidValue | undefined;
-  error: FormErrorMessage;
+  validValue?: ValidValue;
+  isValid: boolean;
 }
 
 type FormState<
   Values extends Record<string, any>,
   ValidValues extends Values = Values,
 > = {
-  fields: FormFieldsState<Values, ValidValues>;
+  fields: Partial<FormFields<Values, ValidValues>>;
   validValues: ValidValues | null;
 };
-
-export type FormFieldsState<
-  Values extends Record<string, any>,
-  ValidValues extends Values = Values,
-> = {
-  [Name in keyof Values]:
-    | FormFieldState<Values[Name], ValidValues[Name]>
-    | undefined;
-};
-
-export interface FormFieldState<
-  Value = unknown,
-  ValidValue extends Value = Value,
-> extends FormField<Value, ValidValue> {
-  validValue: ValidValue | undefined;
-}
-
-export type FormErrorMessage = string | undefined;

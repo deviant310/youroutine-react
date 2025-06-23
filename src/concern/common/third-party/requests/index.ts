@@ -4,3 +4,4 @@ export * from "./tasks-retrieve-request";
 export * from "./task-retrieve-request";
 export * from "./task-create-request";
 export * from "./task-patch-request";
+export * from "./assignees-retrieve-request";

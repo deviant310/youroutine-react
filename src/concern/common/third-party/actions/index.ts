@@ -13,3 +13,4 @@ export * from "./retrieve-task";
 export * from "./create-task";
 export * from "./patch-task";
 export * from "./retrieve-projects";
+export * from "./retrieve-assignees";

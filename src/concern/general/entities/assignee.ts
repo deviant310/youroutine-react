@@ -2,13 +2,13 @@ import { UUID } from "~/typescript";
 
 import { Entity } from "~/infrastructure/data";
 
-export class User extends Entity<UserAttributes> {
-  static getInstanceId(user: User) {
-    return user.$payload.id;
+export class Assignee extends Entity<AssigneeAttributes> {
+  static getInstanceId(assignee: Assignee) {
+    return assignee.$payload.id;
   }
 
-  static getInstanceName(user: User) {
-    return user.$payload.name;
+  static getInstanceName(assignee: Assignee) {
+    return assignee.$payload.name;
   }
 
   get id() {
@@ -24,7 +24,7 @@ export class User extends Entity<UserAttributes> {
   }
 }
 
-export interface UserAttributes {
+export interface AssigneeAttributes {
   readonly id: UUID;
   name: string;
 }

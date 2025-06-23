@@ -13,9 +13,8 @@ export class Form<
   setValues(values: Values) {
     for (const name in values) {
       const value = values[name];
-      const [validValue, error] = this.validateFieldValue(name, value);
 
-      this.updateFieldState(name, { value, validValue, error });
+      this.updateFieldValue(name, value);
     }
 
     this.changeEvent.emit();
@@ -40,46 +39,28 @@ export class Form<
 
   reset() {
     for (const name in this.fieldsConfig) {
-      const { defaultValue: value } = this.fieldsConfig[name];
+      const { defaultValue } = this.fieldsConfig[name];
 
-      const [validValue, error] = this.validateFieldValue(name, value);
-
-      this.updateFieldState(name, { value, validValue, error });
+      this.updateFieldValue(name, defaultValue);
     }
 
     this.changeEvent.emit();
   }
 
   getFieldState<Name extends keyof Values>(name: Name) {
-    return this.fieldsState[name];
+    return this.enabledFields[name];
   }
 
   setFieldValue(name: keyof Values, value: Values[keyof Values]) {
-    const [validValue, error] = this.validateFieldValue(name, value);
-
-    this.updateFieldState(name, { value, validValue, error });
+    this.updateFieldValue(name, value);
 
     this.changeEvent.emit();
   }
-
-  setFieldError(name: keyof Values, error: string | undefined) {
-    this.updateFieldState(name, { error });
-
-    this.changeEvent.emit();
-  }
-
-  /* stainField(name: keyof Values) {
-    this.updateFieldState(name, { dirty: true });
-
-    this.change();
-  } */
 
   resetField(name: keyof Values) {
-    const { defaultValue: value } = this.fieldsConfig[name];
+    const { defaultValue } = this.fieldsConfig[name];
 
-    const [validValue, error] = this.validateFieldValue(name, value);
-
-    this.updateFieldState(name, { value, validValue, error });
+    this.updateFieldValue(name, defaultValue);
 
     this.changeEvent.emit();
   }

@@ -1,3 +1,5 @@
+import { UUID } from "~/typescript";
+
 import { performRequest } from "~/infrastructure/http";
 
 import { User } from "~/concern/general/entities";
@@ -20,6 +22,6 @@ export const mapUserRetrieveResponseData = ({
   userName,
 }: UserRetrieveResponseData) =>
   new User({
-    id: userId,
+    id: userId as UUID,
     name: userName,
   });

@@ -1,4 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+export type SomeOf<T> = Exclude<
+  { [K in keyof T]: Pick<T, K> }[keyof T],
+  undefined
+>;
+
 export type KeyPrefix<
   Enumerable,
   Prefix extends string,

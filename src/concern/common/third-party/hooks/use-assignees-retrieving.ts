@@ -2,19 +2,19 @@ import { useMemo } from "react";
 
 import { useQueryAction } from "use-query-action";
 
-import { retrieveProjects as retrieveProjectsAction } from "../actions";
+import { retrieveAssignees } from "../actions";
 
-export const useProjectsRetrieving = (searchQuery?: string) => {
+export const useAssigneesRetrieving = (searchQuery?: string) => {
   const {
     data,
-    isLoading: retrievingProjects,
-    error: retrievingProjectsError,
-  } = useQueryAction(retrieveProjectsAction, [], {
+    isLoading: retrievingAssignees,
+    error: retrievingAssigneesError,
+  } = useQueryAction(retrieveAssignees, [], {
     keepFresh: true,
     enabled: typeof searchQuery !== "undefined",
   });
 
-  const projects = useMemo(() => {
+  const assignees = useMemo(() => {
     if (typeof searchQuery === "undefined") return data;
 
     return data?.filter(project =>
@@ -23,8 +23,8 @@ export const useProjectsRetrieving = (searchQuery?: string) => {
   }, [data, searchQuery]);
 
   return {
-    projects,
-    retrievingProjects,
-    retrievingProjectsError,
+    assignees,
+    retrievingAssignees,
+    retrievingAssigneesError,
   };
 };

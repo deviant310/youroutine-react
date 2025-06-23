@@ -9,6 +9,6 @@ export const buildUserRetrieveRequest = () =>
   });
 
 export type UserRetrieveResponseData = {
-  userId: number;
+  userId: string;
   userName: string;
 };

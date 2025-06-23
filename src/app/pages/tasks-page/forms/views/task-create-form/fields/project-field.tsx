@@ -8,19 +8,14 @@ import { Project } from "~/concern/general/entities";
 import { useTaskCreateFormField } from "../../../handlers";
 
 export const ProjectField = memo(() => {
-  const [nameEntry, setNameEntry] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const { name, value, error, setValue } = useTaskCreateFormField("project");
   const { projects, retrievingProjects, retrievingProjectsError } =
-    useProjectsRetrieving(nameEntry);
-
-  const field = useTaskCreateFormField("project");
+    useProjectsRetrieving(searchQuery);
 
   /* const displayedError = useMemo(() => {
     if (dirty) return error;
   }, [dirty, error]); */
-
-  if (!field) return;
-
-  const { name, value, error, setValue } = field;
 
   return (
     <SelectField
@@ -36,8 +31,8 @@ export const ProjectField = memo(() => {
       loadingOptions={retrievingProjects}
       loadingOptionsError={retrievingProjectsError}
       //onInputBlur={stain}
-      searchValue={nameEntry}
-      onSearchChange={setNameEntry}
+      searchValue={searchQuery}
+      onSearchChange={setSearchQuery}
       placeholder="Select project"
       size="auto"
     />
